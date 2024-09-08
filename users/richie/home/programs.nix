@@ -42,6 +42,6 @@
     nix-prefetch
     nix-tree
     nixpkgs-fmt
-    # inputs.system_tools.packages.x86_64-linux.default
+    inputs.system_tools.packages.x86_64-linux.default
   ];
 }

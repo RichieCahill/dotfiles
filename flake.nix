@@ -30,12 +30,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    system_tools = {
+      url = "github:RichieCahill/system_tools";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
-
   };
 
   outputs = {
