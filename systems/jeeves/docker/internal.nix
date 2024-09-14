@@ -52,7 +52,7 @@ in
         DELUGE_DAEMON_LOG_LEVEL = "debug";
         DELUGE_WEB_LOG_LEVEL = "debug";
       };
-      environmentFiles = /root/secrets/docker/qbit_vpn;
+      environmentFiles = [/root/secrets/docker/qbit_vpn];
       autoStart = true;
     };
     bazarr = {

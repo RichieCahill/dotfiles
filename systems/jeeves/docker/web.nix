@@ -47,7 +47,7 @@ in
         "tunnel"
         "run"
       ];
-      environmentFiles = /root/secrets/docker/cloud_flare_tunnel;
+      environmentFiles = [/root/secrets/docker/cloud_flare_tunnel];
       dependsOn = [ "haproxy" ];
       extraOptions = [ "--network=web" ];
       autoStart = true;
