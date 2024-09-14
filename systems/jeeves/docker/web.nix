@@ -1,4 +1,3 @@
-{ config, ... }:
 let
   vars = import ../vars.nix;
 in
@@ -14,7 +13,7 @@ in
     dnd_file_server = {
       image = "ubuntu/apache2:latest";
       volumes = [
-        "${../../../users/richie/global/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
+        "${../../common/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
         "${vars.storage_main}/Table_Top/:/data"
       ];
       extraOptions = [ "--network=web" ];

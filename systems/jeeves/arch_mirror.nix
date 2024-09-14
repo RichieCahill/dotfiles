@@ -6,7 +6,7 @@ in
   virtualisation.oci-containers.containers.arch_mirror = {
     image = "ubuntu/apache2:latest";
     volumes = [
-      "${../../users/richie/global/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
+      "${../common/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
       "${vars.media_mirror}:/data"
     ];
     ports = [ "800:80" ];
