@@ -34,6 +34,11 @@
       url = "github:RichieCahill/system_tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-cosmic = {
+      url = "github:lilyinstarlight/nixos-cosmic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -41,6 +46,7 @@
     nixpkgs,
     home-manager,
     systems,
+    nixos-cosmic,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -63,6 +69,10 @@
     nixosConfigurations = {
       bob = lib.nixosSystem {
         modules = [./systems/bob];
+        specialArgs = {inherit inputs outputs;};
+      };
+      jeeves = lib.nixosSystem {
+        modules = [./systems/jeeves];
         specialArgs = {inherit inputs outputs;};
       };
     };
