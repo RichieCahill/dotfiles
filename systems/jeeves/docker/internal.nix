@@ -1,4 +1,3 @@
-{ config, ... }:
 let
   vars = import ../vars.nix;
 in
@@ -53,7 +52,7 @@ in
         DELUGE_DAEMON_LOG_LEVEL = "debug";
         DELUGE_WEB_LOG_LEVEL = "debug";
       };
-      # environmentFiles = [ config.sops.secrets."docker/qbit_vpn".path ];
+      environmentFiles = /root/secrets/docker/qbit_vpn;
       autoStart = true;
     };
     bazarr = {

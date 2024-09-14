@@ -10,7 +10,7 @@ in
     ../common/optional/systemd-boot.nix
     ../common/optional/zerotier.nix
     ./arch_mirror.nix
-    # ./docker
+    ./docker
     ./hardware.nix
     ./networking.nix
     ./programs.nix
@@ -23,8 +23,6 @@ in
     "torrenting"
   ];
 
-
-  # services.openssh.settings.PermitRootLogin = "yes";
 
   services = {
     openssh.ports = [ 629 ];
@@ -45,8 +43,6 @@ in
         path = vars.media_notes;
         devices = [
           "bob"
-          "phone"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -56,7 +52,6 @@ in
         devices = [
           "bob"
           "phone"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -66,7 +61,6 @@ in
         devices = [
           "bob"
           "phone"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -76,7 +70,6 @@ in
         devices = [
           "bob"
           "phone"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -85,7 +78,6 @@ in
         path = "${vars.storage_syncthing}/projects";
         devices = [
           "bob"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };

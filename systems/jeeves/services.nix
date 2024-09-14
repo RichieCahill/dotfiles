@@ -20,7 +20,7 @@
         description = "validates startup";
         path = [ pkgs.zfs ];
         serviceConfig = {
-          # EnvironmentFile = config.sops.secrets."server-validation/webhook".path;
+          EnvironmentFile = "/root/secrets/services/server-validation";
           Type = "oneshot";
           ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_jeeves";
         };

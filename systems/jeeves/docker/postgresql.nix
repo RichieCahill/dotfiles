@@ -1,4 +1,3 @@
-{ config, ... }:
 let
   vars = import ../vars.nix;
 in
@@ -24,7 +23,7 @@ in
         POSTGRES_DB = "archive";
         POSTGRES_INITDB_ARGS = "--auth-host=scram-sha-256";
       };
-      # environmentFiles = [ config.sops.secrets."docker/postgres".path ];
+      environmentFiles = /root/secrets/docker/postgres;
       autoStart = true;
       user = "postgres:postgres";
     };

@@ -26,7 +26,7 @@ in
         TZ = "Etc/EST";
       };
       volumes = [
-        # "${config.sops.secrets."docker/haproxy_cert".path}:/etc/ssl/certs/cloudflare.pem"
+        "/root/secrets/docker/cloudflare.pem:/etc/ssl/certs/cloudflare.pem"
         "${./haproxy.cfg}:/usr/local/etc/haproxy/haproxy.cfg"
       ];
       dependsOn = [
@@ -47,7 +47,7 @@ in
         "tunnel"
         "run"
       ];
-      # environmentFiles = [ config.sops.secrets."docker/cloud_flare_tunnel".path ];
+      environmentFiles = /root/secrets/docker/cloud_flare_tunnel;
       dependsOn = [ "haproxy" ];
       extraOptions = [ "--network=web" ];
       autoStart = true;
