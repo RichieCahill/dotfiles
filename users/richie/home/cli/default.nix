@@ -1,8 +1,9 @@
 {
   imports = [
+    ./direnv.nix
+    ./fonts.nix
     ./git.nix
     ./zsh.nix
-    ./direnv.nix
   ];
 
   programs.starship.enable = true;
