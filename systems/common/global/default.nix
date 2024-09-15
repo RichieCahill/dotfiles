@@ -18,7 +18,12 @@
     ./ssh.nix
   ];
 
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot = {
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    tmp.useTmpfs = true;
+  };
+
+  zramSwap.enable = true;
 
   security.auditd.enable = lib.mkDefault true;
 
