@@ -18,14 +18,11 @@ in
     ./services.nix
   ];
 
-  boot = {
-    zfs.extraPools = [
-      "media"
-      "storage"
-      "torrenting"
-    ];
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  };
+  boot.zfs.extraPools = [
+    "media"
+    "storage"
+    "torrenting"
+  ];
 
   services = {
     openssh.ports = [ 629 ];
