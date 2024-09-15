@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   vars = import ./vars.nix;
 in
@@ -18,12 +18,14 @@ in
     ./services.nix
   ];
 
-  boot.zfs.extraPools = [
-    "media"
-    "storage"
-    "torrenting"
-  ];
-
+  boot = {
+    zfs.extraPools = [
+      "media"
+      "storage"
+      "torrenting"
+    ];
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  };
 
   services = {
     openssh.ports = [ 629 ];

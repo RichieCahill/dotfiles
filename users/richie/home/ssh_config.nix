@@ -11,7 +11,7 @@
         dynamicForwards = [ { port = 9050; } ];
       };
       unlock-jeeves = {
-        hostname = "192.168.90.14";
+        hostname = "192.168.95.14";
         user = "root";
         identityFile = "~/.ssh/id_ed25519";
         port = 2222;
