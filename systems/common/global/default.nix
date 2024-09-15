@@ -18,7 +18,7 @@
     ./ssh.nix
   ];
 
-  kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   security.auditd.enable = lib.mkDefault true;
 
