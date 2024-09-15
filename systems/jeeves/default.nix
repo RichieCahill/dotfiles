@@ -69,6 +69,7 @@ in
         path = "${vars.storage_syncthing}/music";
         devices = [
           "bob"
+          "ipad"
           "phone"
         ];
         fsWatcherEnabled = true;
