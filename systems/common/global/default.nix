@@ -42,5 +42,8 @@
 
   users.mutableUsers = lib.mkDefault true;
 
-  zramSwap.enable = true;
+  zramSwap = {
+    enable = lib.mkDefault true;
+    priority = 1000;
+  };
 }
