@@ -23,16 +23,7 @@
     tmp.useTmpfs = true;
   };
 
-  zramSwap.enable = true;
-
-  security.auditd.enable = lib.mkDefault true;
-
-  programs = {
-    zsh.enable = true;
-    fish.enable = true;
-  };
-
-  users.mutableUsers = lib.mkDefault true;
+  hardware.enableRedistributableFirmware = true;
 
   home-manager = {
     useGlobalPkgs = true;
@@ -42,5 +33,14 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  hardware.enableRedistributableFirmware = true;
+  programs = {
+    zsh.enable = true;
+    fish.enable = true;
+  };
+
+  security.auditd.enable = lib.mkDefault true;
+
+  users.mutableUsers = lib.mkDefault true;
+
+  zramSwap.enable = true;
 }
