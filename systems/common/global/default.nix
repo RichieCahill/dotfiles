@@ -19,7 +19,7 @@
   ];
 
   boot = {
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = lib.mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
     tmp.useTmpfs = true;
   };
 

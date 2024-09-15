@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   ...
 }:
 {
@@ -15,6 +16,7 @@
     ./hardware.nix
     ./nvidia.nix
   ];
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking = {
     hostName = "bob";
