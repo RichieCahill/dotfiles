@@ -11,7 +11,6 @@
     neofetch
     rar
     ripgrep
-    sops
     starship
     tmux
     zoxide

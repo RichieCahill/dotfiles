@@ -52,9 +52,7 @@
         id = "l62ul-lpweo"; # cspell:disable-line
         path = "/home/richie/notes";
         devices = [
-          "phone"
           "jeeves"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -64,7 +62,6 @@
         devices = [
           "phone"
           "jeeves"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -74,7 +71,6 @@
         devices = [
           "phone"
           "jeeves"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -82,9 +78,9 @@
         id = "vprc5-3azqc"; # cspell:disable-line
         path = "/home/richie/music";
         devices = [
+          "ipad"
           "phone"
           "jeeves"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -93,7 +89,6 @@
         path = "/home/richie/projects";
         devices = [
           "jeeves"
-          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };

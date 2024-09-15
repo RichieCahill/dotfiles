@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   inputs,
   outputs,
@@ -16,6 +17,8 @@
     ./programs.nix
     ./ssh.nix
   ];
+
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   security.auditd.enable = lib.mkDefault true;
 

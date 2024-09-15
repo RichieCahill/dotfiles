@@ -9,9 +9,9 @@
     settings = {
       devices = {
         phone.id = "LTGPLAE-M4ZDJTM-TZ3DJGY-SLLAVWF-CQDVEVS-RGCS75T-GAPZYK3-KUM6LA5"; # cspell:disable-line
-        jeeves.id = "7YQ4UEW-OPQEBH4-6YKJH4B-ZCE3SAX-5EIK5JL-WJDIWUA-WA2N3D5-MNK6GAV"; # cspell:disable-line
-        rhapsody-in-green.id = "INKUNKN-KILXGL5-2TQ5JTH-ORJOLOM-WYD2PYO-YRDLQIX-3AKZFWT-ZN7OJAE"; # cspell:disable-line
-        bob.id = "YP6UYKF-KFZ3FG3-5XM3XM3-5Q24AZS-LZK67PN-LAERKU2-K4WMYBH-N57ZBA5"; # cspell:disable-line
+        jeeves.id = "RCDU465-AIQRBEJ-VWC4EZF-2AMXABC-F3S4NFW-QA4ZUAQ-OVNUBLI-BUJJTA2"; # cspell:disable-line
+        ipad.id = "KI76T3X-SFUGV2L-VSNYTKR-TSIUV5L-SHWD3HE-GQRGRCN-GY4UFMD-CW6Z6AX"; # cspell:disable-line
+        bob.id = "CJIAPEJ-VO74RR4-F75VU6M-QNZAMYG-FYUJG7Y-6AT62HJ-355PRPL-PJFETAZ"; # cspell:disable-line
       };
     };
   };
