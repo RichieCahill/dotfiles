@@ -15,8 +15,6 @@
         user = "root";
         identityFile = "~/.ssh/id_ed25519";
         port = 2222;
-        RequestTTY = "yes";
-        RemoteCommand = "cryptsetup-askpass";
       };
       jeevesjr = {
         hostname = "192.168.90.35";
