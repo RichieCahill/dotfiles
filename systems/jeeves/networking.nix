@@ -3,6 +3,7 @@
     hostName = "jeeves";
     hostId = "0e15ce35";
     firewall.enable = false;
+    useNetworkd = true;
   };
 
   systemd.network = {
