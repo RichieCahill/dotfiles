@@ -17,8 +17,8 @@
       ];
       kernelModules = [ ];
       luks.devices = {
-        "luks-root-pool-wwn-0x500a0751e6c3c01e-part2".device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part2";
-        "luks-root-pool-wwn-0x500a0751e6c3c01c-part2".device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01c-part2";
+        "luks-root-pool-wwn-0x500a0751e6c3c01e-part2".device = "/dev/disk/by-id//wwn-0x500a0751e6c3c01e-part2";
+        "luks-root-pool-wwn-0x500a0751e6c3c01c-part2".device = "/dev/disk/by-id//wwn-0x500a0751e6c3c01c-part2";
       };
     };
     kernelModules = [ "kvm-amd" ];
@@ -51,7 +51,26 @@
     };
   };
 
-  swapDevices = [ ];
+
+
+  swapDevices = [
+    {
+      device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01c-part3";
+      randomEncryption = {
+        enable = true; 
+        allowDiscards = true;
+      };
+      priority = 10;
+    }
+    {
+      device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part3";
+      randomEncryption = {
+        enable = true; 
+        allowDiscards = true;
+      };
+      priority = 10;
+    }
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
