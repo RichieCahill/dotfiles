@@ -13,6 +13,7 @@
     ../common/optional/syncthing_base.nix
     ../common/optional/systemd-boot.nix
     ../common/optional/zerotier.nix
+    ../common/optional/yubikey.nix
     ./hardware.nix
     ./nvidia.nix
   ];
