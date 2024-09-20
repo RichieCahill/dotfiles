@@ -13,6 +13,7 @@ in
     ./arch_mirror.nix
     ./docker
     ./hardware.nix
+    ./home_assistant.nix
     ./networking.nix
     ./programs.nix
     ./services.nix
