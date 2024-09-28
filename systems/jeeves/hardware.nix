@@ -17,8 +17,38 @@
       ];
       kernelModules = [ ];
       luks.devices = {
-        "luks-root-pool-wwn-0x500a0751e6c3c01e-part2".device = "/dev/disk/by-id//wwn-0x500a0751e6c3c01e-part2";
-        "luks-root-pool-wwn-0x500a0751e6c3c01c-part2".device = "/dev/disk/by-id//wwn-0x500a0751e6c3c01c-part2";
+        # cspell:disable
+        # Root pool
+        "luks-root-pool-wwn-0x500a0751e6c3c01e-part2" = {
+          device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part2";
+          bypassWorkqueues = true;
+        };
+        "luks-root-pool-wwn-0x500a0751e6c3c01c-part2" = {
+          device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01c-part2";
+          bypassWorkqueues = true;
+        };
+        # Media pool
+        "luks-media_pool-nvme-INTEL_SSDPEK1A118GA_BTOC14120V2J118B-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_SSDPEK1A118GA_BTOC14120V2J118B-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-media_pool-nvme-INTEL_SSDPEK1A118GA_BTOC14120WAG118B-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_SSDPEK1A118GA_BTOC14120WAG118B-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-media_pool-nvme-INTEL_SSDPE2ME012T4_CVMD5130000G1P2HGN-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_SSDPE2ME012T4_CVMD5130000G1P2HGN-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-media_pool-nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        # cspell:enable
       };
     };
     kernelModules = [ "kvm-amd" ];
