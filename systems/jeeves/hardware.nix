@@ -48,6 +48,9 @@
           bypassWorkqueues = true;
           allowDiscards = true;
         };
+        # Torrenting pool
+        "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device = "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
+        "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device = "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
         # cspell:enable
       };
     };
