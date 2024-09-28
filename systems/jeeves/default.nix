@@ -94,8 +94,8 @@ in
       description = "ZFS Snapshot Manager";
       requires = [ "zfs-import.target" ];
       after = [ "zfs-import.target" ];
+      path = [ pkgs.zfs ];
       serviceConfig = {
-        Environment = "ZFS_BIN=${pkgs.zfs}/bin/zfs";
         Type = "oneshot";
         ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/snapshot_manager --config-file='${./snapshot_config.toml}'";
       };
