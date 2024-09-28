@@ -8,6 +8,7 @@ in {
   users.users.richie = {
     isNormalUser = true;
     shell = pkgs.zsh;
+    group = "richie";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIPtuYhiJHRTYhNaDmTcJOqJASk7D8mIn6u3F1IN5AFJ bob" # cspell:disable-line
     ];
@@ -26,6 +27,10 @@ in {
       "uaccess"
       "wireshark"
     ];
+  };
+
+  users.groups.richie = {
+    gid = 1000;
   };
 
   home-manager.users.richie = import ./systems/${config.networking.hostName}.nix; 
