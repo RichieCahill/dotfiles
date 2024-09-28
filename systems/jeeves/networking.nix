@@ -7,29 +7,41 @@
   };
 
   systemd.network = {
+
     enable = true;
+
+    netdevs = {
+      "20-ioit-vlan" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "ioit-vlan";
+        };
+        vlanConfig.Id = 20;
+      };
+    };
+
     networks = {
       "10-1GB_Primary" = {
         matchConfig.Name = "enp98s0f0";
         DHCP = "yes";
+        vlan = [ "ioit-vlan" ];
+        linkConfig.RequiredForOnline = "routable";
       };
-    };
-    networks = {
       "10-1GB_Secondary" = {
         matchConfig.Name = "enp98s0f1";
         DHCP = "yes";
       };
-    };
-    networks = {
       "10-10GB_Primary" = {
         matchConfig.Name = "enp97s0f0np0";
         DHCP = "yes";
         linkConfig.RequiredForOnline = "routable";
       };
-    };
-    networks = {
       "10-10GB_Secondary" = {
         matchConfig.Name = "enp97s0f1np1";
+        DHCP = "yes";
+      };
+      "40-ioit-vlan" = {
+        matchConfig.Name = "ioit-vlan";
         DHCP = "yes";
       };
     };
