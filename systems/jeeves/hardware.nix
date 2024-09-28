@@ -48,6 +48,33 @@
           bypassWorkqueues = true;
           allowDiscards = true;
         };
+        # Storage pool
+        "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1" = {
+          device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834817F-part1" = {
+          device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834817F-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-storage_pool-nvme-INTEL_MEMPEK1W016GA_PHBT828104DF016D-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_MEMPEK1W016GA_PHBT828104DF016D-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-storage_pool-nvme-INTEL_MEMPEK1W016GA_PHBT828105A8016D-part1" = {
+          device = "/dev/disk/by-id/nvme-INTEL_MEMPEK1W016GA_PHBT828105A8016D-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bc438dd-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bc438dd-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd035f5-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd02746-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
         # Torrenting pool
         "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device = "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
         "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device = "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
