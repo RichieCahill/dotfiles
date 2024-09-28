@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ inputs, pkgs, ... }:
 let
   vars = import ./vars.nix;
 in
@@ -97,7 +97,7 @@ in
       serviceConfig = {
         Environment = "ZFS_BIN=${pkgs.zfs}/bin/zfs";
         Type = "oneshot";
-        ExecStart = "${pkgs.python3}/bin/python3 ${vars.media_scripts}/ZFS/snapshot_manager.py --config-file='${./snapshot_config.toml}'";
+        ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/snapshot_manager --config-file='${./snapshot_config.toml}'";
       };
     };
     timers."snapshot_manager" = {
