@@ -75,6 +75,8 @@
         "luks-storage_pool-wwn-0x5000cca23bcf313e-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
         "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
         "luks-storage_pool-wwn-0x5000cca23bd02746-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
         # Torrenting pool
         "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device = "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
         "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device = "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
