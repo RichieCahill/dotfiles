@@ -1,11 +1,9 @@
 {
-  inputs,
   pkgs,
   ...
 }:
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.framework-13-7040-amd
     ../../users/richie
     ../common/global
     ../common/optional/desktop.nix
