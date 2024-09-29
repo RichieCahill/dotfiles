@@ -10,26 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Make changes
-        run: |
-          # Update ZFS package to match the latest supported Linux kernel version
-
-          raw_latest_zfs=$(curl -s https://raw.githubusercontent.com/openzfs/zfs/master/META | grep Linux-Maximum | cut -d" " -f2)
-
-          latest_zfs="${raw_latest_zfs//./_}"
-
-          sed -i "s/linuxPackages_6_[0-9]\+/linuxPackages_$latest_zfs/" systems/common/global/default.nix
-
-          # Commit the changes
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-          git add systems/common/global/default.nix
-          git commit -m "Update Linux kernel and ZFS packages"
+        run: bash ${GITHUB_WORKSPACE}/.github/workflows/kernel_packages_update.sh
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Daily update
