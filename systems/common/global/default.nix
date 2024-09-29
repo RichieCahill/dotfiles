@@ -1,8 +1,8 @@
 {
-  config,
-  lib,
   inputs,
+  lib,
   outputs,
+  pkgs,
   ...
 }:
 {
@@ -19,7 +19,7 @@
   ];
 
   boot = {
-    kernelPackages = lib.mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_10;
     tmp.useTmpfs = true;
   };
 
