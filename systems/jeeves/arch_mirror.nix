@@ -3,6 +3,14 @@ let
   vars = import ./vars.nix;
 in
 {
+  users = {
+    users.arch-mirror = {
+      isSystemUser = true;
+      group = "arch-mirror";
+    };
+    groups.arch-mirror = {};
+  };
+
   virtualisation.oci-containers.containers.arch_mirror = {
     image = "ubuntu/apache2:latest";
     volumes = [
@@ -23,6 +31,8 @@ in
     serviceConfig = {
       Environment = "MIRROR_DIR=${vars.media_mirror}/archlinux/";
       Type = "simple";
+      User = "arch-mirror";
+      Group = "arch-mirror";
       ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/sync_mirror";
     };
   };
