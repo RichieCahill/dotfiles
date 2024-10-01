@@ -224,6 +224,8 @@ def installer(
 
 
 class Cursor:
+    """Cursor class to handle cursor movement and navigation."""
+
     def __init__(self):
         self.x_position = 0
         self.y_position = 0
@@ -280,6 +282,8 @@ class Cursor:
 
 
 class State:
+    """State class to store the state of the program."""
+
     def __init__(self):
         self.key = 0
         self.cursor = Cursor()
@@ -294,6 +298,12 @@ class State:
 
 
 def get_device(raw_device: str) -> dict[str, str]:
+    """get device information from raw device string
+    Args:
+        raw_device (str): the raw device string
+    Returns:
+        dict[str, str]: the device information
+    """
     raw_device_components = raw_device.split(" ")
     return {
         thing.split("=")[0].lower(): thing.split("=")[1].strip('"')
@@ -302,7 +312,10 @@ def get_device(raw_device: str) -> dict[str, str]:
 
 
 def get_devices() -> list[dict[str, str]]:
-    """Get a list of devices."""
+    """Get a list of devices.
+    Returns:
+        list[dict[str, str]]: the list of devices
+    """
     # --bytes
     raw_devices = bash_wrapper("lsblk --paths --pairs").splitlines()
     return [get_device(raw_device) for raw_device in raw_devices]
@@ -321,6 +334,16 @@ def draw_device_menu(
     menu_start_y: int = 0,
     menu_start_x: int = 0,
 ) -> State:
+    """draw the device menu and handle user input
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        devices (list[dict[str, str]]): the list of devices to draw
+        state (State): the state object to update
+        menu_start_y (int, optional): the y position to start drawing the menu. Defaults to 0.
+        menu_start_x (int, optional): the x position to start drawing the menu. Defaults to 0.
+    Returns:
+        State: the updated state object
+    """
     padding = 2
 
     name_padding = calculate_device_menu_padding(devices, "name", padding)
@@ -364,6 +387,11 @@ def draw_device_menu(
 
 
 def debug_menu(std_screen: curses.window, key: int) -> None:
+    """draw debug menu
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        key (int): the last key pressed
+    """
     height, width = std_screen.getmaxyx()
     width_height = "Width: {}, Height: {}".format(width, height)
     std_screen.addstr(height - 4, 0, width_height, curses.color_pair(5))
@@ -383,6 +411,13 @@ def status_bar(
     width: int,
     height: int,
 ) -> None:
+    """draw status bar
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        cursor (Cursor): the cursor object
+        width (int): the width of the screen
+        height (int): the height of the screen
+    """
     std_screen.attron(curses.A_REVERSE)
     std_screen.attron(curses.color_pair(3))
 
@@ -404,6 +439,15 @@ def set_color() -> None:
 
 
 def get_text_input(std_screen: curses.window, prompt: str, y: int, x: int) -> str:
+    """get text input from the user
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        prompt (str): the prompt to display
+        y (int): the y position to start drawing the prompt
+        x (int): the x position to start drawing the prompt
+    Returns:
+        str: the input string
+    """
     curses.echo()
     std_screen.addstr(y, x, prompt)
     input_str = ""
@@ -429,6 +473,14 @@ def swap_size_input(
     state: State,
     swap_offset: int,
 ) -> State:
+    """draw swap size input
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        state (State): the state object to update
+        swap_offset (int): the y position to start drawing the swap size input
+    Returns:
+        State: the updated state object
+    """
     swap_size_text = "Swap size (GB): "
     std_screen.addstr(swap_offset, 0, f"{swap_size_text}{state.swap_size}")
     if state.key == ord("\n") and state.cursor.get_y() == swap_offset:
@@ -454,6 +506,14 @@ def reserve_size_input(
     state: State,
     reserve_offset: int,
 ) -> State:
+    """draw reserve size input
+    Args:
+        std_screen (curses.window): the curses window to draw on
+        state (State): the state object to update
+        reserve_offset (int): the y position to start drawing the reserve size input
+    Returns:
+        State: the updated state object
+    """
     reserve_size_text = "reserve size (GB): "
     std_screen.addstr(reserve_offset, 0, f"{reserve_size_text}{state.reserve_size}")
     if state.key == ord("\n") and state.cursor.get_y() == reserve_offset:
@@ -477,6 +537,12 @@ def reserve_size_input(
 
 
 def draw_menu(std_screen: curses.window) -> State:
+    """draw the menu and handle user input
+    Args:
+        std_screen (curses.window): the curses window to draw on
+    Returns:
+        State: the state object
+    """
     # Clear and refresh the screen for a blank canvas
     std_screen.clear()
     std_screen.refresh()
@@ -532,6 +598,7 @@ def draw_menu(std_screen: curses.window) -> State:
 
 
 def main() -> None:
+    """Main."""
     configure_logger("DEBUG")
 
     state = curses.wrapper(draw_menu)
