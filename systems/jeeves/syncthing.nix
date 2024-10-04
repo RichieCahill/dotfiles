@@ -10,6 +10,7 @@ in
         path = vars.media_notes;
         devices = [
           "bob"
+          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
@@ -18,6 +19,7 @@ in
         path = "${vars.storage_syncthing}/books";
         devices = [
           "bob"
+          "rhapsody-in-green"
           "phone"
         ];
         fsWatcherEnabled = true;
@@ -27,6 +29,7 @@ in
         path = "${vars.storage_syncthing}/important";
         devices = [
           "bob"
+          "rhapsody-in-green"
           "phone"
         ];
         fsWatcherEnabled = true;
@@ -36,6 +39,7 @@ in
         path = "${vars.storage_syncthing}/music";
         devices = [
           "bob"
+          "rhapsody-in-green"
           "ipad"
           "phone"
         ];
@@ -46,6 +50,7 @@ in
         path = "${vars.storage_syncthing}/projects";
         devices = [
           "bob"
+          "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };

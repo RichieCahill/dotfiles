@@ -1,11 +1,11 @@
 {    
-  services.syncthing.settings.folders = {
+  syncthing.settings.folders = {
     "notes" = {
       id = "l62ul-lpweo"; # cspell:disable-line
       path = "/home/richie/notes";
       devices = [
+        "bob"
         "jeeves"
-        "rhapsody-in-green"
       ];
       fsWatcherEnabled = true;
     };
@@ -13,9 +13,9 @@
       id = "6uppx-vadmy"; # cspell:disable-line
       path = "/home/richie/books";
       devices = [
-        "phone"
+        "bob"
         "jeeves"
-        "rhapsody-in-green"
+        "phone"
       ];
       fsWatcherEnabled = true;
     };
@@ -23,9 +23,9 @@
       id = "4ckma-gtshs"; # cspell:disable-line
       path = "/home/richie/important";
       devices = [
-        "phone"
+        "bob"
         "jeeves"
-        "rhapsody-in-green"
+        "phone"
       ];
       fsWatcherEnabled = true;
     };
@@ -33,10 +33,10 @@
       id = "vprc5-3azqc"; # cspell:disable-line
       path = "/home/richie/music";
       devices = [
+        "bob"
         "ipad"
-        "phone"
         "jeeves"
-        "rhapsody-in-green"
+        "phone"
       ];
       fsWatcherEnabled = true;
     };
@@ -44,8 +44,8 @@
       id = "vyma6-lqqrz"; # cspell:disable-line
       path = "/home/richie/projects";
       devices = [
+        "bob"
         "jeeves"
-        "rhapsody-in-green"
       ];
       fsWatcherEnabled = true;
     };
