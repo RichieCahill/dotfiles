@@ -19,10 +19,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Daily update
-          title: Daily update
+          commit-message: Base linuxPackages update
+          title: Base linuxPackages update
           body: |
-            This is an automated pull request.
-            Daily update performed+9 at $(date)
+            Update linuxPackages
           branch: daily-update
           delete-branch: true
