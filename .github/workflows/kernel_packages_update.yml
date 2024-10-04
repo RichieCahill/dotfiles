@@ -1,4 +1,4 @@
-name: Daily Pull Request
+name: Kernel Packages Update
 
 on:
   schedule:
