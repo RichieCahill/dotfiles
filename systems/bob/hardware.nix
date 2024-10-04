@@ -22,8 +22,10 @@
         "sd_mod"
       ];
       kernelModules = [ ];
-      luks.devices = {
-        "luks-root-pool-nvme-Samsung_SSD_990_PRO_with_Heatsink_1TB_S73JNJ0X114418B-part2".device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_with_Heatsink_1TB_S73JNJ0X114418B-part2";
+      luks.devices."luks-root-pool-nvme-Samsung_SSD_990_PRO_with_Heatsink_1TB_S73JNJ0X114418B-part2" = {
+        device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_with_Heatsink_1TB_S73JNJ0X114418B-part2";
+        bypassWorkqueues = true;
+        allowDiscards = true;
       };
     };
     kernelModules = [ "kvm-amd" ];
