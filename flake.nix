@@ -75,6 +75,10 @@
         modules = [./systems/jeeves];
         specialArgs = {inherit inputs outputs;};
       };
+      rhapsody-in-green = lib.nixosSystem {
+        modules = [./systems/rhapsody-in-green];
+        specialArgs = {inherit inputs outputs;};
+      };
     };
   };
 }
