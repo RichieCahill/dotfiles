@@ -1,5 +1,5 @@
 {    
-  syncthing.settings.folders = {
+  services.syncthing.settings.folders = {
     "notes" = {
       id = "l62ul-lpweo"; # cspell:disable-line
       path = "/home/richie/notes";
