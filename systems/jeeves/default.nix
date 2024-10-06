@@ -29,6 +29,11 @@ in
   services = {
     openssh.ports = [ 629 ];
 
+    nix-serve = {
+      enable = true;
+      secretKeyFile = "/var/cache-priv-key.pem";
+    };
+
     plex = {
       enable = true;
       dataDir = vars.media_plex;
