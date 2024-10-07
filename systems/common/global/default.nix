@@ -19,7 +19,7 @@
   ];
 
   boot = {
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_10;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_11;
     tmp.useTmpfs = true;
   };
 
