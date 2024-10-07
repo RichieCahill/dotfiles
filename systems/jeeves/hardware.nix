@@ -117,26 +117,7 @@
     };
   };
 
-
-
-  swapDevices = [
-    {
-      device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01c-part3";
-      randomEncryption = {
-        enable = true; 
-        allowDiscards = true;
-      };
-      priority = 10;
-    }
-    {
-      device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part3";
-      randomEncryption = {
-        enable = true; 
-        allowDiscards = true;
-      };
-      priority = 10;
-    }
-  ];
+  swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
