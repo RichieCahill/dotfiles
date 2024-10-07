@@ -97,7 +97,7 @@
       fsType = "zfs";
     };
 
-    fileSystems."/nix" =
+    "/nix" =
     { device = "root_pool/nix";
       fsType = "zfs";
     };
