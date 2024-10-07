@@ -1,5 +1,4 @@
-{ config, lib,  modulesPath, ... }:
-
+{ config, lib, modulesPath, ... }:
 {
   imports =[ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -95,6 +94,11 @@
 
     "/home" = {
       device = "root_pool/home";
+      fsType = "zfs";
+    };
+
+    fileSystems."/nix" =
+    { device = "root_pool/nix";
       fsType = "zfs";
     };
 
