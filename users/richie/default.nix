@@ -18,6 +18,7 @@ in {
       "audio"
       "video"
       "wheel"
+      "users"
     ]
     ++ ifTheyExist [
       "dialout"
@@ -28,6 +29,7 @@ in {
       "uaccess"
       "wireshark"
     ];
+    uid = 1000;
   };
 
   users.groups.richie = {
