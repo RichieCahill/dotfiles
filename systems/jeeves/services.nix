@@ -3,6 +3,9 @@
   pkgs,
   ...
 }:
+let
+  vars = import ../vars.nix;
+in
 {
   systemd = {
     services = {
@@ -20,7 +23,7 @@
         description = "validates startup";
         path = [ pkgs.zfs ];
         serviceConfig = {
-          EnvironmentFile = "/root/secrets/services/server-validation";
+          EnvironmentFile = "${vars.storage_secrets}/services/server-validation";
           Type = "oneshot";
           ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_jeeves";
         };

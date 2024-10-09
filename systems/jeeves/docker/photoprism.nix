@@ -52,7 +52,7 @@ in
         PHOTOPRISM_GID="600";
         # PHOTOPRISM_UMASK: 0000
       };
-      environmentFiles = [/root/secrets/docker/photoprism];
+      environmentFiles = ["${vars.storage_secrets}/docker/photoprism"];
       autoStart = true;
       dependsOn = [ "photoprism_mariadb" ];
       extraOptions = [ "--network=web" ];
@@ -66,7 +66,7 @@ in
         MARIADB_DATABASE = "photoprism";
         MARIADB_USER = "photoprism";
       };
-      environmentFiles = [/root/secrets/docker/photoprism];
+      environmentFiles = ["${vars.storage_secrets}/docker/photoprism"];
       cmd = [ "--innodb-buffer-pool-size=512M" "--transaction-isolation=READ-COMMITTED" "--character-set-server=utf8mb4" "--collation-server=utf8mb4_unicode_ci" "--max-connections=512" "--innodb-rollback-on-timeout=OFF" "--innodb-lock-wait-timeout=120" ];
       autoStart = true;
       extraOptions = [ "--network=web" ];

@@ -14,9 +14,10 @@ in
   media_plex = "${zfs_media}/plex";
   # storage
   storage_main = "${zfs_storage}/main";
-  storage_plex = "${zfs_storage}/plex";
-  storage_syncthing = "${zfs_storage}/syncthing";
   storage_photos = "${zfs_storage}/photos";
+  storage_plex = "${zfs_storage}/plex";
+  storage_secrets = "${zfs_storage}/secrets";
+  storage_syncthing = "${zfs_storage}/syncthing";
   # torrenting
   torrenting_qbit = "${zfs_torrenting}/qbit";
   torrenting_qbitvpn = "${zfs_torrenting}/qbitvpn";
