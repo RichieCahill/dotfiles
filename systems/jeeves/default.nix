@@ -31,7 +31,7 @@ in
 
     nix-serve = {
       enable = true;
-      secretKeyFile = "${vars.storage_secrets}/nix-cache/cache-priv-key.pem";
+      secretKeyFile = "${vars.storage_secrets}/services/nix-cache/cache-priv-key.pem";
     };
 
     plex = {
