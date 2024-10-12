@@ -1,0 +1,29 @@
+["default"]
+15_min = 8
+hourly = 24
+daily = 0
+monthly = 0
+
+["root_pool/home"]
+15_min = 8
+hourly = 24
+daily = 14
+monthly = 0
+
+["root_pool/root"]
+15_min = 8
+hourly = 24
+daily = 0
+monthly = 0
+
+["root_pool/nix"]
+15_min = 4
+hourly = 0
+daily = 0
+monthly = 0
+
+["root_pool/var"]
+15_min = 8
+hourly = 24
+daily = 30
+monthly = 6

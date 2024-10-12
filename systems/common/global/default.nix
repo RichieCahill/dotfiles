@@ -16,6 +16,7 @@
     ./nix.nix
     ./programs.nix
     ./ssh.nix
+    ./snapshot_manager.nix
   ];
 
   boot = {
