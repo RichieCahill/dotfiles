@@ -55,21 +55,6 @@ in
       environmentFiles = ["${vars.storage_secrets}/docker/qbitvpn"];
       autoStart = true;
     };
-    bazarr = {
-      image = "ghcr.io/linuxserver/bazarr:latest";
-      ports = [ "6767:6767" ];
-      environment = {
-        PUID = "600";
-        PGID = "100";
-        TZ = "America/New_York";
-      };
-      volumes = [
-        "${vars.media_docker_configs}/bazarr:/config"
-        "${vars.storage_plex}/movies:/movies"
-        "${vars.storage_plex}/tv:/tv"
-      ];
-      autoStart = true;
-    };
     prowlarr = {
       image = "ghcr.io/linuxserver/prowlarr:latest";
       ports = [ "9696:9696" ];
@@ -79,21 +64,6 @@ in
         TZ = "America/New_York";
       };
       volumes = [ "${vars.media_docker_configs}/prowlarr:/config" ];
-      autoStart = true;
-    };
-    radarr = {
-      image = "ghcr.io/linuxserver/radarr:latest";
-      ports = [ "7878:7878" ];
-      environment = {
-        PUID = "600";
-        PGID = "100";
-        TZ = "America/New_York";
-      };
-      volumes = [
-        "${vars.media_docker_configs}/radarr:/config"
-        "${vars.storage_plex}/movies:/movies"
-        "${vars.torrenting_qbitvpn}:/data"
-      ];
       autoStart = true;
     };
     sonarr = {
@@ -109,35 +79,6 @@ in
         "${vars.storage_plex}/tv:/tv"
         "${vars.torrenting_qbitvpn}:/data"
       ];
-      autoStart = true;
-    };
-    overseerr = {
-      image = "ghcr.io/linuxserver/overseerr";
-      environment = {
-        PUID = "600";
-        PGID = "100";
-        TZ = "America/New_York";
-      };
-      volumes = [ "${vars.media_docker_configs}/overseerr:/config" ];
-      dependsOn = [
-        "radarr"
-        "sonarr"
-      ];
-      extraOptions = [ "--network=web" ];
-      autoStart = true;
-    };
-    whisper = {
-      image = "ghcr.io/linuxserver/faster-whisper:latest";
-      ports = [ "10300:10300" ];
-      environment = {
-        PUID = "600";
-        PGID = "100";
-        TZ = "America/New_York";
-        WHISPER_MODEL = "tiny-int8";
-        WHISPER_LANG = "en";
-        WHISPER_BEAM = "1";
-      };
-      volumes = [ "${vars.media_docker_configs}/whisper:/config" ];
       autoStart = true;
     };
   };
