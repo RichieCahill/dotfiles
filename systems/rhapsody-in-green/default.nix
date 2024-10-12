@@ -44,6 +44,8 @@
       pulse.enable = true;
     };
 
+    snapshot_manager.enable = true;
+
     zfs = {
       trim.enable = true;
       autoScrub.enable = true;
