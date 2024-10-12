@@ -1,4 +1,3 @@
-{ inputs, pkgs, ... }:
 let
   vars = import ./vars.nix;
 in
@@ -41,6 +40,11 @@ in
 
     smartd.enable = true;
 
+    snapshot_manager = {
+      enable = true;
+      path = ./snapshot_config.toml;
+    };
+
     sysstat.enable = true;
 
     zfs = {
@@ -48,27 +52,6 @@ in
       autoScrub.enable = true;
     };
   };
-  systemd = {
-    services."snapshot_manager" = {
-      description = "ZFS Snapshot Manager";
-      requires = [ "zfs-import.target" ];
-      after = [ "zfs-import.target" ];
-      path = [ pkgs.zfs ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/snapshot_manager --config-file='${./snapshot_config.toml}'";
-      };
-    };
-    timers."snapshot_manager" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "15m";
-        OnUnitActiveSec = "15m";
-        Unit = "snapshot_manager.service";
-      };
-    };
-  };
-
 
   system.stateVersion = "24.05";
 }
