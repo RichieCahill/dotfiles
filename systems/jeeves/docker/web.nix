@@ -10,15 +10,6 @@ in
       extraOptions = [ "--network=web" ];
       autoStart = true;
     };
-    dnd_file_server = {
-      image = "ubuntu/apache2:latest";
-      volumes = [
-        "${../../common/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
-        "${vars.storage_main}/Table_Top/:/data"
-      ];
-      extraOptions = [ "--network=web" ];
-      autoStart = true;
-    };
     haproxy = {
       image = "haproxy:latest";
       user = "600:600";
@@ -31,10 +22,8 @@ in
       ];
       dependsOn = [
         "arch_mirror"
-        "dnd_file_server"
         "filebrowser"
         "grafana"
-        "overseerr"
         "uptime_kuma"
       ];
       extraOptions = [ "--network=web" ];
