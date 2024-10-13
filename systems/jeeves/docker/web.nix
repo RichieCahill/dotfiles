@@ -3,6 +3,20 @@ let
 in
 {
   virtualisation.oci-containers.containers = {
+    audiobookshelf = {
+      image = "ghcr.io/advplyr/audiobookshelf:latest";
+      ports = [ "13378:80" ];
+      volumes = [
+        "${vars.media_docker_configs}/audiobookshelf:/config"
+        "${vars.media_docker_configs}/audiobookshelf:/metadata"
+        "${vars.storage_library}/audiobooks:/audiobooks"
+        "${vars.storage_library}/books:/books"
+      ];
+      environment = {
+        TZ = "America/New_York";
+      };
+      autoStart = true;
+    };
     grafana = {
       image = "grafana/grafana-enterprise:latest";
       volumes = [ "${vars.media_docker_configs}/grafana:/var/lib/grafana" ];

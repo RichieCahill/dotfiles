@@ -17,6 +17,7 @@ sudo zpool add torrenting -o ashift=12 special
 
 # media datasets
 sudo zfs create -o compression=zstd-9 media/docker
+sudo zfs create -o recordsize=1M -o compression=zstd-19 media/library
 sudo zfs create -o exec=off media/minio
 sudo zfs create -o exec=off media/mirror
 sudo zfs create -o copies=3 media/notes
