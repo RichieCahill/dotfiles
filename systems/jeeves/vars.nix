@@ -18,6 +18,7 @@ in
   storage_plex = "${zfs_storage}/plex";
   storage_secrets = "${zfs_storage}/secrets";
   storage_syncthing = "${zfs_storage}/syncthing";
+  storage_library = "${zfs_storage}/library";
   # torrenting
   torrenting_qbit = "${zfs_torrenting}/qbit";
   torrenting_qbitvpn = "${zfs_torrenting}/qbitvpn";
