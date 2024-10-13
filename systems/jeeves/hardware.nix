@@ -3,6 +3,24 @@
   imports =[ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
+    loader = {
+      grub = {
+        enable = true;
+        zfsSupport = true;
+        efiSupport = true;
+        mirroredBoots = [
+          {
+            devices = [ "nodev" ];
+            path = "/boot0";
+          }
+          {
+            devices = [ "nodev" ];
+            path = "/boot1";
+          }
+        ];
+      };
+      efi.canTouchEfiVariables = true;
+    };
     initrd = {
       availableKernelModules = [
         "ahci"
@@ -18,12 +36,12 @@
       luks.devices = {
         # cspell:disable
         # Root pool
-        "luks-root-pool-wwn-0x500a0751e6c3c01e-part2" = {
-          device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part2";
+        "luks-root-pool-wwn-0x55cd2e4150f01519-part2" = {
+          device = "/dev/disk/by-id/wwn-0x55cd2e4150f01519-part2";
           bypassWorkqueues = true;
         };
-        "luks-root-pool-wwn-0x500a0751e6c3c01c-part2" = {
-          device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01c-part2";
+        "luks-root-pool-wwn-0x55cd2e4150f01556-part2" = {
+          device = "/dev/disk/by-id/wwn-0x55cd2e4150f01556-part2";
           bypassWorkqueues = true;
         };
         # Media pool
@@ -107,8 +125,16 @@
       fsType = "zfs";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
+    "/boot0" = {
+      device = "/dev/disk/by-id/wwn-0x55cd2e4150f01556-part1";
+      fsType = "vfat";
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
+    };
+    "/boot1" = {
+      device = "/dev/disk/by-id/wwn-0x55cd2e4150f01519-part1";
       fsType = "vfat";
       options = [
         "fmask=0077"

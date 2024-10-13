@@ -7,7 +7,6 @@ in
     ../common/global
     ../common/optional/ssh_decrypt.nix
     ../common/optional/syncthing_base.nix
-    ../common/optional/systemd-boot.nix
     ../common/optional/zerotier.nix
     ./arch_mirror.nix
     ./docker
