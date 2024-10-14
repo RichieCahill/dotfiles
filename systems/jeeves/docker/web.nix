@@ -15,6 +15,7 @@ in
       environment = {
         TZ = "America/New_York";
       };
+      extraOptions = [ "--network=web" ];
       autoStart = true;
     };
     grafana = {
@@ -36,6 +37,7 @@ in
       ];
       dependsOn = [
         "arch_mirror"
+        "audiobookshelf"
         "filebrowser"
         "grafana"
         "uptime_kuma"
