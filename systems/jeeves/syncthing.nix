@@ -5,6 +5,13 @@ in
   services.syncthing = {
     guiAddress = "192.168.90.40:8384";
     settings.folders = {
+      "bob_temp" = {
+        path = "${vars.storage_syncthing}/bob_temp";
+        devices = [
+          "jeeves"
+        ];
+        fsWatcherEnabled = true;
+      };
       "notes" = {
         id = "l62ul-lpweo"; # cspell:disable-line
         path = vars.media_notes;
@@ -50,6 +57,13 @@ in
         path = "${vars.storage_syncthing}/projects";
         devices = [
           "bob"
+          "rhapsody-in-green"
+        ];
+        fsWatcherEnabled = true;
+      };
+      "rhapsody-in-green_temp" = {
+        path = "${vars.storage_syncthing}/projects";
+        devices = [
           "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;

@@ -49,5 +49,21 @@
       ];
       fsWatcherEnabled = true;
     };
+    rhapsody-in-temp = {
+      id = "rhapsody-in-green_temp";
+      path = "/home/richie/projects";
+      devices = [
+        "bob"
+        "jeeves"
+      ];
+      fsWatcherEnabled = true;
+    };
+    "vault" = {
+      path = "/home/richie/vault";
+      devices = [
+        "bob"
+      ];
+      fsWatcherEnabled = true;
+    };
   };
 }
