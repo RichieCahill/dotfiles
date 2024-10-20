@@ -39,10 +39,12 @@
         "luks-root-pool-wwn-0x55cd2e4150f01519-part2" = {
           device = "/dev/disk/by-id/wwn-0x55cd2e4150f01519-part2";
           bypassWorkqueues = true;
+          allowDiscards = true;
         };
         "luks-root-pool-wwn-0x55cd2e4150f01556-part2" = {
           device = "/dev/disk/by-id/wwn-0x55cd2e4150f01556-part2";
           bypassWorkqueues = true;
+          allowDiscards = true;
         };
         # Media pool
         "luks-media_pool-nvme-INTEL_SSDPEK1A118GA_BTOC14120V2J118B-part1" = {
@@ -144,7 +146,7 @@
       options = [
         "fmask=0077"
         "dmask=0077"
-      ];
+      ];    
     };
   };
 
