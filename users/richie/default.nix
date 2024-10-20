@@ -26,6 +26,7 @@ in {
       "libvirtd"
       "networkmanager"
       "plugdev"
+      "scanner"
       "uaccess"
       "wireshark"
     ];
