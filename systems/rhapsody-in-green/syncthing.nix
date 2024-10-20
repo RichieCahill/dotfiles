@@ -9,16 +9,6 @@
       ];
       fsWatcherEnabled = true;
     };
-    "books" = {
-      id = "6uppx-vadmy"; # cspell:disable-line
-      path = "/home/richie/books";
-      devices = [
-        "bob"
-        "jeeves"
-        "phone"
-      ];
-      fsWatcherEnabled = true;
-    };
     "important" = {
       id = "4ckma-gtshs"; # cspell:disable-line
       path = "/home/richie/important";
@@ -51,9 +41,8 @@
     };
     rhapsody-in-temp = {
       id = "rhapsody-in-green_temp";
-      path = "/home/richie/projects";
+      path = "/home/richie/temp";
       devices = [
-        "bob"
         "jeeves"
       ];
       fsWatcherEnabled = true;
