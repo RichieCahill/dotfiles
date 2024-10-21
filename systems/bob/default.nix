@@ -1,8 +1,4 @@
 {
-  pkgs,
-  ...
-}:
-{
   imports = [
     ../../users/richie
     ../common/global
@@ -17,7 +13,6 @@
     ./nvidia.nix
     ./syncthing.nix
   ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking = {
     hostName = "bob";
