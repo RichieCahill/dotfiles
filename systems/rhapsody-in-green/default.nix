@@ -15,8 +15,9 @@
 
   networking = {
     hostName = "rhapsody-in-green";
+    hostId = "6404140d";
+    firewall.enable = true;
     networkmanager.enable = true;
-    hostId = "6404140d";  
   };
 
   hardware = {
