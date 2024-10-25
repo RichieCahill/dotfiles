@@ -16,8 +16,9 @@
 
   networking = {
     hostName = "bob";
-    networkmanager.enable = true;
     hostId = "7c678a41";
+    firewall.enable = true;
+    networkmanager.enable = true;
   };
 
   hardware = {
