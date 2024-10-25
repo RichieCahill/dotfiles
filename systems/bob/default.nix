@@ -1,14 +1,14 @@
 {
   imports = [
     ../../users/richie
-    ../common/global
-    ../common/optional/desktop.nix
-    ../common/optional/scanner.nix
-    ../common/optional/steam.nix
-    ../common/optional/syncthing_base.nix
-    ../common/optional/systemd-boot.nix
-    ../common/optional/zerotier.nix
-    ../common/optional/yubikey.nix
+    ../../common/global
+    ../../common/optional/desktop.nix
+    ../../common/optional/scanner.nix
+    ../../common/optional/steam.nix
+    ../../common/optional/syncthing_base.nix
+    ../../common/optional/systemd-boot.nix
+    ../../common/optional/zerotier.nix
+    ../../common/optional/yubikey.nix
     ./hardware.nix
     ./nvidia.nix
     ./syncthing.nix
