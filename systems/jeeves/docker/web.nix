@@ -5,7 +5,6 @@ in
   virtualisation.oci-containers.containers = {
     audiobookshelf = {
       image = "ghcr.io/advplyr/audiobookshelf:latest";
-      ports = [ "13378:80" ];
       volumes = [
         "${vars.media_docker_configs}/audiobookshelf:/config"
         "${vars.media_docker_configs}/audiobookshelf:/metadata"
