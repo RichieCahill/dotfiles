@@ -2,7 +2,7 @@
   networking = {
     hostName = "jeeves";
     hostId = "0e15ce35";
-    firewall.enable = false;
+    firewall.enable = true;
     useNetworkd = true;
   };
 
