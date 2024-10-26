@@ -15,6 +15,7 @@
     nemo-fileroller
     obs-studio
     obsidian
+    prismlauncher
     proxychains
     prusa-slicer
     signal-desktop
