@@ -47,7 +47,6 @@ in
     };
     environmentFiles = ["${vars.storage_secrets}/docker/photoprism"];
     autoStart = true;
-    dependsOn = [ "photoprism_mariadb" ];
     extraOptions = [ "--network=web" ];
   };
 }

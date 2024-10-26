@@ -22,6 +22,7 @@ in
         "audiobookshelf"
         "filebrowser"
         "grafana"
+        "photoprism"
         "uptime_kuma"
       ];
       extraOptions = [ "--network=web" ];
