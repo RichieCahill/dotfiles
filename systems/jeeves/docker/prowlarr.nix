@@ -2,9 +2,7 @@ let
   vars = import ../vars.nix;
 in
 {
-  networking.firewall = {
-    allowedTCPPorts = [ 9696 ];
-  };
+  networking.firewall.allowedTCPPorts = [ 9696 ];
   virtualisation.oci-containers.containers.prowlarr = {
     image = "ghcr.io/linuxserver/prowlarr:latest";
     ports = [ "9696:9696" ];

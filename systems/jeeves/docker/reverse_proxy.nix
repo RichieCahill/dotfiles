@@ -2,28 +2,11 @@ let
   vars = import ../vars.nix;
 in
 {
+  networking.firewall = {
+    allowedTCPPorts = [ 7844 ];
+    allowedUDPPorts = [ 7844 ];
+  };
   virtualisation.oci-containers.containers = {
-    audiobookshelf = {
-      image = "ghcr.io/advplyr/audiobookshelf:latest";
-      volumes = [
-        "${vars.media_docker_configs}/audiobookshelf:/config"
-        "${vars.media_docker_configs}/audiobookshelf:/metadata"
-        "${vars.storage_library}/audiobooks:/audiobooks"
-        "${vars.storage_library}/books:/books"
-      ];
-      environment = {
-        TZ = "America/New_York";
-      };
-      extraOptions = [ "--network=web" ];
-      autoStart = true;
-    };
-    grafana = {
-      image = "grafana/grafana-enterprise:latest";
-      volumes = [ "${vars.media_docker_configs}/grafana:/var/lib/grafana" ];
-      user = "600:600";
-      extraOptions = [ "--network=web" ];
-      autoStart = true;
-    };
     haproxy = {
       image = "haproxy:latest";
       user = "600:600";
