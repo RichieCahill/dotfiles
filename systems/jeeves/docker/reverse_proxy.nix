@@ -2,10 +2,6 @@ let
   vars = import ../vars.nix;
 in
 {
-  networking.firewall = {
-    allowedTCPPorts = [ 7844 ];
-    allowedUDPPorts = [ 7844 ];
-  };
   virtualisation.oci-containers.containers = {
     haproxy = {
       image = "haproxy:latest";
