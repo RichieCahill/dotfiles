@@ -5,14 +5,23 @@
     bat
     btop
     eza
+    fd
+    ffmpegthumbnailer
+    fzf
     git
     gnupg
+    imagemagick
+    jq
     ncdu
     neofetch
+    p7zip
+    poppler
     rar
     ripgrep
     starship
     tmux
+    unzip
+    yazi
     zoxide
     # system info
     hwloc
