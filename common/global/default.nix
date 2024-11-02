@@ -2,7 +2,6 @@
   inputs,
   lib,
   outputs,
-  pkgs,
   ...
 }:
 {
@@ -20,10 +19,7 @@
     ./snapshot_manager.nix
   ];
 
-  boot = {
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_10;
-    tmp.useTmpfs = true;
-  };
+  boot.tmp.useTmpfs = true;
 
   hardware.enableRedistributableFirmware = true;
 
