@@ -110,7 +110,6 @@ def create_zfs_pool(pool_disks: Sequence[str], mnt_dir: str) -> None:
         "-O relatime=on "
         "-O xattr=sa "
         "-O mountpoint=none "
-        "-O primarycache=metadata "
         "root_pool "
     )
     if len(pool_disks) == 1:
