@@ -3,16 +3,16 @@
 # zpools
 
 # media
-sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O zstd -m /zfs/media media mirror
+sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/media media mirror
 sudo zpool add media -o ashift=12 special mirror
 
 # storage
-sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O zstd -m /zfs/storage storage
+sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/storage storage
 sudo zpool add storage -o ashift=12 special mirror
 sudo zpool add storage -o ashift=12 logs mirror
 
 # torrenting
-sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O zstd -m /zfs/torrenting torrenting
+sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/torrenting torrenting
 sudo zpool add torrenting -o ashift=12 special
 
 # media datasets
