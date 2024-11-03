@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ./firefox.nix
+    ./firefox
     ./vscode
   ];
 
