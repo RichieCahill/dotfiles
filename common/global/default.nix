@@ -29,7 +29,12 @@
     extraSpecialArgs = {inherit inputs outputs;};
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
+    config = {
+      allowUnfree = true;
+    };
+  };
 
   programs = {
     zsh.enable = true;
