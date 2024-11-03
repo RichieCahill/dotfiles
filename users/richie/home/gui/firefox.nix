@@ -16,6 +16,11 @@
         sponsorblock
         ublock-origin
       ];
+      search = {
+          force = true;
+          default = "kagi";
+          order = [ "kagi" "DuckDuckGo" "Google" ];
+      };
       search.engines = {
         "Nix Options" = {
           urls = [
@@ -63,8 +68,21 @@
           icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
           definedAliases = [ "@n" ];
         };
+        "kagi" = {
+          urls = [
+            {
+              template = "https://kagi.com/search?";
+              params = [
+                {
+                  name = "q";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+          icon = ./kagi.png;
+        };
       };
-      search.force = true;
       settings = {
         # SECTION: FASTFOX
         # GENERAL
