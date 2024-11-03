@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  programs.firefox.search.engines = {
+  programs.firefox.profiles.richie.search.engines = {
     "Nix Options" = {
       urls = [
         {
