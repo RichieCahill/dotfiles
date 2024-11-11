@@ -24,6 +24,8 @@ in
     "torrenting"
   ];
 
+  networking.firewall.allowedTCPPorts = [ 7654 ];
+
   services = {
     openssh.ports = [ 629 ];
 
