@@ -39,6 +39,14 @@ in
       openFirewall = true;
     };
 
+    tang = {
+      enable = true;
+      ipAddressAllow = [
+        "192.168.98.1/24"
+        "192.168.95.1/24"
+      ];
+    };
+
     smartd.enable = true;
 
     snapshot_manager = {
