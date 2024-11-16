@@ -36,10 +36,7 @@
     };
   };
 
-  programs = {
-    zsh.enable = true;
-    fish.enable = true;
-  };
+  programs.zsh.enable = true;
 
   security.auditd.enable = lib.mkDefault true;
 
