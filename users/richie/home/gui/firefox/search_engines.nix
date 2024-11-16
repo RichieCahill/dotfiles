@@ -61,5 +61,24 @@
       ];
       icon = ./kagi.png;
     };
+    github = {
+      urls = [
+        {
+          template = "https://github.com/search?";
+          params = [
+            {
+              name = "q";
+              value = "{searchTerms}";
+            }
+            {
+              name = "type";
+              value = "code";
+            }
+          ];
+        }
+      ];
+      icon = ./github.svg;
+      definedAliases = [ "@n" ];
+    };
   };
 }
