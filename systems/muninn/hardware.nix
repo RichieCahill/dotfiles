@@ -17,6 +17,8 @@
         device = "/dev/disk/by-id/nvme-INTEL_SSDPEKKW256G7_BTPY63820XBH256D-part2";
         bypassWorkqueues = true;
         allowDiscards = true;
+        keyFileSize = 4096;
+        keyFile = "/dev/disk/by-id/usb-SanDisk_Ultra_T_C_4C530001020919102244-0:0";
       };
     };
     kernelModules = [ "kvm-intel" ];
