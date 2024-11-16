@@ -12,6 +12,10 @@
         "usb_storage"
         "sd_mod"
       ];
+      clevis = {
+        enable = true;
+        devices."luks-root-pool-nvme-INTEL_SSDPEKKW256G7_BTPY63820XBH256D-part2".secretFile = /root/key.jwe;
+      };
       kernelModules = [ ];
       luks.devices."luks-root-pool-nvme-INTEL_SSDPEKKW256G7_BTPY63820XBH256D-part2" = {
         device = "/dev/disk/by-id/nvme-INTEL_SSDPEKKW256G7_BTPY63820XBH256D-part2";
