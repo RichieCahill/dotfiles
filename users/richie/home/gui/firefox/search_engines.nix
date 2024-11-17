@@ -78,7 +78,7 @@
         }
       ];
       icon = ./github.svg;
-      definedAliases = [ "@n" ];
+      definedAliases = [ "@g" ];
     };
   };
 }
