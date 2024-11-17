@@ -1,6 +1,7 @@
 {
   imports = [
     ../../users/richie
+    ../../users/gaming
     ../../common/global
     ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
@@ -28,7 +29,7 @@
   services = {
     displayManager = {
       enable = true;
-      autoLogin.user = "richie";
+      autoLogin.user = "gaming";
     };
 
     openssh.ports = [ 262 ];

@@ -5,9 +5,7 @@
   ...
 }: {
   imports = [
-    ./cli
     ./programs.nix
-    ./ssh_config.nix
   ];
 
   nix = {
@@ -27,7 +25,7 @@
   };
 
   home = {
-    username = "richie";
+    username = "gaming";
     homeDirectory = "/home/${config.home.username}";
     stateVersion = "24.05";
     sessionVariables = {
