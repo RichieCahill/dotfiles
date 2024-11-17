@@ -28,11 +28,6 @@
   security.rtkit.enable = true;
 
   services = {
-    displayManager = {
-      enable = true;
-      autoLogin.user = "gaming";
-    };
-
     getty = {
       loginProgram = "${pkgs.gamescope}/bin/gamescope";
       loginOptions = "${pkgs.steam}/bin/steam -bigpicture";
