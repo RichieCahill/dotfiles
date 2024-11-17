@@ -30,6 +30,8 @@
     zfs.package = pkgs.zfs_unstable;
   };
 
+  programs.sway.enable = true;
+
   services = {
     desktopManager.plasma6.enable = true;
 
