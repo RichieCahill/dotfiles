@@ -1,8 +1,8 @@
-{ pkgs, ... }:
 {
   imports = [
     ../../users/richie
     ../../common/global
+    ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ./hardware.nix
@@ -25,15 +25,7 @@
 
   security.rtkit.enable = true;
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    zfs.package = pkgs.zfs_unstable;
-  };
-
-  programs.sway.enable = true;
-
   services = {
-    desktopManager.plasma6.enable = true;
     displayManager = {
       enable = true;
       autoLogin.user = "richie";
