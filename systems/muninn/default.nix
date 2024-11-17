@@ -1,8 +1,8 @@
+{ pkgs, ... }:
 {
   imports = [
     ../../users/richie
     ../../common/global
-    ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/update.nix
@@ -26,9 +26,15 @@
 
   security.rtkit.enable = true;
 
-  services = {
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    zfs.package = pkgs.zfs_unstable;
+  };
 
-    displayManager.sddm.enable = true;
+  services = {
+    desktopManager.plasma6.enable = true;
+
+    displayManager.autoLogin.user = "richie";
 
     openssh.ports = [ 262 ];
 
