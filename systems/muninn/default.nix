@@ -34,8 +34,10 @@
 
   services = {
     desktopManager.plasma6.enable = true;
-
-    displayManager.autoLogin.user = "richie";
+    displayManager = {
+      enable = true;
+      autoLogin.user = "richie";
+    };
 
     openssh.ports = [ 262 ];
 
