@@ -4,11 +4,15 @@
     ../../users/richie
     ../../users/gaming
     ../../common/global
-    ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ./hardware.nix
   ];
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    zfs.package = pkgs.zfs_unstable;
+  };
 
   networking = {
     hostName = "muninn";
