@@ -3,6 +3,7 @@
   imports = [
     ./firefox
     ./vscode
+    ./kitty.nix
   ];
 
   home.packages = with pkgs; [
