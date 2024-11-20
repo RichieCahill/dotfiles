@@ -3,19 +3,15 @@
 
 
   imports = [
-    ../../users/richie
     ../../users/gaming
+    ../../users/richie
     ../../common/global
+    ../../common/optional/desktop_kernel.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/update.nix
     ./hardware.nix
   ];
-
-  boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    zfs.package = pkgs.zfs_unstable;
-  };
 
   environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
 
