@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, ... }:
 {
 
 
@@ -10,6 +10,7 @@
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ./hardware.nix
+    inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
   ];
 
   environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
