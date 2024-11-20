@@ -1,7 +1,5 @@
 { inputs, ... }:
 {
-
-
   imports = [
     ../../users/gaming
     ../../users/richie
