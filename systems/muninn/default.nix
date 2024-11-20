@@ -35,7 +35,7 @@
   services = {
     getty.autologinUser = "gaming";
 
-    openssh.ports = [ 262 ];
+    openssh.ports = [ 295 ];
 
     printing.enable = true;
 
