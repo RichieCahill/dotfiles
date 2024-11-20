@@ -36,6 +36,12 @@
         identityFile = "~/.ssh/id_ed25519";
         port = 922;
       };
+      muninn = {
+        hostname = "192.168.98.52";
+        user = "richie";
+        identityFile = "~/.ssh/id_ed25519";
+        port = 295;
+      };      
     };
   };
 }
