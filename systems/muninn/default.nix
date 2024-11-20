@@ -36,8 +36,7 @@
 
   services = {
     getty = {
-      loginProgram = ./gs.sh;
-      # loginOptions = "${pkgs.steam}/bin/steam -bigpicture";
+      loginProgram = ./gamescope.sh;
       autologinUser = "gaming";
     };
 
