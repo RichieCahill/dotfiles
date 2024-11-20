@@ -17,6 +17,8 @@
     zfs.package = pkgs.zfs_unstable;
   };
 
+  environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
+
   networking = {
     hostName = "muninn";
     hostId = "a43179c5";
@@ -36,7 +38,7 @@
 
   services = {
     getty = {
-      loginProgram = ./gamescope.sh;
+      # loginProgram = ./gamescope.sh;
       autologinUser = "gaming";
     };
 
