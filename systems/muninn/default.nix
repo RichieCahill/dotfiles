@@ -37,10 +37,7 @@
   security.rtkit.enable = true;
 
   services = {
-    getty = {
-      # loginProgram = ./gamescope.sh;
-      autologinUser = "gaming";
-    };
+    getty.autologinUser = "gaming";
 
     openssh.ports = [ 262 ];
 
