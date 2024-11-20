@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+
+
   imports = [
     ../../users/richie
     ../../users/gaming
@@ -33,8 +35,8 @@
 
   services = {
     getty = {
-      loginProgram = "${pkgs.gamescope}/bin/gamescope";
-      loginOptions = "${pkgs.steam}/bin/steam -bigpicture";
+      loginProgram = ./gs.sh;
+      # loginOptions = "${pkgs.steam}/bin/steam -bigpicture";
       autologinUser = "gaming";
     };
 
