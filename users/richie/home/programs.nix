@@ -35,7 +35,7 @@
     wget
     # python
     poetry
-    python312
+    python313
     ruff
     # Rust packages
     trunk
