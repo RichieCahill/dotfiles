@@ -1,11 +1,24 @@
-{ lib, ... }:
+{  lib, pkgs, ... }:
 {
-  services.autopull = {
-    enable = lib.mkDefault true;
-    repo.dotfiles = {
-      enable = lib.mkDefault true;
-      ssh-key = lib.mkDefault "/root/.ssh/id_ed25519_ghdeploy";
-      path = lib.mkDefault /root/dotfiles;
+  systemd = {
+    services."autopull@dotfiles" = {
+      requires = [ "multi-user.target" ];
+      after = [ "multi-user.target" ];
+      description = "Pull the latest data for dotfiles";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        WorkingDirectory = /root/dotfiles;
+        ExecStart = "${pkgs.git}/bin/git pull --all --prune";
+      };
+    };
+    timers."autopull@dotfiles" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "1h";
+        OnUnitActiveSec = "1h";
+        Unit = "autopull@dotfiles.service";
+      };
     };
   };
 
