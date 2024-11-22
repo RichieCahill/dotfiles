@@ -1,9 +1,5 @@
+{ pkgs, config, ... }:
 {
-  lib,
-  pkgs,
-  config,
-  ...
-}: {
   imports = [
     ./cli
     ./programs.nix
@@ -11,7 +7,7 @@
   ];
 
   nix = {
-    package = lib.mkDefault pkgs.nix;
+    package = pkgs.nix;
     settings = {
       experimental-features = [
         "nix-command"
