@@ -7,6 +7,6 @@
       shell = "${pkgs.zsh}/bin/zsh";
       wayland_titlebar_color = "background";
     };
-    theme = "VSCode_Dark";
+    themeFile = "VSCode_Dark";
   };
 }
