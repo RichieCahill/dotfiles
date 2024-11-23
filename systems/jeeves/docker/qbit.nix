@@ -7,7 +7,7 @@ in
     allowedUDPPorts = [ 6881 29432 ];
   };
   virtualisation.oci-containers.containers.qbit = {
-    image = "ghcr.io/linuxserver/qbittorrent:latest";
+    image = "ghcr.io/linuxserver/qbittorrent:5.0.2";
     ports = [
       "6881:6881"
       "6881:6881/udp"

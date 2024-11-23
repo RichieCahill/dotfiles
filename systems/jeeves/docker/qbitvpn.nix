@@ -7,7 +7,7 @@ in
     allowedUDPPorts = [ 6882 ];
   };
   virtualisation.oci-containers.containers.qbitvpn = {
-    image = "binhex/arch-qbittorrentvpn:latest";
+    image = "binhex/arch-qbittorrentvpn:5.0.2-1-01";
     extraOptions = [ "--cap-add=NET_ADMIN" ];
     ports = [
       "6882:6881"
