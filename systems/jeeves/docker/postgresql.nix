@@ -23,7 +23,7 @@ in
         POSTGRES_DB = "archive";
         POSTGRES_INITDB_ARGS = "--auth-host=scram-sha-256";
       };
-      environmentFiles = [/root/secrets/docker/postgres];
+      environmentFiles = [ "${vars.storage_secrets}/docker/postgres" ];
       autoStart = true;
       user = "postgres:postgres";
     };
