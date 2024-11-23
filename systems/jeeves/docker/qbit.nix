@@ -4,7 +4,7 @@ in
 {
   networking.firewall = {
     allowedTCPPorts = [ 6881 8082 29432 ]; 
-    allowedUDPPorts = [ 6881 ];
+    allowedUDPPorts = [ 6881 29432 ];
   };
   virtualisation.oci-containers.containers.qbit = {
     image = "ghcr.io/linuxserver/qbittorrent:latest";
