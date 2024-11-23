@@ -1,19 +1,8 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 {
   imports = [
     ./programs.nix
   ];
-
-  nix = {
-    package = pkgs.nix;
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-        "ca-derivations"
-      ];
-    };
-  };
 
   programs = {
     home-manager.enable = true;
