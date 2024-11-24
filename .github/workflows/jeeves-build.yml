@@ -10,10 +10,8 @@ jobs:
     name: Build Nix targets
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - name: Check Nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@v4 # This action
+      - uses: actions/checkout@v4
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v3
       - name: Build default package
-        run: nixos-rebuild build --flake /home/richie/projects/dotfiles#jeeves
+        run: 'nix-shell -p nixos-rebuild --run "nixos-rebuild build --flake /home/richie/projects/dotfiles#jeeves"'
