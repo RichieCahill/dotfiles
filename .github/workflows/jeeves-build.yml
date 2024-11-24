@@ -14,4 +14,4 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v3
       - name: Build default package
-        run: 'nix-shell -p nixos-rebuild --run "nixos-rebuild build --flake /home/richie/projects/dotfiles#jeeves"'
+        run: 'nix-shell -p nixos-rebuild --run "nixos-rebuild build --flake ./#jeeves"'
