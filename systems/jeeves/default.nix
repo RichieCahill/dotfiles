@@ -14,6 +14,7 @@ in
     ./home_assistant.nix
     ./networking.nix
     ./programs.nix
+    ./runner.nix
     ./services.nix
     ./syncthing.nix
   ];
