@@ -19,4 +19,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
-        run: 'nix-shell -p nixos-rebuild --run "nixos-rebuild build --flake ./#${{ matrix.system }}"'
+        run: "nixos-rebuild build --flake ./#${{ matrix.system }}"
