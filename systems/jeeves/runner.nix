@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 let
   vars = import ./vars.nix;
 in
@@ -21,7 +22,7 @@ in
     tokenFile = "${vars.storage_secrets}/services/github_runners/nix_builder";
     user = "github-runners";
     group = "github-runners";
-    # extraPackages
+    extraPackages = [ pkgs.nixos-rebuild ];
     # extraEnvironment
   };
 }
