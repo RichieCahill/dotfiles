@@ -13,5 +13,9 @@
       extraCompatPackages = with pkgs; [proton-ge-bin];
       extest.enable = true;
     };
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
   };
 }
