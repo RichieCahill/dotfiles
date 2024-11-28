@@ -6,8 +6,8 @@ monthly = 0
 
 ["root_pool/home"]
 15_min = 8
-hourly = 24
-daily = 14
+hourly = 12
+daily = 1
 monthly = 0
 
 ["root_pool/root"]
