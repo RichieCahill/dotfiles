@@ -23,7 +23,8 @@
     networks = {
       "10-1GB_Primary" = {
         matchConfig.Name = "enp98s0f0";
-        DHCP = "yes";
+        address = [ "192.168.95.14/24" ];
+        routes = [{ Gateway = "192.168.95.1"; }];
         vlan = [ "ioit-vlan" ];
         linkConfig.RequiredForOnline = "routable";
       };
