@@ -1,6 +1,7 @@
 {
   imports = [
     ./desktop_kernel.nix
+    ./pipewire.nix
   ];
   services = {
     desktopManager.plasma6.enable = true;
