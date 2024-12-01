@@ -14,7 +14,6 @@ in
         "${./haproxy.cfg}:/usr/local/etc/haproxy/haproxy.cfg"
       ];
       dependsOn = [
-        "arch_mirror"
         "audiobookshelf"
         "filebrowser"
         "grafana"
