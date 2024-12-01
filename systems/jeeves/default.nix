@@ -8,7 +8,6 @@ in
     ../../common/optional/ssh_decrypt.nix
     ../../common/optional/syncthing_base.nix
     ../../common/optional/zerotier.nix
-    ./arch_mirror.nix
     ./docker
     ./hardware.nix
     ./home_assistant.nix
