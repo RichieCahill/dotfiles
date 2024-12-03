@@ -1,7 +1,11 @@
+let
+  vars = import ./vars.nix;
+in
 {
   services.home-assistant = {
     enable = true;
     openFirewall = true;
+    configDir = vars.media_home_assistant;
     config = {
       http = {
         server_port = 8123;
