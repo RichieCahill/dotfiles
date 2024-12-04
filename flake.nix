@@ -3,8 +3,8 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://cache.nixos.org/?priority=1&want-mass-query=true"
-      "https://cache.tmmworkshop.com/?priority=1&want-mass-query=true"
+      "https://cache.nixos.org/?priority=2&want-mass-query=true"
+      "https://cache.tmmworkshop.com/?priority=2&want-mass-query=true"
       "https://nix-community.cachix.org/?priority=10&want-mass-query=true"
     ];
     extra-trusted-public-keys = [
