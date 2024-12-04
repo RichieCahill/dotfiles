@@ -17,9 +17,9 @@ in {
         "https://nix-community.cachix.org"
       ];
       substituters = [
-        "https://cache.nixos.org"
-        "https://cache.tmmworkshop.com"
-        "https://nix-community.cachix.org"
+        "https://cache.nixos.org/?priority=1&want-mass-query=true"
+        "https://cache.tmmworkshop.com/?priority=1&want-mass-query=true"
+        "https://nix-community.cachix.org/?priority=10&want-mass-query=true"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
