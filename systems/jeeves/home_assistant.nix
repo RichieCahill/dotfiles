@@ -15,7 +15,7 @@ in
           "192.168.98.4"
         ];
         use_x_forwarded_for = true;
-        trusted_proxies = "172.100.0.4";
+        trusted_proxies = "172.18.0.3";
       };
       homeassistant = {
         time_zone = "America/New_York";
