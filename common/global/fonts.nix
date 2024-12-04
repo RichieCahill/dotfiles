@@ -4,7 +4,9 @@
     fontconfig.enable = true;
     enableDefaultPackages = true;
     packages = with pkgs; [
-      nerdfonts
+      nerd-fonts.roboto-mono
+      nerd-fonts.intone-mono
+      nerd-fonts.symbols-only
     ];
   };
 }
