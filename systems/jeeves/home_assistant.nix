@@ -38,6 +38,10 @@ in
       sun = { };
       webhook = { };
       zeroconf = { };
+      automation = "!include automations.yaml";
+      script = "!include scripts.yaml";
+      scene = "!include scenes.yaml";
+      group = "!include groups.yaml";
     };
     extraPackages =
       python3Packages: with python3Packages; [
