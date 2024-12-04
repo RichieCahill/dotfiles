@@ -23,6 +23,7 @@ in {
     ++ ifTheyExist [
       "dialout"
       "docker"
+      "hass"
       "libvirtd"
       "networkmanager"
       "plugdev"
