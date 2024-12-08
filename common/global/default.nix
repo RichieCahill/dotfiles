@@ -7,7 +7,6 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ./docker.nix
     ./fail2ban.nix
     ./fonts.nix
     ./libs.nix
