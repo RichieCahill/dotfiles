@@ -12,8 +12,6 @@
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
   ];
 
-  environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
-
   networking = {
     hostName = "muninn";
     hostId = "a43179c5";
@@ -32,7 +30,18 @@
   security.rtkit.enable = true;
 
   services = {
-    getty.autologinUser = "gaming";
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+      enable = true;
+      autoLogin = {
+        user = "gaming";
+        enable = true;
+      };
+      defaultSession = "steam";
+    };
 
     openssh.ports = [ 295 ];
 
