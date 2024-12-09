@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     ../../users/gaming
@@ -25,6 +25,7 @@
       enable = true;
       powerOnBoot = true;
     };
+    firmware = [ pkgs.sof-firmware ];
   };
 
   security.rtkit.enable = true;
