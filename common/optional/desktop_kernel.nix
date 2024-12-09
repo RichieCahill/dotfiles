@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   boot = {
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_6_11;
     zfs.package = pkgs.zfs_unstable;
   };
 }
