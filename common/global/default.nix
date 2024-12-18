@@ -2,6 +2,7 @@
   inputs,
   lib,
   outputs,
+  pkgs,
   ...
 }:
 {
@@ -18,7 +19,11 @@
     ./snapshot_manager.nix
   ];
 
-  boot.tmp.useTmpfs = true;
+  boot = {
+    tmp.useTmpfs = true;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_12;
+    zfs.package = lib.mkDefault pkgs.zfs;
+  };
 
   hardware.enableRedistributableFirmware = true;
 
