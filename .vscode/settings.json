@@ -237,6 +237,7 @@
     "urlclassifier",
     "usbhid",
     "usbutils",
+    "useragent",
     "usernamehw",
     "userprefs",
     "vfat",
