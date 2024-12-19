@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     ../../users/gaming
@@ -12,7 +12,9 @@
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
   ];
 
-  environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
+  environment.systemPackages = with pkgs; [
+    plex-media-player
+  ];
 
   networking = {
     hostName = "muninn";
@@ -27,12 +29,24 @@
       enable = true;
       powerOnBoot = true;
     };
+    firmware = [ pkgs.sof-firmware ];
   };
 
   security.rtkit.enable = true;
 
   services = {
-    getty.autologinUser = "gaming";
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+      enable = true;
+      autoLogin = {
+        user = "gaming";
+        enable = true;
+      };
+      defaultSession = "steam";
+    };
 
     openssh.ports = [ 295 ];
 
