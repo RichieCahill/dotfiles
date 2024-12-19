@@ -12,6 +12,10 @@
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
   ];
 
+  environment.systemPackages = with pkgs; [
+    plex-media-player
+  ];
+
   networking = {
     hostName = "muninn";
     hostId = "a43179c5";
