@@ -1,16 +1,32 @@
+{ pkgs, ... }:
 {
-  imports = [
-    ./desktop_kernel.nix
-    ./pipewire.nix
-  ];
+  boot = {
+    kernelPackages = pkgs.linuxPackages_6_12;
+    zfs.package = pkgs.zfs;
+  };
+
   services = {
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
+
     desktopManager.plasma6.enable = true;
+
     xserver = {
       enable = true;
       xkb = {
         layout = "us";
         variant = "";
       };
+    };
+
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
     };
   };
 }

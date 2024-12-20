@@ -34,8 +34,6 @@
 
   services = {
 
-    displayManager.sddm.enable = true;
-
     openssh.ports = [ 922 ];
 
     printing.enable = true;
