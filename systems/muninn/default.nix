@@ -1,10 +1,10 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     ../../users/gaming
     ../../users/richie
     ../../common/global
-    ../../common/optional/desktop_kernel.nix
+    ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/update.nix
@@ -12,7 +12,9 @@
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
   ];
 
-  environment.loginShellInit = ''[[ "$(tty)" = "/dev/tty1" ]] && ${./gamescope.sh}'';
+  environment.systemPackages = with pkgs; [
+    plex-media-player
+  ];
 
   networking = {
     hostName = "muninn";
@@ -27,23 +29,25 @@
       enable = true;
       powerOnBoot = true;
     };
+    firmware = [ pkgs.sof-firmware ];
   };
 
   security.rtkit.enable = true;
 
   services = {
-    getty.autologinUser = "gaming";
+    displayManager = {
+      enable = true;
+      autoLogin = {
+        user = "gaming";
+        enable = true;
+      };
+      defaultSession = "steam";
+      # defaultSession = "plasma";
+    };
 
     openssh.ports = [ 295 ];
 
     printing.enable = true;
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
 
     snapshot_manager.enable = true;
 
