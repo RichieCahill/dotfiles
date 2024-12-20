@@ -4,7 +4,7 @@
     ../../users/gaming
     ../../users/richie
     ../../common/global
-    ../../common/optional/desktop_kernel.nix
+    ../../common/optional/desktop.nix
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/update.nix
@@ -36,28 +36,18 @@
 
   services = {
     displayManager = {
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-      };
       enable = true;
       autoLogin = {
         user = "gaming";
         enable = true;
       };
       defaultSession = "steam";
+      # defaultSession = "plasma";
     };
 
     openssh.ports = [ 295 ];
 
     printing.enable = true;
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
 
     snapshot_manager.enable = true;
 
