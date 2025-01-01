@@ -45,12 +45,15 @@ in
     };
     extraPackages =
       python3Packages: with python3Packages; [
-        psycopg2
-        gtts
         aioesphomeapi
-        esphome-dashboard-api
+        aiounifi
         bleak-esphome
+        esphome-dashboard-api
+        gtts
+        psycopg2
         pymetno
+        pyownet
+        uiprotect
       ];
     extraComponents = [ "isal" ];
   };
