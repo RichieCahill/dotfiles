@@ -36,8 +36,6 @@
 
     openssh.ports = [ 262 ];
 
-    printing.enable = true;
-
     snapshot_manager.enable = true;
 
     zfs = {
