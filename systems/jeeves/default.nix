@@ -17,6 +17,7 @@ in
     ./runner.nix
     ./services.nix
     ./syncthing.nix
+    ./transmission.nix
   ];
 
   boot.zfs.extraPools = [
