@@ -23,6 +23,7 @@ sudo zfs create -o exec=off media/minio
 sudo zfs create -o copies=3 media/notes
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/photoprism_mariadb media/photoprism_mariadb
 sudo zfs create -o compression=zstd-9 media/plex
+sudo zfs create -o compression=zstd-9 media/services
 sudo zfs create -o compression=zstd-19 media/home_assistant
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/postgres media/postgres
 
@@ -37,3 +38,4 @@ sudo zfs create -o compression=zstd-19 storage/syncthing
 # torrenting datasets
 sudo zfs create -o recordsize=16K -o exec=off -o sync=disabled torrenting/qbit
 sudo zfs create -o recordsize=16K -o exec=off -o sync=disabled torrenting/qbitvpn
+sudo zfs create -o recordsize=16K -o exec=off -o sync=disabled torrenting/transmission

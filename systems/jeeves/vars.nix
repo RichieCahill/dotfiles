@@ -9,6 +9,8 @@ in
   media_database = "${zfs_media}/database";
   media_docker = "${zfs_media}/docker";
   media_docker_configs = "${zfs_media}/docker/configs";
+  media_services = "${zfs_media}/services";
+  media_services_configs = "${zfs_media}/services/configs";
   media_mirror = "${zfs_media}/mirror";
   media_notes = "${zfs_media}/notes";
   media_plex = "${zfs_media}/plex";
@@ -23,4 +25,5 @@ in
   # torrenting
   torrenting_qbit = "${zfs_torrenting}/qbit";
   torrenting_qbitvpn = "${zfs_torrenting}/qbitvpn";
+  torrenting_transmission = "${zfs_torrenting}/transmission";
 }
