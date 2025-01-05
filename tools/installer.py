@@ -145,6 +145,76 @@ def create_zfs_datasets() -> None:
         sys.exit(1)
 
 
+def get_cpu_manufacturer() -> str:
+    """Get the CPU manufacturer."""
+    output = bash_wrapper("cat /proc/cpuinfo")
+
+    id_vendor = {"AuthenticAMD": "amd", "GenuineIntel": "intel"}
+
+    for line in output.splitlines():
+        if "vendor_id" in line:
+            return id_vendor[line.split(": ")[1].strip()]
+
+
+def get_boot_drive_id(disk: str) -> str:
+    """Get the boot drive ID."""
+    output = bash_wrapper(f"lsblk -o UUID {disk}-part1")
+    return output.splitlines()[1]
+
+
+def create_nix_hardware_file(mnt_dir: str, disks: Sequence[str], encrypt: bool) -> None:
+    """Create a NixOS hardware file."""
+
+    cpu_manufacturer = get_cpu_manufacturer()
+
+    devices = ""
+    if encrypt:
+        disk = disks[0]
+
+        devices = (
+            f'      luks.devices."luks-root-pool-{disk.split("/")[-1]}-part2"'
+            "= {\n"
+            f'        device = "{disk}-part2";\n'
+            "        bypassWorkqueues = true;\n"
+            "        allowDiscards = true;\n"
+            "      };\n"
+        )
+
+    host_id = format(getrandbits(32), "08x")
+
+    nix_hardware = (
+        "{ config, lib, modulesPath, ... }:\n"
+        "{\n"
+        '  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];\n\n'
+        "  boot = {\n"
+        "    initrd = {\n"
+        '      availableKernelModules = [ \n        "ahci"\n        "ehci_pci"\n        "nvme"\n        "sd_mod"\n        "usb_storage"\n        "usbhid"\n        "xhci_pci"\n      ];\n'
+        "      kernelModules = [ ];\n"
+        f" {devices}"
+        "    };\n"
+        f'    kernelModules = [ "kvm-{cpu_manufacturer}" ];\n'
+        "    extraModulePackages = [ ];\n"
+        "  };\n\n"
+        "  fileSystems = {\n"
+        '    "/" = lib.mkDefault {\n      device = "root_pool/root";\n      fsType = "zfs";\n    };\n\n'
+        '    "/home" = {\n      device = "root_pool/home";\n      fsType = "zfs";\n    };\n\n'
+        '    "/var" = {\n      device = "root_pool/var";\n      fsType = "zfs";\n    };\n\n'
+        '    "/nix" = {\n      device = "root_pool/var";\n      fsType = "zfs";\n    };\n\n'
+        '    "/boot" = {\n'
+        f"      device = /dev/disk/by-uuid/{get_boot_drive_id(disks[0])};\n"
+        '      fsType = "vfat";\n'
+        '      options = [\n        "fmask=0077"\n        "dmask=0077"\n      ];\n    };\n  };\n\n'
+        "  swapDevices = [ ];\n\n"
+        "  networking.useDHCP = lib.mkDefault true;\n\n"
+        '  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";\n'
+        f"  hardware.cpu.{cpu_manufacturer}.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;\n"
+        f'networking.hostId = "{host_id}";\n'
+        "}\n"
+    )
+
+    Path(f"{mnt_dir}/etc/nixos/hardware-configuration.nix").write_text(nix_hardware)
+
+
 def install_nixos(mnt_dir: str, disks: Sequence[str], encrypt: bool) -> None:
     """Install NixOS."""
     bash_wrapper(f"mount -o X-mount.mkdir -t zfs root_pool/root {mnt_dir}")
@@ -159,27 +229,7 @@ def install_nixos(mnt_dir: str, disks: Sequence[str], encrypt: bool) -> None:
     boot_partition = f"mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir {disks[0]}-part1 {mnt_dir}/boot"
     bash_wrapper(boot_partition)
 
-    bash_wrapper(f"nixos-generate-config --root {mnt_dir}")
-
-    host_id = format(getrandbits(32), "08x")
-
-    nix_hardware = Path(f"{mnt_dir}/etc/nixos/hardware-configuration.nix").read_text()
-    nix_hardware = nix_hardware.replace(
-        ";\n}", f';\n  networking.hostId = "{host_id}";' "\n}"
-    )
-
-    if encrypt:
-        test = [
-            f'    "luks-root-pool-{disk.split("/")[-1]}-part2".device = "{disk}-part2";\n'
-            for disk in disks
-        ]
-
-        encrypted_disks = (
-            ";\n  boot.initrd.luks.devices = {\n" f"{''.join(test)}" "  };\n" "}"
-        )
-        nix_hardware = nix_hardware.replace(";\n}", encrypted_disks)
-
-    Path(f"{mnt_dir}/etc/nixos/hardware-configuration.nix").write_text(nix_hardware)
+    create_nix_hardware_file(mnt_dir, disks, encrypt)
 
     run(("nixos-install", "--root", mnt_dir), check=True)  # noqa: S603
 
