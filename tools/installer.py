@@ -178,7 +178,7 @@ def create_nix_hardware_file(mnt_dir: str, disks: Sequence[str], encrypt: bool) 
         disk = disks[0]
 
         devices = (
-            f'      luks.devices."luks-root-pool-{disk.split("/")[-1]}-part2"'
+            f'     luks.devices."luks-root-pool-{disk.split("/")[-1]}-part2"'
             "= {\n"
             f'        device = "{disk}-part2";\n'
             "        bypassWorkqueues = true;\n"
@@ -205,9 +205,9 @@ def create_nix_hardware_file(mnt_dir: str, disks: Sequence[str], encrypt: bool) 
         '    "/" = lib.mkDefault {\n      device = "root_pool/root";\n      fsType = "zfs";\n    };\n\n'
         '    "/home" = {\n      device = "root_pool/home";\n      fsType = "zfs";\n    };\n\n'
         '    "/var" = {\n      device = "root_pool/var";\n      fsType = "zfs";\n    };\n\n'
-        '    "/nix" = {\n      device = "root_pool/var";\n      fsType = "zfs";\n    };\n\n'
+        '    "/nix" = {\n      device = "root_pool/nix";\n      fsType = "zfs";\n    };\n\n'
         '    "/boot" = {\n'
-        f"      device = /dev/disk/by-uuid/{get_boot_drive_id(disks[0])};\n"
+        f'      device = "/dev/disk/by-uuid/{get_boot_drive_id(disks[0])}";\n'
         '      fsType = "vfat";\n      options = [\n        "fmask=0077"\n        "dmask=0077"\n      ];\n    };\n  };\n\n'
         "  swapDevices = [ ];\n\n"
         "  networking.useDHCP = lib.mkDefault true;\n\n"
@@ -233,6 +233,8 @@ def install_nixos(mnt_dir: str, disks: Sequence[str], encrypt: bool) -> None:
     # set up mirroring afterwards if more than one disk
     boot_partition = f"mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir {disks[0]}-part1 {mnt_dir}/boot"
     bash_wrapper(boot_partition)
+
+    bash_wrapper(f"nixos-generate-config --root {mnt_dir}")
 
     create_nix_hardware_file(mnt_dir, disks, encrypt)
 
