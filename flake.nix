@@ -100,6 +100,10 @@
         ];
         specialArgs = {inherit inputs outputs;};
       };
+      router = lib.nixosSystem {
+        modules = [./systems/router];
+        specialArgs = {inherit inputs outputs;};
+      };
     };
   };
 }

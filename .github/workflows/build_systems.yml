@@ -16,6 +16,7 @@ jobs:
           - "jeeves"
           - "muninn"
           - "rhapsody-in-green"
+          - "router"
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
