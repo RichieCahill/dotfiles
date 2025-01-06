@@ -19,11 +19,11 @@ sudo zpool add torrenting -o ashift=12 special
 sudo zfs create -o compression=zstd-9 media/docker
 sudo zfs create -o recordsize=1M -o compression=zstd-19 media/library
 sudo zfs create -o compression=zstd-9 -o sync=disabled media/github-runners
-sudo zfs create -o exec=off media/minio
 sudo zfs create -o copies=3 media/notes
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/photoprism_mariadb media/photoprism_mariadb
 sudo zfs create -o compression=zstd-9 media/plex
 sudo zfs create -o compression=zstd-19 media/home_assistant
+sudo zfs create -o exec=off media/share
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/postgres media/postgres
 
 # storage datasets
