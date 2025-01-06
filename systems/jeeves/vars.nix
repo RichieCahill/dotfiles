@@ -10,6 +10,7 @@ in
   media_docker = "${zfs_media}/docker";
   media_docker_configs = "${zfs_media}/docker/configs";
   media_mirror = "${zfs_media}/mirror";
+  media_share = "${zfs_media}/share";
   media_notes = "${zfs_media}/notes";
   media_plex = "${zfs_media}/plex";
   media_home_assistant = "${zfs_media}/home_assistant";
