@@ -42,6 +42,11 @@
       url = "github:lilyinstarlight/nixos-cosmic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -50,6 +55,7 @@
     home-manager,
     systems,
     nixos-cosmic,
+    sops-nix,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -71,19 +77,31 @@
 
     nixosConfigurations = {
       bob = lib.nixosSystem {
-        modules = [./systems/bob];
+        modules = [
+          ./systems/bob
+          sops-nix.nixosModules.sops
+        ];
         specialArgs = {inherit inputs outputs;};
       };
       jeeves = lib.nixosSystem {
-        modules = [./systems/jeeves];
+        modules = [
+          ./systems/jeeves
+          sops-nix.nixosModules.sops
+        ];
         specialArgs = {inherit inputs outputs;};
       };
       rhapsody-in-green = lib.nixosSystem {
-        modules = [./systems/rhapsody-in-green];
+        modules = [
+          ./systems/rhapsody-in-green
+          sops-nix.nixosModules.sops
+        ];
         specialArgs = {inherit inputs outputs;};
       };
       muninn = lib.nixosSystem {
-        modules = [./systems/muninn];
+        modules = [
+          ./systems/muninn
+          sops-nix.nixosModules.sops
+        ];
         specialArgs = {inherit inputs outputs;};
       };
     };
