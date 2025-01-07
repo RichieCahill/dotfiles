@@ -79,28 +79,24 @@
       bob = lib.nixosSystem {
         modules = [
           ./systems/bob
-          sops-nix.nixosModules.sops
         ];
         specialArgs = {inherit inputs outputs;};
       };
       jeeves = lib.nixosSystem {
         modules = [
           ./systems/jeeves
-          sops-nix.nixosModules.sops
         ];
         specialArgs = {inherit inputs outputs;};
       };
       rhapsody-in-green = lib.nixosSystem {
         modules = [
           ./systems/rhapsody-in-green
-          sops-nix.nixosModules.sops
         ];
         specialArgs = {inherit inputs outputs;};
       };
       muninn = lib.nixosSystem {
         modules = [
           ./systems/muninn
-          sops-nix.nixosModules.sops
         ];
         specialArgs = {inherit inputs outputs;};
       };
