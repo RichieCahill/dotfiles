@@ -4,9 +4,16 @@
   ...
 }: 
 {
+  sops.secrets.gaming_password = {
+    sopsFile = ../secrets.yaml;
+    neededForUsers = true;
+  };
+
   users = {
     users.gaming = {
       isNormalUser = true;
+      hashedPasswordFile = "${config.sops.secrets.gaming_password.path}";
+
       shell = pkgs.zsh;
       group = "gaming";
       extraGroups =
