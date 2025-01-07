@@ -5,8 +5,17 @@
 }: let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in {
+
+  sops.secrets.richie_password = {
+    sopsFile = ../secrets.yaml;
+    neededForUsers = true;
+  };
+
   users.users.richie = {
     isNormalUser = true;
+
+    hashedPasswordFile = "${config.sops.secrets.richie_password.path}";
+
     shell = pkgs.zsh;
     group = "richie";
     openssh.authorizedKeys.keys = [
