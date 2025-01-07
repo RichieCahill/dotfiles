@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
     ./fail2ban.nix
     ./fonts.nix
     ./libs.nix
@@ -46,7 +47,7 @@
 
   security.auditd.enable = lib.mkDefault true;
 
-  users.mutableUsers = lib.mkDefault true;
+  users.mutableUsers = lib.mkDefault false;
 
   zramSwap = {
     enable = lib.mkDefault true;
