@@ -16,7 +16,6 @@ in
         id = "l62ul-lpweo"; # cspell:disable-line
         path = vars.media_notes;
         devices = [
-          "bob"
           "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
@@ -46,13 +45,19 @@ in
         id = "vyma6-lqqrz"; # cspell:disable-line
         path = "${vars.storage_syncthing}/projects";
         devices = [
-          "bob"
           "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
       };
       "rhapsody-in-green_temp" = {
         path = "${vars.storage_syncthing}/rhapsody-in-green_temp";
+        devices = [
+          "rhapsody-in-green"
+        ];
+        fsWatcherEnabled = true;
+      };
+      "vault" = {
+        path = "/home/richie/vault";
         devices = [
           "rhapsody-in-green"
         ];

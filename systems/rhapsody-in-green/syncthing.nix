@@ -4,7 +4,6 @@
       id = "l62ul-lpweo"; # cspell:disable-line
       path = "/home/richie/notes";
       devices = [
-        "bob"
         "jeeves"
       ];
       fsWatcherEnabled = true;
@@ -34,7 +33,6 @@
       id = "vyma6-lqqrz"; # cspell:disable-line
       path = "/home/richie/projects";
       devices = [
-        "bob"
         "jeeves"
       ];
       fsWatcherEnabled = true;
@@ -50,7 +48,7 @@
     "vault" = {
       path = "/home/richie/vault";
       devices = [
-        "bob"
+        "jeeves"
       ];
       fsWatcherEnabled = true;
     };
