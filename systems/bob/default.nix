@@ -34,6 +34,15 @@
   security.rtkit.enable = true;
 
   services = {
+    displayManager = {
+      enable = true;
+      autoLogin = {
+        user = "gaming";
+        enable = true;
+      };
+      defaultSession = "steam";
+      # defaultSession = "plasma";
+    };
 
     openssh.ports = [ 262 ];
 
