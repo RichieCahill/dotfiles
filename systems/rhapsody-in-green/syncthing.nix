@@ -1,5 +1,13 @@
 {    
   services.syncthing.settings.folders = {
+    "dotfiles" = {
+      path = "/home/richie/dotfiles";
+      devices = [
+        "jeeves"
+        "bob"
+      ];
+      fsWatcherEnabled = true;
+    };
     "notes" = {
       id = "l62ul-lpweo"; # cspell:disable-line
       path = "/home/richie/notes";

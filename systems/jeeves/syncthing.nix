@@ -5,6 +5,14 @@ in
   services.syncthing = {
     guiAddress = "192.168.90.40:8384";
     settings.folders = {
+      "dotfiles" = {
+        path = "/home/richie/dotfiles";
+        devices = [
+          "bob"
+          "rhapsody-in-green"
+        ];
+        fsWatcherEnabled = true;
+      };
       "bob_temp" = {
         path = "${vars.storage_syncthing}/bob_temp";
         devices = [

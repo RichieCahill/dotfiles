@@ -18,17 +18,14 @@
       ];
     };
     shellAliases = {
-      "sgc" = "sudo git -C /root/dotfiles";
-
-      ## Utilities
       "lrt" = "eza --icons -lsnew";
       "ls" = "eza";
       "ll" = "eza --long --group";
       "la" = "eza --all";
 
       "rspace" = "'for f in *\ *; do mv \"$f\" \"\${f// /_}\"; done'";
-      "rebuild" = "sudo nixos-rebuild switch --flake /home/richie/projects/dotfiles#$HOST";
-      "nix-test" = "nixos-rebuild test --flake /home/richie/projects/dotfiles";
+      "rebuild" = "sudo nixos-rebuild switch --flake /home/richie/dotfiles#$HOST";
+      "nix-test" = "nixos-rebuild test --flake /home/richie/dotfiles";
     };
   };
 }
