@@ -1,6 +1,7 @@
 {
   imports = [
     ../../users/richie
+    ../../users/gaming
     ../../common/global
     ../../common/optional/desktop.nix
     ../../common/optional/docker.nix
