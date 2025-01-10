@@ -26,6 +26,8 @@
         device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_with_Heatsink_1TB_S73JNJ0X114418B-part2";
         bypassWorkqueues = true;
         allowDiscards = true;
+        keyFileSize = 4096;
+        keyFile = "/dev/disk/by-id/usb-Samsung_Flash_Drive_FIT_0374620080067131-0:0";
       };
     };
     kernelModules = [ "kvm-amd" ];
