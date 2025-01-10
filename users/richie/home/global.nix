@@ -16,7 +16,7 @@
     homeDirectory = "/home/${config.home.username}";
     stateVersion = "24.05";
     sessionVariables = {
-      FLAKE = "$HOME/Projects/dotfiles";
+      FLAKE = "$HOME/dotfiles";
     };
   };
 }
