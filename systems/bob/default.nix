@@ -14,6 +14,7 @@
     ./hardware.nix
     ./nvidia.nix
     ./syncthing.nix
+    ./games.nix
   ];
 
   networking = {
