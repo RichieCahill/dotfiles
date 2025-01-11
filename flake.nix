@@ -94,12 +94,6 @@
         ];
         specialArgs = {inherit inputs outputs;};
       };
-      muninn = lib.nixosSystem {
-        modules = [
-          ./systems/muninn
-        ];
-        specialArgs = {inherit inputs outputs;};
-      };
     };
   };
 }

@@ -14,7 +14,6 @@ jobs:
         system:
           - "bob"
           - "jeeves"
-          - "muninn"
           - "rhapsody-in-green"
     steps:
       - uses: actions/checkout@v4
