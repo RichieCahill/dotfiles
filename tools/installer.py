@@ -132,11 +132,10 @@ def create_zfs_pool(pool_disks: Sequence[str], mnt_dir: str) -> None:
 def create_zfs_datasets() -> None:
     """Create ZFS datasets."""
 
-    bash_wrapper("zfs create -o canmount=noauto root_pool/root")
+    bash_wrapper("zfs create -o canmount=noauto -o reservation=10G root_pool/root")
     bash_wrapper("zfs create root_pool/home")
-    bash_wrapper("zfs create root_pool/var")
-    bash_wrapper("zfs create -o compression=zstd-9 root_pool/nix")
-
+    bash_wrapper("zfs create root_pool/var -o reservation=1G")
+    bash_wrapper("zfs create -o compression=zstd-9 -o reservation=10G root_pool/nix")
     datasets = bash_wrapper("zfs list -o name")
 
     expected_datasets = {
