@@ -2,7 +2,7 @@
 {
   boot = {
     kernelPackages = pkgs.linuxPackages_6_12;
-    zfs.package = pkgs.zfs;
+    zfs.package = pkgs.zfs_2_3;
   };
 
   services = {
