@@ -40,8 +40,7 @@
         user = "gaming";
         enable = true;
       };
-      defaultSession = "steam";
-      # defaultSession = "plasma";
+      defaultSession = "plasma";
     };
 
     openssh.ports = [ 262 ];
