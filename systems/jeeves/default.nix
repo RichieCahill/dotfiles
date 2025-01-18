@@ -12,6 +12,7 @@ in
     ./docker
     ./hardware.nix
     ./home_assistant.nix
+    ./jellyfin.nix
     ./networking.nix
     ./programs.nix
     ./runner.nix
