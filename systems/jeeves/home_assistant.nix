@@ -51,6 +51,7 @@ in
           bleak-esphome
           esphome-dashboard-api
           gtts
+          jellyfin-apiclient-python
           psycopg2
           pymetno
           pyownet
