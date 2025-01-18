@@ -18,8 +18,6 @@
         order = [ "Google" ];
       };
       settings = {
-        # Makes Firefox use the PlayStation 5 user agent
-        "general.useragent.override" = "Mozilla/5.0 (PlayStation; PlayStation 5/10.01) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15,gzip(gfe),gzip(gfe)";
 
         # SECTION: FASTFOX
         # GENERAL
