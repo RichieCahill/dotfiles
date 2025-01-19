@@ -35,12 +35,6 @@ in
       openFirewall = true;
     };
 
-    plex = {
-      enable = true;
-      dataDir = vars.media_plex;
-      openFirewall = true;
-    };
-
     smartd.enable = true;
 
     snapshot_manager = {
