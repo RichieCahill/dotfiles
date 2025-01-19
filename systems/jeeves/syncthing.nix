@@ -25,6 +25,7 @@ in
         path = vars.media_notes;
         devices = [
           "rhapsody-in-green"
+          "davids-server"
         ];
         fsWatcherEnabled = true;
       };
@@ -68,8 +69,62 @@ in
         path = "/home/richie/vault";
         devices = [
           "rhapsody-in-green"
+          "davids-server"
         ];
         fsWatcherEnabled = true;
+      };
+      "backup" = {
+        path = "${vars.storage_syncthing}/backup";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+      };
+      # 
+      "davids-backup1" = {
+        id = "8229p-8z3tm"; # cspell:disable-line
+        path = "${vars.storage_syncthing}/davids_backups/1";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+        type = "receiveencrypted";
+      };
+      "davids-backup2" = {
+        id = "iciw3-dp6ao"; # cspell:disable-line
+        path = "${vars.storage_syncthing}/davids_backups/2";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+        type = "receiveencrypted";
+      };
+      "davids-backup3" = {
+        id = "9si6m-bnkjb"; # cspell:disable-line
+        path = "${vars.storage_syncthing}/davids_backups/3";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+        type = "receiveencrypted";
+      };
+      "davids-backup4" = {
+        id = "qjyfy-uupj4"; # cspell:disable-line
+        path = "${vars.storage_syncthing}/davids_backups/4";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+        type = "receiveencrypted";
+      };
+      "davids-backup5" = {
+        id = "fm4h5-emsu2"; # cspell:disable-line
+        path = "${vars.storage_syncthing}/davids_backups/5";
+        devices = [
+          "davids-server"
+        ];
+        fsWatcherEnabled = true;
+        type = "receiveencrypted";
       };
     };
   };
