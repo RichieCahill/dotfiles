@@ -31,7 +31,6 @@
     };
   };
 
-
   services = {
     displayManager = {
       enable = true;
@@ -43,13 +42,6 @@
     };
 
     openssh.ports = [ 262 ];
-
-    snapshot_manager.enable = true;
-
-    zfs = {
-      trim.enable = true;
-      autoScrub.enable = true;
-    };
   };
 
   system.stateVersion = "24.05";

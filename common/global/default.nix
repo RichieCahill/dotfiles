@@ -42,7 +42,17 @@
     };
   };
 
-  services.fwupd.enable = true;
+  services = {
+    # firmware update
+    fwupd.enable = true;
+
+    snapshot_manager.enable = lib.mkDefault true;
+
+    zfs = {
+      trim.enable = lib.mkDefault true;
+      autoScrub.enable = lib.mkDefault true;
+    };
+  };
 
   programs.zsh.enable = true;
 

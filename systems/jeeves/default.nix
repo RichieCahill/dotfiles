@@ -37,17 +37,7 @@ in
 
     smartd.enable = true;
 
-    snapshot_manager = {
-      enable = true;
-      path = ./snapshot_config.toml;
-    };
-
-    sysstat.enable = true;
-
-    zfs = {
-      trim.enable = true;
-      autoScrub.enable = true;
-    };
+    snapshot_manager.path = ./snapshot_config.toml;
   };
 
   system.stateVersion = "24.05";
