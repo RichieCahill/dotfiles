@@ -29,13 +29,5 @@
       ];
       fsWatcherEnabled = true;
     };
-    "temp" = {
-      id = "bob_temp";
-      path = "/home/richie/temp";
-      devices = [
-        "jeeves"
-      ];
-      fsWatcherEnabled = true;
-    };
   };
 }

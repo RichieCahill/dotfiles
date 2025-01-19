@@ -15,13 +15,6 @@ in
         ];
         fsWatcherEnabled = true;
       };
-      "bob_temp" = {
-        path = "${vars.storage_syncthing}/bob_temp";
-        devices = [
-          "jeeves"
-        ];
-        fsWatcherEnabled = true;
-      };
       "notes" = {
         id = "l62ul-lpweo"; # cspell:disable-line
         path = vars.media_notes;
