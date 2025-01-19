@@ -29,18 +29,7 @@
     };
   };
 
-
-  services = {
-
-    openssh.ports = [ 922 ];
-
-    snapshot_manager.enable = true;
-
-    zfs = {
-      trim.enable = true;
-      autoScrub.enable = true;
-    };
-  };
+  services.openssh.ports = [ 922 ];
 
   system.stateVersion = "24.05";
 }
