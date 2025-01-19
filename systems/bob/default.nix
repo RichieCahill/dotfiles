@@ -9,6 +9,7 @@
     ../../common/optional/steam.nix
     ../../common/optional/syncthing_base.nix
     ../../common/optional/systemd-boot.nix
+    ../../common/optional/update.nix
     ../../common/optional/yubikey.nix
     ../../common/optional/zerotier.nix
     ./hardware.nix
