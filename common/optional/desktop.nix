@@ -5,6 +5,9 @@
     zfs.package = pkgs.zfs_2_3;
   };
 
+  # rtkit is optional but recommended for pipewire
+  security.rtkit.enable = true;
+
   services = {
     displayManager.sddm = {
       enable = true;
