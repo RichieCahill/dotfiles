@@ -2,6 +2,8 @@ let
   vars = import ./vars.nix;
 in
 {
+  networking.firewall.allowedTCPPorts = [ 8384 ]; 
+  
   services.syncthing = {
     guiAddress = "192.168.90.40:8384";
     settings.folders = {
