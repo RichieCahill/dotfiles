@@ -31,7 +31,7 @@ in
               Port 629
               User github-runners
               HostName 192.168.95.14
-              IdentityFile ${vars.storage_secrets}/services/github-runners/${name}
+              IdentityFile ${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners
               StrictHostKeyChecking no
               UserKnownHostsFile /dev/null
           '';
