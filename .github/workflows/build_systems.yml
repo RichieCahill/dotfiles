@@ -22,4 +22,4 @@ jobs:
       - name: copy to nix-cache
         env:
           NIX_SSHOPTS: "-p 629 -i /zfs/storage/secrets/services/github-runners/id_ed25519_github-runners"
-        run: nix copy --to ssh://192.168.98.14 .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
+        run: nix copy --to ssh://192.168.95.14 .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
