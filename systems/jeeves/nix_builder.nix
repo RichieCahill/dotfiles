@@ -23,6 +23,7 @@ in
           isReadOnly = false;
         };
         "/secrets".mountPoint = "${vars.storage_secrets}/services/github-runners/${name}";
+        "ssh-keys".mountPoint = "${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners";
       };
       config = { config, pkgs, lib, ... }: {
           services.github-runners.${name} = {
