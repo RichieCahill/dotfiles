@@ -8,6 +8,9 @@
       isSystemUser = true;
       group = "github-runners";
       uid = 601;
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA/S8i+BNX/12JNKg+5EKGX7Aqimt5KM+ve3wt/SyWuO github-runners" # cspell:disable-line
+      ];
     };
     groups.github-runners.gid = 601;
   };
