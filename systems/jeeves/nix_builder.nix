@@ -26,6 +26,15 @@ in
         "ssh-keys".mountPoint = "${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners";
       };
       config = { config, pkgs, lib, ... }: {
+          programs.ssh.extraConfig = ''
+            Host jeeves
+              Port 629
+              User github-runners
+              HostName 192.168.95.14
+              IdentityFile ${vars.storage_secrets}/services/github-runners/${name}
+              StrictHostKeyChecking no
+              UserKnownHostsFile /dev/null
+          '';
           services.github-runners.${name} = {
             enable = true;
             replace = true;
