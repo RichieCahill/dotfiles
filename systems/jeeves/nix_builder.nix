@@ -69,6 +69,7 @@ in
           };
           users = {
             users.github-runners = {
+              shell = pkgs.bash;
               isSystemUser = true;
               group = "github-runners";
               uid = 601;
