@@ -55,6 +55,7 @@ in
           psycopg2
           pymetno
           pyownet
+          rokuecp
           uiprotect
         ];
       extraComponents = [ "isal" ];
