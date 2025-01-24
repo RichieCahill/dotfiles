@@ -44,7 +44,7 @@ in
             tokenFile = "${vars.storage_secrets}/services/github-runners/${name}";
             user = "github-runners";
             group = "github-runners";
-            extraPackages = with pkgs; [ nixos-rebuild openssh unixtools.ping];
+            extraPackages = with pkgs; [ nixos-rebuild openssh ];
           };
           users = {
             users.github-runners = {
