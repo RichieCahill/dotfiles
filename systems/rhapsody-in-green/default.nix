@@ -22,13 +22,6 @@
     networkmanager.enable = true;
   };
 
-  hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
-  };
-
   services.openssh.ports = [ 922 ];
 
   system.stateVersion = "24.05";

@@ -5,6 +5,11 @@
     zfs.package = pkgs.zfs_2_3;
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   # rtkit is optional but recommended for pipewire
   security.rtkit.enable = true;
 
