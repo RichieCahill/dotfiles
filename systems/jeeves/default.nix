@@ -29,11 +29,6 @@ in
   services = {
     openssh.ports = [ 629 ];
 
-    nix-serve = {
-      enable = true;
-      secretKeyFile = "${vars.storage_secrets}/services/nix-cache/cache-priv-key.pem";
-      openFirewall = true;
-    };
 
     smartd.enable = true;
 
