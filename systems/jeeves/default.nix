@@ -1,6 +1,3 @@
-let
-  vars = import ./vars.nix;
-in
 {
   imports = [
     ../../users/richie
@@ -10,13 +7,11 @@ in
     ../../common/optional/syncthing_base.nix
     ../../common/optional/zerotier.nix
     ./docker
+    ./services
     ./hardware.nix
-    ./home_assistant.nix
-    ./jellyfin.nix
     ./networking.nix
     ./programs.nix
     ./runner.nix
-    ./services.nix
     ./syncthing.nix
   ];
 
@@ -28,7 +23,6 @@ in
 
   services = {
     openssh.ports = [ 629 ];
-
 
     smartd.enable = true;
 
