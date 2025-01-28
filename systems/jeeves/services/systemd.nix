@@ -4,7 +4,7 @@
   ...
 }:
 let
-  vars = import ./vars.nix;
+  vars = import ../vars.nix;
 in
 {
   systemd = {
@@ -13,7 +13,7 @@ in
         description = "maintains /zfs/storage/plex permissions";
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.bash}/bin/bash ${./scripts/plex_permission.sh}";
+          ExecStart = "${pkgs.bash}/bin/bash ${../scripts/plex_permission.sh}";
         };
       };
       startup_validation = {
