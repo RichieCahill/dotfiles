@@ -11,7 +11,7 @@
     ./hardware.nix
     ./networking.nix
     ./programs.nix
-    ./runner.nix
+    ./runners
     ./syncthing.nix
   ];
 
