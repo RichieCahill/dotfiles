@@ -18,6 +18,13 @@
         };
         vlanConfig.Id = 20;
       };
+      "21-internal-ioit-vlan" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "internal-ioit-vlan";
+        };
+        vlanConfig.Id = 21;
+      };
     };
 
     networks = {
@@ -25,7 +32,7 @@
         matchConfig.Name = "enp98s0f0";
         address = [ "192.168.95.14/24" ];
         routes = [{ Gateway = "192.168.95.1"; }];
-        vlan = [ "ioit-vlan" ];
+        vlan = [ "ioit-vlan" "internal-ioit-vlan" ];
         linkConfig.RequiredForOnline = "routable";
       };
       "10-1GB_Secondary" = {
@@ -43,6 +50,10 @@
       };
       "40-ioit-vlan" = {
         matchConfig.Name = "ioit-vlan";
+        DHCP = "yes";
+      };
+      "41-internal-ioit-vlan" = {
+        matchConfig.Name = "internal-ioit-vlan";
         DHCP = "yes";
       };
     };
