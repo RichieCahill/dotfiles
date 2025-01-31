@@ -3,7 +3,7 @@
 with lib;
 
 let
-  vars = import ./vars.nix;
+  vars = import ../vars.nix;
 in
 {
   options.services.nix_builder.containers = mkOption {
