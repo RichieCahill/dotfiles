@@ -16,7 +16,6 @@ in
       dependsOn = [
         "audiobookshelf"
         "filebrowser"
-        "grafana"
         "photoprism"
         "uptime_kuma"
       ];
