@@ -4,7 +4,7 @@ in
 {
   virtualisation.oci-containers.containers = {
     haproxy = {
-      image = "haproxy:latest";
+      image = "haproxy:3.1";
       user = "600:600";
       environment = {
         TZ = "Etc/EST";
@@ -23,7 +23,7 @@ in
       autoStart = true;
     };
     cloud_flare_tunnel = {
-      image = "cloudflare/cloudflared:latest";
+      image = "cloudflare/cloudflared:2025.1.1";
       user = "600:600";
       cmd = [
         "tunnel"
