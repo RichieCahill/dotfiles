@@ -3,7 +3,7 @@ let
 in
 {
   virtualisation.oci-containers.containers.audiobookshelf = {
-    image = "ghcr.io/advplyr/audiobookshelf:latest";
+    image = "ghcr.io/advplyr/audiobookshelf:2.18.1";
     volumes = [
       "${vars.media_docker_configs}/audiobookshelf:/config"
       "${vars.media_docker_configs}/audiobookshelf:/metadata"
