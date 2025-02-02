@@ -14,7 +14,6 @@ in
         "${./haproxy.cfg}:/usr/local/etc/haproxy/haproxy.cfg"
       ];
       dependsOn = [
-        "photoprism"
         "uptime_kuma"
       ];
       extraOptions = [ "--network=web" ];
