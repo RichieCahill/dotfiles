@@ -1,13 +1,13 @@
 zpool = ["root_pool", "storage", "torrenting", "media"]
 services = [
-    "docker-audiobookshelf",
+    "audiobookshelf",
     "docker-cloud_flare_tunnel",
-    "docker-filebrowser",
     "docker-haproxy",
     "docker-qbit",
     "docker-qbitvpn",
     "docker-uptime_kuma",
     "docker",
+    "filebrowser",
     "home-assistant",
     "jellyfin",
 ]
