@@ -15,7 +15,6 @@ in
       ];
       dependsOn = [
         "audiobookshelf"
-        "filebrowser"
         "photoprism"
         "uptime_kuma"
       ];
