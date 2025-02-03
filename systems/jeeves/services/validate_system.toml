@@ -2,7 +2,7 @@ zpool = ["root_pool", "storage", "torrenting", "media"]
 services = [
     "audiobookshelf",
     "docker-cloud_flare_tunnel",
-    "docker-haproxy",
+    "haproxy",
     "docker-qbit",
     "docker-qbitvpn",
     "docker-uptime_kuma",

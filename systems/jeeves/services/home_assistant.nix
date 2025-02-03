@@ -16,7 +16,7 @@ in
             "192.168.98.4"
           ];
           use_x_forwarded_for = true;
-          trusted_proxies = "172.18.0.0/24";
+          trusted_proxies = "192.168.95.0/24";
         };
         homeassistant = {
           time_zone = "America/New_York";
@@ -57,6 +57,7 @@ in
           pyownet
           rokuecp
           uiprotect
+          wakeonlan
         ];
       extraComponents = [ "isal" ];
     };
