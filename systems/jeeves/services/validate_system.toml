@@ -1,7 +1,7 @@
 zpool = ["root_pool", "storage", "torrenting", "media"]
 services = [
     "audiobookshelf",
-    "docker-cloud_flare_tunnel",
+    "cloud_flare_tunnel",
     "haproxy",
     "docker-qbit",
     "docker-qbitvpn",
