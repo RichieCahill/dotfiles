@@ -116,6 +116,7 @@
     "libsodium",
     "libssh",
     "libvirtd",
+    "llms",
     "localtime",
     "louislam",
     "lsnew",
