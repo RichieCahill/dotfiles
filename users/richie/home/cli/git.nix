@@ -7,5 +7,6 @@
       pull.rebase = true;
       color.ui = true;
     };
+    lfs.enable = true;
   };
 }
