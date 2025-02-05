@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     candy-icons
+    chromium
     discord-canary
     gimp
     gparted
