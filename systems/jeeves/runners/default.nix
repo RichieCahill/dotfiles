@@ -1,6 +1,8 @@
 { pkgs, ... }:
 {
-  imports = [ ./nix_builder.nix ];
+  imports = [ 
+    ./nix_builder.nix 
+  ];
 
   users = {
     users.github-runners = {

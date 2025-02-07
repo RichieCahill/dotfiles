@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, inputs, lib, ... }:
 
 with lib;
 
@@ -6,6 +6,8 @@ let
   vars = import ../vars.nix;
 in
 {
+  imports = [ inputs.microvm.nixosModules.microvm ];
+
   options.services.nix_builder.containers = mkOption {
     type = types.attrsOf (types.submodule ({ name, ... }: {
       options.enable = mkEnableOption "GitHub runner container";
@@ -81,3 +83,4 @@ in
     }
   ) config.services.nix_builder.containers;
 }
+
