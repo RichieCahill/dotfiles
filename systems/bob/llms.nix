@@ -2,7 +2,7 @@
   services = {
     ollama = {
       enable = true;
-      loadModels = [ 
+      loadModels = [
         "codellama:7b"
         "deepseek-r1:1.5b"
         "deepseek-r1:7b"
@@ -19,6 +19,6 @@
       enable = true;
       openFirewall = true;
       host = "192.168.90.25";
-    }; 
-  }; 
+    };
+  };
 }

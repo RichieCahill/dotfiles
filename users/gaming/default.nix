@@ -2,7 +2,7 @@
   pkgs,
   config,
   ...
-}: 
+}:
 {
   sops.secrets.gaming_password = {
     sopsFile = ../secrets.yaml;
@@ -16,8 +16,7 @@
 
       shell = pkgs.zsh;
       group = "gaming";
-      extraGroups =
-      [
+      extraGroups = [
         "audio"
         "video"
         "users"
@@ -27,5 +26,5 @@
 
     groups.gaming.gid = 1100;
   };
-  home-manager.users.gaming = import ./systems/${config.networking.hostName}.nix; 
+  home-manager.users.gaming = import ./systems/${config.networking.hostName}.nix;
 }

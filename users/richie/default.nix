@@ -2,9 +2,11 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-in {
+in
+{
 
   sops.secrets.richie_password = {
     sopsFile = ../secrets.yaml;
@@ -23,28 +25,28 @@ in {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJYZFsc9CSH03ZUP7y81AHwSyjLwFmcshVFCyxDcYhBT rhapsody-in-green" # cspell:disable-line
       ];
       extraGroups =
-      [
-        "audio"
-        "video"
-        "wheel"
-        "users"
-      ]
-      ++ ifTheyExist [
-        "dialout"
-        "docker"
-        "hass"
-        "libvirtd"
-        "networkmanager"
-        "plugdev"
-        "scanner"
-        "uaccess"
-        "wireshark"
-      ];
+        [
+          "audio"
+          "video"
+          "wheel"
+          "users"
+        ]
+        ++ ifTheyExist [
+          "dialout"
+          "docker"
+          "hass"
+          "libvirtd"
+          "networkmanager"
+          "plugdev"
+          "scanner"
+          "uaccess"
+          "wireshark"
+        ];
       uid = 1000;
     };
 
     groups.richie.gid = 1000;
   };
 
-  home-manager.users.richie = import ./systems/${config.networking.hostName}.nix; 
+  home-manager.users.richie = import ./systems/${config.networking.hostName}.nix;
 }

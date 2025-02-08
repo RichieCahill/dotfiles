@@ -14,7 +14,6 @@
     };
     groups.github-runners.gid = 601;
   };
-  
 
   services.nix_builder.containers = {
     nix-builder-0.enable = true;

@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [mangohud steam-run];
+  environment.systemPackages = with pkgs; [
+    mangohud
+    steam-run
+  ];
   hardware.steam-hardware.enable = true;
 
   programs = {
@@ -11,7 +14,7 @@
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
       protontricks.enable = true;
-      extraCompatPackages = with pkgs; [proton-ge-bin];
+      extraCompatPackages = with pkgs; [ proton-ge-bin ];
       extest.enable = true;
     };
     gamescope = {

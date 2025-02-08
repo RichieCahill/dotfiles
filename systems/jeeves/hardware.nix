@@ -1,6 +1,11 @@
-{ config, lib, modulesPath, ... }:
 {
-  imports =[ (modulesPath + "/installer/scan/not-detected.nix") ];
+  config,
+  lib,
+  modulesPath,
+  ...
+}:
+{
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
     loader = {
@@ -88,22 +93,32 @@
           bypassWorkqueues = true;
           allowDiscards = true;
         };
-        "luks-storage_pool-wwn-0x5000cca23bc438dd-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bc438dd-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd035f5-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd02746-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1".device = "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
+        "luks-storage_pool-wwn-0x5000cca23bc438dd-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bc438dd-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd035f5-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd02746-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
+        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
+        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
         # Torrenting pool
         "luks-torrenting_pool-wwn-0x500a0751e6c3c01e-part1" = {
           device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
         };
-        "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device = "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
-        "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device = "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
+        "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
+        "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device =
+          "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
         # cspell:enable
       };
     };
@@ -122,8 +137,8 @@
       fsType = "zfs";
     };
 
-    "/nix" =
-    { device = "root_pool/nix";
+    "/nix" = {
+      device = "root_pool/nix";
       fsType = "zfs";
     };
 
@@ -146,7 +161,7 @@
       options = [
         "fmask=0077"
         "dmask=0077"
-      ];    
+      ];
     };
   };
 

@@ -2,8 +2,8 @@ let
   vars = import ./vars.nix;
 in
 {
-  networking.firewall.allowedTCPPorts = [ 8384 ]; 
-  
+  networking.firewall.allowedTCPPorts = [ 8384 ];
+
   services.syncthing = {
     guiAddress = "192.168.90.40:8384";
     settings = {
@@ -77,7 +77,7 @@ in
           ];
           fsWatcherEnabled = true;
         };
-        # 
+        #
         "davids-backup1" = {
           id = "8229p-8z3tm"; # cspell:disable-line
           path = "${vars.storage_syncthing}/davids_backups/1";

@@ -7,14 +7,20 @@ let
 in
 {
   options.services.nix_builder.containers = mkOption {
-    type = types.attrsOf (types.submodule ({ name, ... }: {
-      options.enable = mkEnableOption "GitHub runner container";
-    }));
-    default = {};
+    type = types.attrsOf (
+      types.submodule (
+        { name, ... }:
+        {
+          options.enable = mkEnableOption "GitHub runner container";
+        }
+      )
+    );
+    default = { };
     description = "GitHub runner container configurations";
   };
 
-  config.containers = mapAttrs (name: cfg:
+  config.containers = mapAttrs (
+    name: cfg:
     mkIf cfg.enable {
       autoStart = true;
       bindMounts = {
@@ -25,7 +31,14 @@ in
         "/secrets".mountPoint = "${vars.storage_secrets}/services/github-runners/${name}";
         "ssh-keys".mountPoint = "${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners";
       };
-      config = { config, pkgs, lib, ... }: {
+      config =
+        {
+          config,
+          pkgs,
+          lib,
+          ...
+        }:
+        {
           nix.settings = {
             trusted-substituters = [
               "https://cache.nixos.org"
@@ -65,7 +78,10 @@ in
             tokenFile = "${vars.storage_secrets}/services/github-runners/${name}";
             user = "github-runners";
             group = "github-runners";
-            extraPackages = with pkgs; [ nixos-rebuild openssh ];
+            extraPackages = with pkgs; [
+              nixos-rebuild
+              openssh
+            ];
           };
           users = {
             users.github-runners = {
@@ -77,7 +93,7 @@ in
             groups.github-runners.gid = 601;
           };
           system.stateVersion = "24.11";
-      };
+        };
     }
   ) config.services.nix_builder.containers;
 }

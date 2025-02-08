@@ -12,7 +12,7 @@
       "10-1GB_Primary" = {
         matchConfig.Name = "enp98s0f0";
         address = [ "192.168.95.14/24" ];
-        routes = [{ Gateway = "192.168.95.1"; }];
+        routes = [ { Gateway = "192.168.95.1"; } ];
         linkConfig.RequiredForOnline = "routable";
       };
       "10-1GB_Secondary" = {

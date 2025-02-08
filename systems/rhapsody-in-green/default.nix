@@ -26,7 +26,7 @@
   services = {
     openssh.ports = [ 922 ];
 
-    desktopManager.cosmic.enable = true;  
+    desktopManager.cosmic.enable = true;
   };
 
   system.stateVersion = "24.05";

@@ -266,7 +266,7 @@ def installer(
 
     if encrypt_key:
         pool_disks = [
-            f'/dev/mapper/luks-root-pool-{disk.split("/")[-1]}-part2' for disk in disks
+            f"/dev/mapper/luks-root-pool-{disk.split('/')[-1]}-part2" for disk in disks
         ]
     else:
         pool_disks = [f"{disk}-part2" for disk in disks]
@@ -448,7 +448,7 @@ def draw_device_menu(
     type_padding = calculate_device_menu_padding(devices, "type", padding)
     mountpoints_padding = calculate_device_menu_padding(devices, "mountpoints", padding)
 
-    device_header = f"{"Name":{name_padding}}{"Size":{size_padding}}{"Type":{type_padding}}{"Mountpoints":{mountpoints_padding}}"
+    device_header = f"{'Name':{name_padding}}{'Size':{size_padding}}{'Type':{type_padding}}{'Mountpoints':{mountpoints_padding}}"
 
     menu_width = range(menu_start_x, len(device_header) + menu_start_x)
 

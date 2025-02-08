@@ -8,6 +8,7 @@ in
     openFirewall = true;
     host = "192.168.90.40";
   };
-  systemd.services.audiobookshelf.serviceConfig.WorkingDirectory = lib.mkForce "${vars.media_docker_configs}/audiobookshelf";
+  systemd.services.audiobookshelf.serviceConfig.WorkingDirectory =
+    lib.mkForce "${vars.media_docker_configs}/audiobookshelf";
   users.users.audiobookshelf.home = lib.mkForce "${vars.media_docker_configs}/audiobookshelf";
 }

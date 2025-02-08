@@ -17,7 +17,11 @@
       search = {
         force = true;
         default = "kagi";
-        order = [ "kagi" "DuckDuckGo" "Google" ];
+        order = [
+          "kagi"
+          "DuckDuckGo"
+          "Google"
+        ];
       };
       settings = {
         # SECTION: FASTFOX
@@ -138,7 +142,8 @@
         "permissions.default.desktop-notification" = 0; # allow websites to ask
         # PREF: allow websites to ask you for your location
         "permissions.default.geo" = 0;
-        "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+        "geo.provider.network.url" =
+          "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
         "permissions.manager.defaultsUrl" = "";
         "webchannel.allowObject.urlWhitelist" = "";
 
