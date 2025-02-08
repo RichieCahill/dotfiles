@@ -1,4 +1,4 @@
-{    
+{
   services.syncthing.settings.folders = {
     "dotfiles" = {
       path = "/home/richie/dotfiles";

@@ -3,7 +3,11 @@ let
 in
 {
   networking.firewall = {
-    allowedTCPPorts = [ 6882 8081 8118 ];
+    allowedTCPPorts = [
+      6882
+      8081
+      8118
+    ];
     allowedUDPPorts = [ 6882 ];
   };
   virtualisation.oci-containers.containers.qbitvpn = {
@@ -36,7 +40,7 @@ in
       DELUGE_DAEMON_LOG_LEVEL = "debug";
       DELUGE_WEB_LOG_LEVEL = "debug";
     };
-    environmentFiles = ["${vars.storage_secrets}/docker/qbitvpn"];
+    environmentFiles = [ "${vars.storage_secrets}/docker/qbitvpn" ];
     autoStart = true;
   };
 }

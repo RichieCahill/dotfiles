@@ -49,51 +49,54 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    systems,
-    nixos-cosmic,
-    sops-nix,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    lib = nixpkgs.lib // home-manager.lib;
-    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
-    pkgsFor = lib.genAttrs (import systems) (
-      system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      systems,
+      nixos-cosmic,
+      sops-nix,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+      lib = nixpkgs.lib // home-manager.lib;
+      forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
+      pkgsFor = lib.genAttrs (import systems) (
+        system:
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
         }
-    );
-  in {
-    inherit lib;
-    overlays = import ./overlays {inherit inputs outputs;};
+      );
+    in
+    {
+      inherit lib;
+      overlays = import ./overlays { inherit inputs outputs; };
 
-    devShells = forEachSystem (pkgs: import ./shell.nix {inherit pkgs;});
-    formatter = forEachSystem (pkgs: pkgs.treefmt);
+      devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
+      formatter = forEachSystem (pkgs: pkgs.treefmt);
 
-    nixosConfigurations = {
-      bob = lib.nixosSystem {
-        modules = [
-          ./systems/bob
-        ];
-        specialArgs = {inherit inputs outputs;};
-      };
-      jeeves = lib.nixosSystem {
-        modules = [
-          ./systems/jeeves
-        ];
-        specialArgs = {inherit inputs outputs;};
-      };
-      rhapsody-in-green = lib.nixosSystem {
-        modules = [
-          ./systems/rhapsody-in-green
-        ];
-        specialArgs = {inherit inputs outputs;};
+      nixosConfigurations = {
+        bob = lib.nixosSystem {
+          modules = [
+            ./systems/bob
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
+        jeeves = lib.nixosSystem {
+          modules = [
+            ./systems/jeeves
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
+        rhapsody-in-green = lib.nixosSystem {
+          modules = [
+            ./systems/rhapsody-in-green
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
       };
     };
-  };
 }

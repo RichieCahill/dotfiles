@@ -2,7 +2,7 @@ let
   vars = import ../vars.nix;
 in
 {
-  services ={
+  services = {
     home-assistant = {
       enable = true;
       openFirewall = true;
@@ -62,9 +62,9 @@ in
       extraComponents = [ "isal" ];
     };
     esphome = {
-        enable = true;
-        openFirewall = true;
-        address = "192.168.90.40";
+      enable = true;
+      openFirewall = true;
+      address = "192.168.90.40";
     };
   };
 }

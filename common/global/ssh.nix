@@ -67,5 +67,5 @@
     };
   };
 
-    networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 ];
 }
