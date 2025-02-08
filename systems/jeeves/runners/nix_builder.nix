@@ -79,8 +79,10 @@ in
             user = "github-runners";
             group = "github-runners";
             extraPackages = with pkgs; [
+              nixfmt-rfc-style
               nixos-rebuild
               openssh
+              treefmt
             ];
           };
           users = {
