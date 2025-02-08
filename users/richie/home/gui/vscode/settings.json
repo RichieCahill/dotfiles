@@ -30,6 +30,20 @@
     "announcement": "off"
   },
 
+  // database settings
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "192.168.90.40",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "main",
+      "database": "postgres",
+      "username": "richie"
+    }
+  ],
+
   // formatters
   "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
