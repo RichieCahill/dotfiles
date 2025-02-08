@@ -50,7 +50,7 @@
     nix-output-monitor
     nix-prefetch
     nix-tree
-    nixpkgs-fmt
+    nixfmt-rfc-style
     inputs.system_tools.packages.x86_64-linux.default
   ];
 }
