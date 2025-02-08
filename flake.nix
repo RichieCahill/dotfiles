@@ -73,7 +73,7 @@
     overlays = import ./overlays {inherit inputs outputs;};
 
     devShells = forEachSystem (pkgs: import ./shell.nix {inherit pkgs;});
-    formatter = forEachSystem (pkgs: pkgs.alejandra);
+    formatter = forEachSystem (pkgs: pkgs.treefmt);
 
     nixosConfigurations = {
       bob = lib.nixosSystem {
