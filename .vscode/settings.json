@@ -146,6 +146,7 @@
     "Networkd",
     "networkmanager",
     "newtabpage",
+    "nixfmt",
     "nixos",
     "nixpkgs",
     "nmap",
