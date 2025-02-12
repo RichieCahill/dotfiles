@@ -13,7 +13,6 @@ in
           server_host = [
             "192.168.95.14"
             "192.168.90.40"
-            "192.168.98.4"
           ];
           use_x_forwarded_for = true;
           trusted_proxies = "192.168.95.0/24";
