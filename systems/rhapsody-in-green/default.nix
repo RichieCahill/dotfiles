@@ -13,7 +13,6 @@
     ./hardware.nix
     ./syncthing.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
-    inputs.nixos-cosmic.nixosModules.default
   ];
 
   networking = {
@@ -25,8 +24,6 @@
 
   services = {
     openssh.ports = [ 922 ];
-
-    desktopManager.cosmic.enable = true;
   };
 
   system.stateVersion = "24.05";
