@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 22 * * *"
 
 jobs:
   build:
@@ -21,3 +23,4 @@ jobs:
         run: "nixos-rebuild build --flake ./#${{ matrix.system }}"
       - name: copy to nix-cache
         run: nix copy --to ssh://jeeves .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
+
