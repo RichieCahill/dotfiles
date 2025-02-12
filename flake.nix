@@ -97,6 +97,12 @@
           ];
           specialArgs = { inherit inputs outputs; };
         };
+        brendans-system = lib.nixosSystem {
+          modules = [
+            ./systems/brendans-system
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
       };
     };
 }

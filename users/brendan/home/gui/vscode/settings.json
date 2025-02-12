@@ -1,0 +1,71 @@
+{
+  // vscode settings
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.formatOnSave": true,
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.showSlider": "always",
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+  "files.autoSave": "afterDelay",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.fetchOnPull": true,
+  "git.pruneOnFetch": true,
+  "terminal.integrated.scrollback": 10000,
+  "update.mode": "none",
+  "workbench.colorTheme": "Default Dark+",
+
+  // turns off all sounds and announcements
+  "accessibility.signals.terminalCommandFailed": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.terminalQuickFix": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.terminalBell": {
+    "sound": "off",
+    "announcement": "off"
+  },
+
+  // database settings
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "192.168.90.40",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "main",
+      "database": "postgres",
+      "username": "richie"
+    }
+  ],
+
+  // formatters
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[nix]": { "editor.defaultFormatter": "jnoortheen.nix-ide" },
+  "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
+  "[yaml]": { "editor.defaultFormatter": "redhat.vscode-yaml" },
+
+  // spell check
+  "cSpell.enabled": true,
+  "cSpell.language": "en,en-US",
+  "cSpell.enableFiletypes": ["bat", "csv", "nix", "toml"],
+  "cSpell.userWords": ["Cahill", "syncthing"],
+
+  // nix
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+
+  // force the use of rust-analyzer from dev shell
+  "rust-analyzer.server.path": "rust-analyzer",
+  "redhat.telemetry.enabled": true,
+  "gitlens.plusFeatures.enabled": false,
+  // new
+  "hediet.vscode-drawio.resizeImages": null
+}

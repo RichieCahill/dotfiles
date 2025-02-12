@@ -15,6 +15,7 @@ jobs:
           - "bob"
           - "jeeves"
           - "rhapsody-in-green"
+          - "brendans-system"
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
