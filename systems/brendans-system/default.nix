@@ -14,7 +14,7 @@
   ];
 
   networking = {
-    hostName = "bob";
+    hostName = "brendans-system";
     hostId = "7c678a41";
     firewall.enable = true;
     networkmanager.enable = true;
