@@ -50,7 +50,7 @@
     "Nix Packages pr-tracker" = {
       urls = [
         {
-          template = "https://nixpk.gs/pr-tracker.html?"; 
+          template = "https://nixpk.gs/pr-tracker.html?";
           params = [
             {
               name = "pr";
