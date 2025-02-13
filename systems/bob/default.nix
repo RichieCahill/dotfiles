@@ -12,8 +12,8 @@
     ../../common/optional/update.nix
     ../../common/optional/yubikey.nix
     ../../common/optional/zerotier.nix
+    ../../common/optional/nvidia.nix
     ./hardware.nix
-    ./nvidia.nix
     ./syncthing.nix
     ./games.nix
     ./llms.nix
