@@ -6,8 +6,6 @@ let
   vars = import ../vars.nix;
 in
 {
-  networking.firewall.allowedTCPPorts = [ 8080 ];
-
   systemd.services.filebrowser = {
     description = "filebrowser";
     after = [ "network.target" ];
