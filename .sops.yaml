@@ -1,10 +1,10 @@
 keys:
-  - &admin_richie age1u8zj599elqqvcmhxn8zuwrufsz8w8w366d3ayrljjejljt2q45kq8mxw9c
+  - &admin_richie age1u8zj599elqqvcmhxn8zuwrufsz8w8w366d3ayrljjejljt2q45kq8mxw9c # cspell:disable-line
 
-  - &system_bob age1q47vup0tjhulkg7d6xwmdsgrw64h4ax3la3evzqpxyy4adsmk9fs56qz3y
-  - &system_jeeves age13lmqgc3jvkyah5e3vcwmj4s5wsc2akctcga0lpc0x8v8du3fxprqp4ldkv
-  - &system_router age1xzxryqq63x65yuza9lmmkud7crjjxpnkdew070yhx6xn7xe4tdws5twxsv
-  - &system_rhapsody age1ufnewppysaq2wwcl4ugngjz8pfzc5a35yg7luq0qmuqvctajcycs5lf6k4
+  - &system_bob age1q47vup0tjhulkg7d6xwmdsgrw64h4ax3la3evzqpxyy4adsmk9fs56qz3y # cspell:disable-line
+  - &system_jeeves age13lmqgc3jvkyah5e3vcwmj4s5wsc2akctcga0lpc0x8v8du3fxprqp4ldkv # cspell:disable-line
+  - &system_router age1xzxryqq63x65yuza9lmmkud7crjjxpnkdew070yhx6xn7xe4tdws5twxsv # cspell:disable-line
+  - &system_rhapsody age1ufnewppysaq2wwcl4ugngjz8pfzc5a35yg7luq0qmuqvctajcycs5lf6k4 # cspell:disable-line
 
 creation_rules:
   - path_regex: users/secrets\.yaml$
