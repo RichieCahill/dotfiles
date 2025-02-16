@@ -232,11 +232,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1738434563,
-        "narHash": "sha256-RE+6AgQ/Q/yFBYDPlN+jSrhEKtZLBF8xlIsz2T78K68=",
+        "lastModified": 1739664204,
+        "narHash": "sha256-uzT5hQstNHJvdPPqdSiznxPXL3qCaKQ+DmMnx6IpIYk=",
         "owner": "RichieCahill",
         "repo": "system_tools",
-        "rev": "7cff86220ce86a1083466e2fc8b947551ab577a3",
+        "rev": "b36dd59fedeba140175590bfcab2ba22049dfc93",
         "type": "github"
       },
       "original": {
