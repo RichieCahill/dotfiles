@@ -25,7 +25,7 @@
 
       "rspace" = "'for f in *\ *; do mv \"$f\" \"\${f// /_}\"; done'";
       "rebuild" = "sudo nixos-rebuild switch --flake /home/richie/dotfiles#$HOST";
-      "nix-test" = "nixos-rebuild test --flake /home/richie/dotfiles";
+      "build_iso" = "nix build .#nixosConfigurations.installer.config.system.build.isoImage";
     };
   };
 }
