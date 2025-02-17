@@ -1,0 +1,17 @@
+name: build_systems
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  build:
+    name: build-installer-iso
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build default package
+        run: "nix build .#nixosConfigurations.installer.config.system.build.isoImage"
