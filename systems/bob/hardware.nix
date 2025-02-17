@@ -28,6 +28,7 @@
         allowDiscards = true;
         keyFileSize = 4096;
         keyFile = "/dev/disk/by-id/usb-Samsung_Flash_Drive_FIT_0374620080067131-0:0";
+        fallbackToPassword = true;
       };
     };
     kernelModules = [ "kvm-amd" ];
