@@ -8,7 +8,9 @@
 {
   imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
 
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
+    git
+    python313
     inputs.system_tools.packages.x86_64-linux.default
   ];
 
