@@ -51,6 +51,11 @@
       fsType = "zfs";
     };
 
+    "/zfs/models" = {
+      device = "root_pool/models";
+      fsType = "zfs";
+    };
+
     "/boot" = {
       device = "/dev/disk/by-uuid/609D-FF29";
       fsType = "vfat";
