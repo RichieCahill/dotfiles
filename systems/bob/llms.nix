@@ -1,6 +1,7 @@
 {
   services = {
     ollama = {
+      user = "ollama";
       enable = true;
       loadModels = [
         "codellama:7b"
