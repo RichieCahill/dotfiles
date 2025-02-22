@@ -37,6 +37,8 @@
     };
 
     openssh.ports = [ 262 ];
+
+    snapshot_manager.path = ./snapshot_config.toml;
   };
 
   system.stateVersion = "24.05";
