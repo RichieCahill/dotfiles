@@ -91,6 +91,12 @@
           ];
           specialArgs = { inherit inputs outputs; };
         };
+        installer = lib.nixosSystem {
+          modules = [
+            ./systems/installer
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
       };
     };
 }

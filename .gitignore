@@ -165,3 +165,6 @@ test.*
 
 # syncthing
 .stfolder
+
+# nixos build results
+result
