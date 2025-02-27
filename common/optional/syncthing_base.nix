@@ -1,9 +1,10 @@
+{ lib, ... }:
 {
   services.syncthing = {
     enable = true;
     user = "richie";
     overrideDevices = true;
-    overrideFolders = true;
+    overrideFolders = lib.mkDefault true;
     dataDir = "/home/richie/Syncthing";
     configDir = "/home/richie/.config/syncthing";
     settings.devices = {

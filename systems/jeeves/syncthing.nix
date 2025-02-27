@@ -5,6 +5,7 @@ in
   networking.firewall.allowedTCPPorts = [ 8384 ];
 
   services.syncthing = {
+    overrideFolders = false;
     guiAddress = "192.168.90.40:8384";
     settings = {
       devices.davids-server.id = "7GXTDGR-AOXFW2O-K6J7NM3-XYZNRRW-AKHAFWM-GBOWUPQ-OA6JIWD-ER7RDQL"; # cspell:disable-line
