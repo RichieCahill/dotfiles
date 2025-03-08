@@ -39,6 +39,7 @@ in
           "networkmanager"
           "plugdev"
           "scanner"
+          "transmission"
           "uaccess"
           "wireshark"
         ];
