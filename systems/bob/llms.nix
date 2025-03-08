@@ -12,6 +12,7 @@
         "llama2-uncensored:7b"
         "mistral-nemo:12b"
         "dolphin-mixtral:8x7b"
+        "qwq:32b"
       ];
       models = "/zfs/models";
       acceleration = "cuda";
