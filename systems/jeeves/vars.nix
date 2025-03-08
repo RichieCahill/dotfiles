@@ -25,4 +25,5 @@ in
   # torrenting
   torrenting_qbit = "${zfs_torrenting}/qbit";
   torrenting_qbitvpn = "${zfs_torrenting}/qbitvpn";
+  torrenting_transmission = "${zfs_torrenting}/transmission";
 }
