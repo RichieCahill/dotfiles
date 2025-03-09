@@ -15,6 +15,7 @@
   "terminal.integrated.scrollback": 10000,
   "update.mode": "none",
   "workbench.colorTheme": "Default Dark+",
+  "workbench.secondarySideBar.showLabels": false,
 
   // turns off all sounds and announcements
   "accessibility.signals.terminalCommandFailed": {
