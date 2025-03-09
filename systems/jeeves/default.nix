@@ -10,6 +10,7 @@
     ./services
     ./hardware.nix
     ./networking.nix
+    ./nvidia.nix
     ./programs.nix
     ./runners
     ./syncthing.nix

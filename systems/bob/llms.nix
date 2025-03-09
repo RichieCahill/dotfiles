@@ -13,6 +13,7 @@
         "mistral-nemo:12b"
         "dolphin-mixtral:8x7b"
         "qwq:32b"
+        "Qihoo360-Light-R1-32B"
       ];
       models = "/zfs/models";
       acceleration = "cuda";
