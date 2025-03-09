@@ -8,11 +8,12 @@
 
   home.packages = with pkgs; [
     candy-icons
-    ladybird
     chromium
     discord-canary
     gimp
     gparted
+    jetbrains.datagrip
+    ladybird
     mediainfo
     nemo
     nemo-fileroller
