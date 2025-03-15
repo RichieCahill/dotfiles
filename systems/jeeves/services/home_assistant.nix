@@ -94,6 +94,10 @@ in
         uri = "tcp://0.0.0.0:10200";  
         voice = "en_GB-alba-medium";
       };
+      openwakeword = {
+        enable = true;
+        uri = "tcp://0.0.0.0:10400";  
+      };
     };
   };
 }
