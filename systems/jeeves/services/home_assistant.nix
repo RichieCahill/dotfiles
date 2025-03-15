@@ -7,7 +7,7 @@ in
       isSystemUser = true;
       group = "hass";
     };
-    groups.hass = {};
+    groups.hass = { };
   };
 
   services = {
@@ -91,12 +91,12 @@ in
       };
       piper.servers.main = {
         enable = true;
-        uri = "tcp://0.0.0.0:10200";  
+        uri = "tcp://0.0.0.0:10200";
         voice = "en_GB-alba-medium";
       };
       openwakeword = {
         enable = true;
-        uri = "tcp://0.0.0.0:10400";  
+        uri = "tcp://0.0.0.0:10400";
       };
     };
   };
