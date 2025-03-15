@@ -14,15 +14,27 @@ in
 
     authentication = pkgs.lib.mkOverride 10 ''
 
+      # admins
+      local all  postgres   trust
+      host  all  postgres   127.0.0.1/32    trust
+      host  all  postgres   ::1/128         trust 
+
+      local all  richie   trust
+      host  all  richie   127.0.0.1/32    trust
+      host  all  richie   ::1/128         trust 
+      host  all  richie   192.168.90.1/24 trust
+      host  all  richie   192.168.95.1/24 trust
+
+
       #type database DBuser origin-address auth-method
-      local all       all     trust
+      local hass     hass      trust
 
       # ipv4
-      host  all      all     127.0.0.1/32    trust
-      host  all      all     192.168.90.1/24 trust
+      host  hass     hass       192.168.90.1/24 trust
+      host  hass     hass       127.0.0.1/32 trust
 
       # ipv6
-      host all       all     ::1/128         trust
+      host hass      hass     ::1/128         trust
     '';
 
     identMap = ''
@@ -31,6 +43,7 @@ in
         superuser_map      postgres  postgres
         # Let other names login as themselves
         superuser_map      richie    postgres
+        superuser_map      hass      hass
     '';
     ensureUsers = [
       {
@@ -45,6 +58,7 @@ in
       }
       {
         name = "richie";
+        ensureDBOwnership = true;
         ensureClauses = {
           superuser = true;
           login = true;
@@ -53,6 +67,22 @@ in
           replication = true;
         };
       }
+      {
+        name = "hass";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
+          createrole = true;
+          createdb = true;
+          replication = true;
+        };
+      }
+    ];
+    ensureDatabases = [
+        "hass"
+        "mxr_dev"
+        "mxr_prod"
+        "richie"
     ];
     # Thank you NotAShelf
     # https://github.com/NotAShelf/nyx/blob/d407b4d6e5ab7f60350af61a3d73a62a5e9ac660/modules/core/roles/server/system/services/databases/postgresql.nix#L74
