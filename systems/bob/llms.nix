@@ -21,7 +21,7 @@
     open-webui = {
       enable = true;
       openFirewall = true;
-      host = "192.168.90.25";
+      host = "0.0.0.0";
     };
   };
 }
