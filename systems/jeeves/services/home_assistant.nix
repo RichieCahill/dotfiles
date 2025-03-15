@@ -2,6 +2,14 @@ let
   vars = import ../vars.nix;
 in
 {
+  users = {
+    users.hass = {
+      isSystemUser = true;
+      group = "hass";
+    };
+    groups.hass = {};
+  };
+
   services = {
     home-assistant = {
       enable = true;
@@ -22,6 +30,12 @@ in
           time_zone = "America/New_York";
           unit_system = "us_customary";
           temperature_unit = "F";
+        };
+        recorder = {
+          db_url = "postgresql://@/hass";
+          auto_purge = true;
+          purge_keep_days = 3650;
+          db_retry_wait = 15;
         };
         assist_pipeline = { };
         backup = { };
