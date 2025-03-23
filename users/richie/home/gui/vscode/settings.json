@@ -63,6 +63,9 @@
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nil",
 
+  // python tools
+  "mypy.runUsingActiveInterpreter": true,
+
   // force the use of rust-analyzer from dev shell
   "rust-analyzer.server.path": "rust-analyzer",
   "redhat.telemetry.enabled": true,
