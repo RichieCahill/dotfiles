@@ -19,10 +19,10 @@
       acceleration = "cuda";
       openFirewall = true;
     };
-    open-webui = {
-      enable = true;
-      openFirewall = true;
-      host = "0.0.0.0";
-    };
+    # open-webui = {
+    #   enable = true;
+    #   openFirewall = true;
+    #   host = "0.0.0.0";
+    # };
   };
 }
