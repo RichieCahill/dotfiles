@@ -15,6 +15,11 @@
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
 
+  powerManagement = { 
+    cpuFreqGovernor = "ondemand";
+    powertop.enable = true;
+  };
+
   networking = {
     hostName = "rhapsody-in-green";
     hostId = "6404140d";
