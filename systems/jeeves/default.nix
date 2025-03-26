@@ -22,6 +22,12 @@
     "torrenting"
   ];
 
+  powerManagement = { 
+    cpuFreqGovernor = "ondemand";
+    # scsiLinkPolicy = "min_power";
+    # powertop.enable = true;
+  };
+
   services = {
     openssh.ports = [ 629 ];
 
