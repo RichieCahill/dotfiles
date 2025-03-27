@@ -15,7 +15,7 @@
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
 
-  powerManagement = { 
+  powerManagement = {
     cpuFreqGovernor = "ondemand";
     powertop.enable = true;
   };

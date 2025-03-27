@@ -22,7 +22,7 @@
     "torrenting"
   ];
 
-  powerManagement = { 
+  powerManagement = {
     cpuFreqGovernor = "ondemand";
     # scsiLinkPolicy = "min_power";
     # powertop.enable = true;
