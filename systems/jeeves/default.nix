@@ -23,9 +23,9 @@
   ];
 
   powerManagement = {
-    cpuFreqGovernor = "ondemand";
+    # cpuFreqGovernor = "ondemand";
     # scsiLinkPolicy = "min_power";
-    # powertop.enable = true;
+    powertop.enable = true;
   };
 
   services = {
