@@ -11,6 +11,8 @@ sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=aut
 sudo zpool add storage -o ashift=12 special mirror
 sudo zpool add storage -o ashift=12 logs mirror
 
+# scratch
+sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/scratch scratch
 
 # media datasets
 sudo zfs create -o compression=zstd-9 media/docker
@@ -33,3 +35,6 @@ sudo zfs create -o compression=zstd-19 storage/syncthing
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/qbitvpn
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/transmission
 
+# scratch datasets
+sudo zfs create -o recordsize=16k -o sync=disabled scratch/qbitvpn
+sudo zfs create -o recordsize=16k -o sync=disabled scratch/transmission
