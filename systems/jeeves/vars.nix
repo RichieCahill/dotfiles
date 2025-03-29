@@ -1,10 +1,9 @@
 let
   zfs_media = "/zfs/media";
   zfs_storage = "/zfs/storage";
-  zfs_torrenting = "/zfs/torrenting";
 in
 {
-  inherit zfs_media zfs_storage zfs_torrenting;
+  inherit zfs_media zfs_storage;
   # media
   media_database = "${zfs_media}/database";
   media_docker = "${zfs_media}/docker";
@@ -22,8 +21,7 @@ in
   storage_secrets = "${zfs_storage}/secrets";
   storage_syncthing = "${zfs_storage}/syncthing";
   storage_library = "${zfs_storage}/library";
-  # torrenting
-  torrenting_qbit = "${zfs_torrenting}/qbit";
-  torrenting_qbitvpn = "${zfs_torrenting}/qbitvpn";
-  torrenting_transmission = "${zfs_torrenting}/transmission";
+  storage_qbitvpn = "${zfs_storage}/qbitvpn";
+  storage_transmission = "${zfs_storage}/transmission";
+
 }
