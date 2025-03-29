@@ -11,9 +11,8 @@ sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=aut
 sudo zpool add storage -o ashift=12 special mirror
 sudo zpool add storage -o ashift=12 logs mirror
 
-# torrenting
-sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/torrenting torrenting
-sudo zpool add torrenting -o ashift=12 special
+# scratch
+sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/scratch scratch
 
 # media datasets
 sudo zfs create -o compression=zstd-9 media/docker
@@ -26,6 +25,10 @@ sudo zfs create -o compression=zstd-19 media/home_assistant
 sudo zfs create -o exec=off media/share
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/postgres media/postgres
 
+# scratch datasets
+sudo zfs create -o recordsize=16k -o sync=disabled scratch/qbitvpn
+sudo zfs create -o recordsize=16k -o sync=disabled scratch/transmission
+
 # storage datasets
 sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/archive
 sudo zfs create -o compression=zstd-19 storage/main
@@ -33,7 +36,5 @@ sudo zfs create -o recordsize=16K -o compression=zstd-19 -o copies=2 storage/pho
 sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/plex
 sudo zfs create -o compression=zstd-19 -o copies=3 storage/secrets
 sudo zfs create -o compression=zstd-19 storage/syncthing
-
-# torrenting datasets
-sudo zfs create -o recordsize=16K -o exec=off -o sync=disabled torrenting/qbit
-sudo zfs create -o recordsize=16K -o exec=off -o sync=disabled torrenting/qbitvpn
+sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/qbitvpn
+sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/transmission

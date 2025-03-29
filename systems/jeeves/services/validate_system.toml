@@ -1,9 +1,8 @@
-zpool = ["root_pool", "storage", "torrenting", "media"]
+zpool = ["root_pool", "storage", "media"]
 services = [
     "audiobookshelf",
     "cloud_flare_tunnel",
     "haproxy",
-    "docker-qbit",
     "docker-qbitvpn",
     "docker-uptime_kuma",
     "docker",
