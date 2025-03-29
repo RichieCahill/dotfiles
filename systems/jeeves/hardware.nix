@@ -110,16 +110,11 @@
         "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1".device =
           "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
         # Torrenting pool
-        "luks-torrenting_pool-wwn-0x500a0751e6c3c01e-part1" = {
-          device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
-          bypassWorkqueues = true;
-          allowDiscards = true;
-        };
-        "luks-torrenting_pool-wwn-0x5000cca264f080a3-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca264f080a3-part1";
-        "luks-torrenting_pool-wwn-0x5000cca298c33ae5-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca298c33ae5-part1";
-        # cspell:enable
+        # "luks-torrenting_pool-wwn-0x500a0751e6c3c01e-part1" = {
+        #   device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
+        #   bypassWorkqueues = true;
+        #   allowDiscards = true;
+        # };
       };
     };
     kernelModules = [ "kvm-amd" ];

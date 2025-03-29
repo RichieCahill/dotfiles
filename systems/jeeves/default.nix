@@ -19,7 +19,6 @@
   boot.zfs.extraPools = [
     "media"
     "storage"
-    "torrenting"
   ];
 
   powerManagement = {

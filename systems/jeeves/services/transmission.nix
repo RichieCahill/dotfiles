@@ -14,9 +14,9 @@ in
     settings = {
       bind-address-ipv4 = "192.168.95.14";
       cache-size-mb = 0;
-      download-dir = "${vars.torrenting_transmission}/complete";
+      download-dir = "${vars.storage_transmission}/complete";
       download-queue-enabled = false;
-      incomplete-dir = "${vars.torrenting_transmission}/incomplete";
+      incomplete-dir = "${vars.storage_transmission}/incomplete";
       incomplete-dir-enabled = true;
       message-level = 3;
       peer-port = 51413;
