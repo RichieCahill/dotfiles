@@ -45,70 +45,132 @@
           device = "/dev/disk/by-id/wwn-0x55cd2e4150f01519-part2";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-root-pool-wwn-0x55cd2e4150f01556-part2" = {
           device = "/dev/disk/by-id/wwn-0x55cd2e4150f01556-part2";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         # Media pool
         "luks-media_pool-nvme-INTEL_SSDPEK1A118GA_BTOC14120V2J118B-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_SSDPEK1A118GA_BTOC14120V2J118B-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-media_pool-nvme-INTEL_SSDPEK1A118GA_BTOC14120WAG118B-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_SSDPEK1A118GA_BTOC14120WAG118B-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-media_pool-nvme-INTEL_SSDPE2ME012T4_CVMD5130000G1P2HGN-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_SSDPE2ME012T4_CVMD5130000G1P2HGN-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-media_pool-nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         # Storage pool
         "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1" = {
           device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834817F-part1" = {
           device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834817F-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-storage_pool-nvme-INTEL_MEMPEK1W016GA_PHBT828104DF016D-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_MEMPEK1W016GA_PHBT828104DF016D-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
         "luks-storage_pool-nvme-INTEL_MEMPEK1W016GA_PHBT828105A8016D-part1" = {
           device = "/dev/disk/by-id/nvme-INTEL_MEMPEK1W016GA_PHBT828105A8016D-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
         };
-        "luks-storage_pool-wwn-0x5000cca23bc438dd-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bc438dd-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd035f5-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd02746-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1".device =
-          "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
+        "luks-storage_pool-wwn-0x5000cca23bc438dd-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bc438dd-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bd035f5-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bd02746-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
+        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1" = {
+          device = "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
+          fallbackToPassword = true;
+        };
         # Torrenting pool
         # "luks-torrenting_pool-wwn-0x500a0751e6c3c01e-part1" = {
         #   device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
