@@ -1,9 +1,10 @@
 let
   zfs_media = "/zfs/media";
   zfs_storage = "/zfs/storage";
+  zfs_scratch = "/zfs/scratch";
 in
 {
-  inherit zfs_media zfs_storage;
+  inherit zfs_media zfs_storage zfs_scratch;
   # media
   media_database = "${zfs_media}/database";
   media_docker = "${zfs_media}/docker";
@@ -23,5 +24,7 @@ in
   storage_library = "${zfs_storage}/library";
   storage_qbitvpn = "${zfs_storage}/qbitvpn";
   storage_transmission = "${zfs_storage}/transmission";
-
+  # scratch
+  scratch_qbitvpn = "${zfs_scratch}/qbitvpn";
+  scratch_transmission = "${zfs_scratch}/transmission";
 }
