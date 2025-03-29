@@ -22,7 +22,7 @@ in
     ];
     volumes = [
       "${vars.media_docker_configs}/qbitvpn:/config"
-      "${vars.torrenting_qbitvpn}:/data"
+      "${vars.storage_qbitvpn}:/data"
       "/etc/localtime:/etc/localtime:ro"
     ];
     environment = {
