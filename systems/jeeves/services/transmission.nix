@@ -16,7 +16,7 @@ in
       cache-size-mb = 0;
       download-dir = "${vars.storage_transmission}/complete";
       download-queue-enabled = false;
-      incomplete-dir = "${vars.storage_transmission}/incomplete";
+      incomplete-dir = "${vars.scratch_transmission}/incomplete";
       incomplete-dir-enabled = true;
       message-level = 3;
       peer-port = 51413;
