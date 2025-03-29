@@ -16,11 +16,6 @@
     ./syncthing.nix
   ];
 
-  boot.zfs.extraPools = [
-    "media"
-    "storage"
-  ];
-
   powerManagement = {
     # cpuFreqGovernor = "ondemand";
     # scsiLinkPolicy = "min_power";

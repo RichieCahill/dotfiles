@@ -90,6 +90,17 @@
           keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
           fallbackToPassword = true;
         };
+        # Scratch pool
+        "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01C-part1" = {
+          device = "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01E-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+        "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01E-part1" = {
+          device = "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01E-part1";
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
         # Storage pool
         "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1" = {
           device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1";
@@ -171,14 +182,15 @@
           keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
           fallbackToPassword = true;
         };
-        # Torrenting pool
-        # "luks-torrenting_pool-wwn-0x500a0751e6c3c01e-part1" = {
-        #   device = "/dev/disk/by-id/wwn-0x500a0751e6c3c01e-part1";
-        #   bypassWorkqueues = true;
-        #   allowDiscards = true;
-        # };
       };
     };
+
+    zfs.extraPools = [
+      "media"
+      "scratch"
+      "storage"
+    ];
+
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
   };
