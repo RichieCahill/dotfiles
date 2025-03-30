@@ -4,7 +4,6 @@ services = [
     "cloud_flare_tunnel",
     "haproxy",
     "docker-qbitvpn",
-    "docker-uptime_kuma",
     "docker",
     "filebrowser",
     "home-assistant",

@@ -92,7 +92,7 @@
         };
         # Scratch pool
         "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01C-part1" = {
-          device = "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01E-part1";
+          device = "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01C-part1";
           bypassWorkqueues = true;
           allowDiscards = true;
         };
