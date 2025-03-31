@@ -19,8 +19,8 @@
         default = "kagi";
         order = [
           "kagi"
-          "DuckDuckGo"
-          "Google"
+          "ddg"
+          "google"
         ];
       };
       settings = {
