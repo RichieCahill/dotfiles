@@ -21,9 +21,9 @@ in
       "8118:8118"
     ];
     volumes = [
-      "${vars.media_docker_configs}/qbitvpn:/config"
-      "${vars.storage_qbitvpn}:/data"
-      "${vars.scratch_qbitvpn}:/data/incomplete"
+      "${vars.docker_configs}/qbitvpn:/config"
+      "${vars.qbitvpn}:/data"
+      "${vars.qbitvpn_scratch}:/data/incomplete"
       "/etc/localtime:/etc/localtime:ro"
     ];
     environment = {
@@ -41,7 +41,7 @@ in
       DELUGE_DAEMON_LOG_LEVEL = "debug";
       DELUGE_WEB_LOG_LEVEL = "debug";
     };
-    environmentFiles = [ "${vars.storage_secrets}/docker/qbitvpn" ];
+    environmentFiles = [ "${vars.secrets}/docker/qbitvpn" ];
     autoStart = true;
   };
 }

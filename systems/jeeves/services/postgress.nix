@@ -10,7 +10,7 @@ in
     package = pkgs.postgresql_17_jit;
     enableTCPIP = true;
     enableJIT = true;
-    dataDir = "${vars.media_database}/postgres";
+    dataDir = "${vars.database}/postgres";
 
     authentication = pkgs.lib.mkOverride 10 ''
 

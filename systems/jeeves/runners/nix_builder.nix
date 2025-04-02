@@ -28,8 +28,8 @@ in
           mountPoint = "/zfs/media/github-runners/${name}";
           isReadOnly = false;
         };
-        "/secrets".mountPoint = "${vars.storage_secrets}/services/github-runners/${name}";
-        "ssh-keys".mountPoint = "${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners";
+        "/secrets".mountPoint = "${vars.secrets}/services/github-runners/${name}";
+        "ssh-keys".mountPoint = "${vars.secrets}/services/github-runners/id_ed25519_github-runners";
       };
       config =
         {
@@ -65,7 +65,7 @@ in
               Port 629
               User github-runners
               HostName 192.168.95.14
-              IdentityFile ${vars.storage_secrets}/services/github-runners/id_ed25519_github-runners
+              IdentityFile ${vars.secrets}/services/github-runners/id_ed25519_github-runners
               StrictHostKeyChecking no
               UserKnownHostsFile /dev/null
           '';
@@ -75,7 +75,7 @@ in
             workDir = "/zfs/media/github-runners/${name}";
             url = "https://github.com/RichieCahill/dotfiles";
             extraLabels = [ "nixos" ];
-            tokenFile = "${vars.storage_secrets}/services/github-runners/${name}";
+            tokenFile = "${vars.secrets}/services/github-runners/${name}";
             user = "github-runners";
             group = "github-runners";
             extraPackages = with pkgs; [

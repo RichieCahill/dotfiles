@@ -7,7 +7,7 @@ in
     ports = [ "8091:80" ];
     volumes = [
       "${../../../common/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
-      "${vars.media_share}:/data"
+      "${vars.share}:/data"
     ];
     extraOptions = [ "--network=web" ];
     autoStart = true;
