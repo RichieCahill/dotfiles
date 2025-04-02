@@ -4,7 +4,7 @@ in
 {
   services.duckdns = {
     enable = true;
-    tokenFile = "${vars.storage_secrets}/services/duckdns/token";
-    domainsFile = "${vars.storage_secrets}/services/duckdns/domains";
+    tokenFile = "${vars.secrets}/services/duckdns/token";
+    domainsFile = "${vars.secrets}/services/duckdns/domains";
   };
 }

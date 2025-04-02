@@ -5,6 +5,6 @@ in
 {
   services.audiobookshelf.enable = true;
   systemd.services.audiobookshelf.serviceConfig.WorkingDirectory =
-    lib.mkForce "${vars.media_docker_configs}/audiobookshelf";
-  users.users.audiobookshelf.home = lib.mkForce "${vars.media_docker_configs}/audiobookshelf";
+    lib.mkForce "${vars.docker_configs}/audiobookshelf";
+  users.users.audiobookshelf.home = lib.mkForce "${vars.docker_configs}/audiobookshelf";
 }

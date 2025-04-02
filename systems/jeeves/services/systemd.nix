@@ -23,7 +23,7 @@ in
         description = "validates startup";
         path = [ pkgs.zfs ];
         serviceConfig = {
-          EnvironmentFile = "${vars.storage_secrets}/services/server-validation";
+          EnvironmentFile = "${vars.secrets}/services/server-validation";
           Type = "oneshot";
           ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_system --config-file='${./validate_system.toml}'";
         };

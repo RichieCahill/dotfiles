@@ -5,6 +5,6 @@ in
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    dataDir = "${vars.media_services}/jellyfin";
+    dataDir = "${vars.services}/jellyfin";
   };
 }

@@ -20,7 +20,7 @@ in
         };
         "notes" = {
           id = "l62ul-lpweo"; # cspell:disable-line
-          path = vars.media_notes;
+          path = vars.notes;
           devices = [
             "rhapsody-in-green"
             "davids-server"
@@ -29,7 +29,7 @@ in
         };
         "important" = {
           id = "4ckma-gtshs"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/important";
+          path = "${vars.syncthing}/important";
           devices = [
             "bob"
             "rhapsody-in-green"
@@ -39,7 +39,7 @@ in
         };
         "music" = {
           id = "vprc5-3azqc"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/music";
+          path = "${vars.syncthing}/music";
           devices = [
             "bob"
             "rhapsody-in-green"
@@ -50,14 +50,14 @@ in
         };
         "projects" = {
           id = "vyma6-lqqrz"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/projects";
+          path = "${vars.syncthing}/projects";
           devices = [
             "rhapsody-in-green"
           ];
           fsWatcherEnabled = true;
         };
         "rhapsody-in-green_temp" = {
-          path = "${vars.storage_syncthing}/rhapsody-in-green_temp";
+          path = "${vars.syncthing}/rhapsody-in-green_temp";
           devices = [
             "rhapsody-in-green"
           ];
@@ -72,7 +72,7 @@ in
           fsWatcherEnabled = true;
         };
         "backup" = {
-          path = "${vars.storage_syncthing}/backup";
+          path = "${vars.syncthing}/backup";
           devices = [
             "davids-server"
           ];
@@ -81,7 +81,7 @@ in
         #
         "davids-backup1" = {
           id = "8229p-8z3tm"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/davids_backups/1";
+          path = "${vars.syncthing}/davids_backups/1";
           devices = [
             "davids-server"
           ];
@@ -90,7 +90,7 @@ in
         };
         "davids-backup2" = {
           id = "iciw3-dp6ao"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/davids_backups/2";
+          path = "${vars.syncthing}/davids_backups/2";
           devices = [
             "davids-server"
           ];
@@ -99,7 +99,7 @@ in
         };
         "davids-backup3" = {
           id = "9si6m-bnkjb"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/davids_backups/3";
+          path = "${vars.syncthing}/davids_backups/3";
           devices = [
             "davids-server"
           ];
@@ -108,7 +108,7 @@ in
         };
         "davids-backup4" = {
           id = "qjyfy-uupj4"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/davids_backups/4";
+          path = "${vars.syncthing}/davids_backups/4";
           devices = [
             "davids-server"
           ];
@@ -117,7 +117,7 @@ in
         };
         "davids-backup5" = {
           id = "fm4h5-emsu2"; # cspell:disable-line
-          path = "${vars.storage_syncthing}/davids_backups/5";
+          path = "${vars.syncthing}/davids_backups/5";
           devices = [
             "davids-server"
           ];

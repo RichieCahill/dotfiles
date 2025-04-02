@@ -14,7 +14,7 @@ in
       Type = "simple";
       User = "richie";
       Group = "users";
-      ExecStart = "${pkgs.filebrowser}/bin/filebrowser --root=/zfs --address=0.0.0.0 --database=${vars.media_docker_configs}/filebrowser/filebrowser.db";
+      ExecStart = "${pkgs.filebrowser}/bin/filebrowser --root=/zfs --address=0.0.0.0 --database=${vars.docker_configs}/filebrowser/filebrowser.db";
       Restart = "on-failure";
     };
   };

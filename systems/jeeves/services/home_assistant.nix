@@ -14,7 +14,7 @@ in
     home-assistant = {
       enable = true;
       openFirewall = true;
-      configDir = vars.media_home_assistant;
+      configDir = vars.home_assistant;
       config = {
         http = {
           server_port = 8123;
