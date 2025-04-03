@@ -76,6 +76,7 @@ in
           makeLuksSSD "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01C-part1";
         "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01E-part1" =
           makeLuksSSD "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01E-part1";
+
         # Storage pool
         "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1" =
           makeLuksSSD "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1";
@@ -91,16 +92,6 @@ in
           makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bd035f5-part1";
         "luks-storage_pool-wwn-0x5000cca23bd00ad6-part1" =
           makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bd00ad6-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf313e-part1" =
-          makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bcf313e-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcdf3b8-part1" =
-          makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bcdf3b8-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd02746-part1" =
-          makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bd02746-part1";
-        "luks-storage_pool-wwn-0x5000cca23bcf9f89-part1" =
-          makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bcf9f89-part1";
-        "luks-storage_pool-wwn-0x5000cca23bd00ae9-part1" =
-          makeLuksDevice "/dev/disk/by-id/wwn-0x5000cca23bd00ae9-part1";
       };
     };
 
