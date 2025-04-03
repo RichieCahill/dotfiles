@@ -16,7 +16,6 @@ sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=aut
 
 # media datasets
 sudo zfs create -o compression=zstd-9 media/docker
-sudo zfs create -o recordsize=1M -o compression=zstd-19 media/library
 sudo zfs create -o compression=zstd-9 -o sync=disabled media/github-runners
 sudo zfs create -o copies=3 media/notes
 sudo zfs create -o compression=zstd-9 media/plex
@@ -38,3 +37,4 @@ sudo zfs create -o compression=zstd-19 -o copies=3 storage/secrets
 sudo zfs create -o compression=zstd-19 storage/syncthing
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/qbitvpn
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/transmission
+sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/library
