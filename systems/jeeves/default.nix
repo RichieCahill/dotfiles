@@ -18,7 +18,7 @@
 
   powerManagement = {
     # cpuFreqGovernor = "ondemand";
-    # scsiLinkPolicy = "min_power";
+    scsiLinkPolicy = "min_power";
     powertop.enable = true;
   };
 
