@@ -52,6 +52,8 @@
     };
   };
 
+  powerManagement.powertop.enable = lib.mkDefault true;
+  
   programs.zsh.enable = true;
 
   security.auditd.enable = lib.mkDefault true;
