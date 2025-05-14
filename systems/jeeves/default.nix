@@ -7,12 +7,13 @@
     ../../common/optional/syncthing_base.nix
     ../../common/optional/zerotier.nix
     ./docker
-    ./services
     ./hardware.nix
     ./networking.nix
     ./nvidia.nix
     ./programs.nix
     ./runners
+    ./services
+    ./services_accounts.nix
     ./syncthing.nix
   ];
 
