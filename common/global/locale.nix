@@ -4,7 +4,7 @@
   console.keyMap = lib.mkDefault "us";
 
   i18n = {
-    defaultLocale = lib.mkDefault "en_US.utf8";
+    defaultLocale = lib.mkDefault "en_US.UTF-8";
     extraLocaleSettings = lib.mkDefault {
       LC_ADDRESS = "en_US.UTF-8";
       LC_IDENTIFICATION = "en_US.UTF-8";
