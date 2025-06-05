@@ -2,6 +2,10 @@ let
   vars = import ../vars.nix;
 in
 {
+  config,
+  ...
+}:
+{
   virtualisation.oci-containers.containers.great_cloud_of_witnesses = {
     image = "ubuntu/apache2:2.4-22.04_beta";
     ports = [ "8092:80" ];
@@ -12,5 +16,19 @@ in
     ];
     extraOptions = [ "--network=web" ];
     autoStart = true;
+  };
+
+  sops.secrets.gcw_password = {
+    sopsFile = ../../../users/secrets.yaml;
+    neededForUsers = true;
+  };
+
+  users = {
+    users.gcw = {
+      isSystemUser = true;
+      hashedPasswordFile = "${config.sops.secrets.gcw_password.path}";
+      group = "gcw";
+    };
+    groups.gcw = { };
   };
 }
