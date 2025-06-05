@@ -35,6 +35,15 @@ in
 
       # ipv6
       host hass      hass     ::1/128         trust
+
+      # megan
+      host  megan    megan    192.168.90.1/24 trust
+      host  megan    megan    127.0.0.1/32 trust
+
+      # gcw
+      host  gcw      gcw      192.168.90.1/24 trust
+      host  gcw      gcw      127.0.0.1/32 trust
+
     '';
 
     identMap = ''
@@ -77,9 +86,31 @@ in
           replication = true;
         };
       }
+      {
+        name = "megan";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
+          createrole = true;
+          createdb = true;
+          replication = true;
+        };
+      }
+      {
+        name = "gcw";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
+          createrole = true;
+          createdb = true;
+          replication = true;
+        };
+      }
     ];
     ensureDatabases = [
+      "gcw"
       "hass"
+      "megan"
       "mxr_dev"
       "mxr_prod"
       "richie"
