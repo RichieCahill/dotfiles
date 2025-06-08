@@ -12,7 +12,7 @@ in
     openRPCPort = true;
     downloadDirPermissions = "770";
     settings = {
-      bind-address-ipv4 = "192.168.95.14";
+      bind-address-ipv4 = "192.168.99.14";
       cache-size-mb = 0;
       download-dir = "${vars.transmission}/complete";
       download-queue-enabled = false;
