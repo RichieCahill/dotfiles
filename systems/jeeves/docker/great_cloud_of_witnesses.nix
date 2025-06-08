@@ -1,21 +1,48 @@
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+
 let
   vars = import ../vars.nix;
 in
 {
-  config,
-  ...
-}:
-{
-  virtualisation.oci-containers.containers.great_cloud_of_witnesses = {
-    image = "ubuntu/apache2:2.4-22.04_beta";
-    ports = [ "8092:80" ];
-    volumes = [
-      "${../../../common/docker_templates}/file_server/sites/:/etc/apache2/sites-enabled/"
-      "${vars.services}/great_cloud_of_witnesses:/data"
-      "/var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock"
-    ];
-    extraOptions = [ "--network=web" ];
-    autoStart = true;
+
+  # environment.systemPackages = with pkgs; [ php.withExtensions ({ all, ... }: [ all.pdo_pgsql ]) ];
+
+  services.httpd = {
+    enable = true;
+    adminAddr = "webmaster@localhost";
+
+    enablePHP = true;
+    phpPackage = pkgs.php.withExtensions (
+      { enabled, all }:
+      enabled
+      ++ [
+        all.pdo
+        all.pdo_pgsql
+      ]
+    );
+    extraModules = [ "rewrite" ];
+    virtualHosts.great_cloud_of_witnesses = {
+      hostName = "localhost";
+      listen = [
+        {
+          ip = "*";
+          port = 8092;
+        }
+
+      ];
+      documentRoot = "${vars.services}/great_cloud_of_witnesses";
+      extraConfig = ''
+        <Directory "${vars.services}/great_cloud_of_witnesses">
+          AllowOverride All
+          Require all granted
+        </Directory>
+      '';
+    };
   };
 
   sops.secrets.gcw_password = {
@@ -26,7 +53,7 @@ in
   users = {
     users.gcw = {
       isSystemUser = true;
-      hashedPasswordFile = "${config.sops.secrets.gcw_password.path}";
+      hashedPasswordFile = config.sops.secrets.gcw_password.path;
       group = "gcw";
     };
     groups.gcw = { };
