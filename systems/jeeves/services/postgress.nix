@@ -23,7 +23,7 @@ in
       host  all  richie   127.0.0.1/32    trust
       host  all  richie   ::1/128         trust 
       host  all  richie   192.168.90.1/24 trust
-      host  all  richie   192.168.95.1/24 trust
+      host  all  richie   192.168.99.1/24 trust
 
 
       #type database DBuser origin-address auth-method
