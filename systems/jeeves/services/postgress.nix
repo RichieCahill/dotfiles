@@ -40,7 +40,11 @@ in
       host  megan    megan    192.168.90.1/24 trust
       host  megan    megan    127.0.0.1/32 trust
 
+      host  gcw      megan    192.168.90.1/24 trust
+      host  gcw      megan    127.0.0.1/32 trust
+
       # gcw
+      local gcw      gcw      trust
       host  gcw      gcw      192.168.90.1/24 trust
       host  gcw      gcw      127.0.0.1/32 trust
 
