@@ -62,6 +62,7 @@
       enable = true;
       execWheelOnly = true;
     };
+    sudo.enable = false;
   };
 
   users.mutableUsers = lib.mkDefault false;
