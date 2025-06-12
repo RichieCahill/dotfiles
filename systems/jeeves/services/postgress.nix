@@ -21,17 +21,17 @@ in
 
       local all  richie   trust
       host  all  richie   127.0.0.1/32    trust
-      host  all  richie   ::1/128         trust 
+      host  all  richie   ::1/128         trust
       host  all  richie   192.168.90.1/24 trust
       host  all  richie   192.168.99.1/24 trust
 
 
       #type database DBuser origin-address auth-method
-      local hass     hass      trust
+      local hass     hass     trust
 
       # ipv4
-      host  hass     hass       192.168.90.1/24 trust
-      host  hass     hass       127.0.0.1/32 trust
+      host  hass     hass     192.168.90.1/24 trust
+      host  hass     hass     127.0.0.1/32 trust
 
       # ipv6
       host hass      hass     ::1/128         trust
