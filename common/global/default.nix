@@ -56,7 +56,13 @@
 
   programs.zsh.enable = true;
 
-  security.auditd.enable = lib.mkDefault true;
+  security = {
+    auditd.enable = lib.mkDefault true;
+    sudo-rs = {
+      enable = true;
+      execWheelOnly = true;
+    };
+  };
 
   users.mutableUsers = lib.mkDefault false;
 
