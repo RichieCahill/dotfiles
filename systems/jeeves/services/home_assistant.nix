@@ -72,7 +72,6 @@ in
           rokuecp
           uiprotect
           wakeonlan
-          wyoming
         ];
       extraComponents = [ "isal" ];
     };
@@ -80,24 +79,6 @@ in
       enable = true;
       openFirewall = true;
       address = "192.168.90.40";
-    };
-    wyoming = {
-      faster-whisper.servers.main = {
-        enable = true;
-        uri = "tcp://0.0.0.0:10300";
-        model = "medium.en";
-        language = "en";
-        device = "cuda";
-      };
-      piper.servers.main = {
-        enable = true;
-        uri = "tcp://0.0.0.0:10200";
-        voice = "en_GB-alba-medium";
-      };
-      openwakeword = {
-        enable = true;
-        uri = "tcp://0.0.0.0:10400";
-      };
     };
   };
 }
