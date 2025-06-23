@@ -19,6 +19,7 @@ jobs:
       - name: merge_flake_lock_update
         run: |
           pr_number=$(gh pr list --state open --author RichieCahill --label flake_lock_update --json number --jq '.[0].number')
+          echo "pr_number=$pr_number" >> $GITHUB_ENV
           if [ -n "$pr_number" ]; then
             gh pr merge "$pr_number" --auto
           else
