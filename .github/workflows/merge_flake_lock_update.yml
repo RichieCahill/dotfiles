@@ -1,4 +1,4 @@
-name: Auto Merge Pull Request
+name: merge_flake_lock_update
 on:
   workflow_dispatch:
   schedule:
@@ -13,9 +13,7 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Enable auto-merge
-        run: gh pr merge flake_lock_update --auto
-      - name: Enable auto-merge
+      - name: merge_flake_lock_update
         run: |
           pr_number=$(gh pr list --state open --author RichieCahill --label flake_lock_update --json number --jq '.[0].number')
           if [ -n "$pr_number" ]; then
