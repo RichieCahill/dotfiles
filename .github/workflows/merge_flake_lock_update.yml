@@ -15,5 +15,13 @@ jobs:
     steps:
       - name: Enable auto-merge
         run: gh pr merge flake_lock_update --auto
+      - name: Enable auto-merge
+        run: |
+          pr_number=$(gh pr list --state open --author "RichieCahill" --label flake_lock_update --json number --jq '.[0].number')
+          if [ -n "$pr_number" ]; then
+            gh pr merge "$pr_number" --auto
+          else
+            echo "No open PR found with label flake_lock_update"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
