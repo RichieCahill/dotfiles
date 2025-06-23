@@ -20,12 +20,4 @@ jobs:
           pr-labels: |
             dependencies
             automated
-      - name: Enable auto-merge
-        if: ${{ success() }}
-        run: |
-          gh pr merge --auto --rebase "$PR_URL"
-        env:
-          PR_URL: ${{ steps.update-flake-lock.outputs.pull-request-url }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          auto-merge: true
-          pr-allow-automerge: true
+            flake_lock_update
