@@ -38,6 +38,7 @@
     poetry
     python313
     ruff
+    uv
     # Rust packages
     trunk
     wasm-pack
