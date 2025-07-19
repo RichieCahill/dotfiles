@@ -5,6 +5,7 @@
     ../../common/optional/docker.nix
     ../../common/optional/ssh_decrypt.nix
     ../../common/optional/syncthing_base.nix
+    ../../common/optional/update.nix
     ../../common/optional/zerotier.nix
     ./docker
     ./services
