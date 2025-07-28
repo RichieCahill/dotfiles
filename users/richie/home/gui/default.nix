@@ -13,7 +13,6 @@
     gimp
     gparted
     jetbrains.datagrip
-    ladybird
     mediainfo
     nemo
     nemo-fileroller
