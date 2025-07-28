@@ -12,8 +12,7 @@
     discord-canary
     gimp
     gparted
-    jetbrains.datagrip
-    ladybird
+    # jetbrains.datagrip
     mediainfo
     nemo
     nemo-fileroller
