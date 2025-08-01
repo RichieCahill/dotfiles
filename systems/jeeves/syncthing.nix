@@ -23,7 +23,10 @@ in
           path = vars.notes;
           devices = [
             "rhapsody-in-green"
-            "davids-server"
+            {
+              name = "davids-server";
+              encryptionPasswordFile = "${vars.secrets}/services/syncthing/davids-server";
+            }
           ];
           fsWatcherEnabled = true;
         };
@@ -67,14 +70,20 @@ in
           path = "/home/richie/vault";
           devices = [
             "rhapsody-in-green"
-            "davids-server"
+            {
+              name = "davids-server";
+              encryptionPasswordFile = "${vars.secrets}/services/syncthing/davids-server";
+            }
           ];
           fsWatcherEnabled = true;
         };
         "backup" = {
           path = "${vars.syncthing}/backup";
           devices = [
-            "davids-server"
+            {
+              name = "davids-server";
+              encryptionPasswordFile = "${vars.secrets}/services/syncthing/davids-server";
+            }
           ];
           fsWatcherEnabled = true;
         };
