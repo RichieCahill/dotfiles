@@ -15,4 +15,4 @@ jobs:
       - name: get_version
         run: treefmt --version
       - name: runs treefmt
-        run: treefmt --ci $( [ "${ACTIONS_RUNNER_DEBUG:-0}" = "1" ] && echo -vv )
+        run: treefmt --ci $( [ -n "$ACTIONS_RUNNER_DEBUG" ] && echo -vv )
