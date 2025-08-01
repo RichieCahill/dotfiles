@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: runs treefmt
-        run: treefmt --ci $( [ "$ACTIONS_RUNNER_DEBUG" = "1" ] && echo -vv )
+        run: treefmt --ci $( [ "${ACTIONS_RUNNER_DEBUG:-0}" = "1" ] && echo -vv )
