@@ -24,25 +24,24 @@ in
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJYZFsc9CSH03ZUP7y81AHwSyjLwFmcshVFCyxDcYhBT rhapsody-in-green" # cspell:disable-line
       ];
-      extraGroups =
-        [
-          "audio"
-          "video"
-          "wheel"
-          "users"
-        ]
-        ++ ifTheyExist [
-          "dialout"
-          "docker"
-          "hass"
-          "libvirtd"
-          "networkmanager"
-          "plugdev"
-          "scanner"
-          "transmission"
-          "uaccess"
-          "wireshark"
-        ];
+      extraGroups = [
+        "audio"
+        "video"
+        "wheel"
+        "users"
+      ]
+      ++ ifTheyExist [
+        "dialout"
+        "docker"
+        "hass"
+        "libvirtd"
+        "networkmanager"
+        "plugdev"
+        "scanner"
+        "transmission"
+        "uaccess"
+        "wireshark"
+      ];
       uid = 1000;
     };
 
