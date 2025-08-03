@@ -39,6 +39,8 @@
     python313
     ruff
     uv
+    # nodejs
+    nodejs
     # Rust packages
     trunk
     wasm-pack
