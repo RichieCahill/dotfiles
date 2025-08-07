@@ -26,5 +26,9 @@
     util-linux
     vlc
     zoom-us
+    # games
+    dwarf-fortress
+    tower-pixel-dungeon
+    endless-sky 
   ];
 }
