@@ -29,6 +29,6 @@
     # games
     dwarf-fortress
     tower-pixel-dungeon
-    endless-sky 
+    endless-sky
   ];
 }
