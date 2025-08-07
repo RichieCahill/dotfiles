@@ -53,6 +53,7 @@
   "[nix]": { "editor.defaultFormatter": "jnoortheen.nix-ide" },
   "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
   "[yaml]": { "editor.defaultFormatter": "redhat.vscode-yaml" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
 
   // spell check
   "cSpell.enabled": true,
