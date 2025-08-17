@@ -32,7 +32,7 @@ in
   };
 
   environment = {
-    sessionVariables.LD_LIBRARY_PATH = libPath;
-    variables.LD_LIBRARY_PATH = libPath;
+    sessionVariables.LD_LIBRARY_PATH = lib.mkDefault libPath;
+    variables.LD_LIBRARY_PATH = lib.mkDefault libPath;
   };
 }
