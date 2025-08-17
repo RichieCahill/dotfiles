@@ -1,4 +1,10 @@
 { lib, pkgs, ... }:
+let
+  libPath = pkgs.lib.makeLibraryPath [
+    pkgs.zlib
+    pkgs.stdenv.cc.cc.lib
+  ];
+in
 {
   programs.nix-ld = {
     enable = lib.mkDefault true;
@@ -15,6 +21,7 @@
       libxml2
       openssl
       stdenv.cc.cc
+      stdenv.cc.cc.lib
       systemd
       util-linux
       xz
@@ -22,5 +29,10 @@
       zlib-ng
       zstd
     ];
+  };
+
+  environment = {
+    sessionVariables.LD_LIBRARY_PATH = libPath;
+    variables.LD_LIBRARY_PATH = libPath;
   };
 }
