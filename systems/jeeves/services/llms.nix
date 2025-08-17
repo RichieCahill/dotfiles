@@ -1,3 +1,6 @@
+let
+  vars = import ../vars.nix;
+in
 {
   services = {
     ollama = {
@@ -5,18 +8,18 @@
       enable = true;
       host = "0.0.0.0";
       loadModels = [
-        "qwen3:14b"
-        "qwen3:30b"
-        "gemma3:12b"
-        "gemma3:27b"
-        "gpt-oss:20b"
-        "gpt-oss:120b"
         "codellama:7b"
-        "deepseek-r1:8b"
         "deepseek-r1:14b"
         "deepseek-r1:32b"
+        "deepseek-r1:8b"
+        "gemma3:12b"
+        "gemma3:27b"
+        "gpt-oss:120b"
+        "gpt-oss:20b"
+        "qwen3:14b"
+        "qwen3:30b"
       ];
-      models = "/zfs/storage/models";
+      models = vars.ollama;
       openFirewall = true;
     };
   };
