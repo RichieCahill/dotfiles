@@ -3,7 +3,7 @@
     ollama = {
       user = "ollama";
       enable = true;
-      hosts = "0.0.0.0";
+      host = "0.0.0.0";
       loadModels = [
         "qwen3:14b"
         "qwen3:30b"
