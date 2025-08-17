@@ -27,6 +27,7 @@ sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/me
 # scratch datasets
 sudo zfs create -o recordsize=16k -o sync=disabled scratch/qbitvpn
 sudo zfs create -o recordsize=16k -o sync=disabled scratch/transmission
+sudo zfs create -o recordsize=1M scratch/kafka
 
 # storage datasets
 sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/archive
@@ -38,3 +39,4 @@ sudo zfs create -o compression=zstd-19 storage/syncthing
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/qbitvpn
 sudo zfs create -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled storage/transmission
 sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/library
+sudo zfs create -o recordsize=1M -o compression=zstd-19 -o sync=disabled storage/ollama

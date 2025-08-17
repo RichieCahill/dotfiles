@@ -17,5 +17,7 @@ in
   share = "${zfs_media}/share";
   syncthing = "${zfs_storage}/syncthing";
   transmission = "${zfs_storage}/transmission";
+  ollama = "${zfs_storage}/ollama";
   transmission_scratch = "${zfs_scratch}/transmission";
+  kafka = "${zfs_scratch}/kafka";
 }
