@@ -1,6 +1,7 @@
 {
   imports = [
     ../../users/richie
+    ../../users/math
     ../../common/global
     ../../common/optional/docker.nix
     ../../common/optional/ssh_decrypt.nix
