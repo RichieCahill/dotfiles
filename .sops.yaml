@@ -3,7 +3,7 @@ keys:
 
   - &system_bob age1q47vup0tjhulkg7d6xwmdsgrw64h4ax3la3evzqpxyy4adsmk9fs56qz3y # cspell:disable-line
   - &system_jeeves age13lmqgc3jvkyah5e3vcwmj4s5wsc2akctcga0lpc0x8v8du3fxprqp4ldkv # cspell:disable-line
-  - &system_router age1xzxryqq63x65yuza9lmmkud7crjjxpnkdew070yhx6xn7xe4tdws5twxsv # cspell:disable-line
+  - &system_leviathan age1l272y8udvg60z7edgje42fu49uwt4x2gxn5zvywssnv9h2krms8s094m4k # cspell:disable-line
   - &system_rhapsody age1ufnewppysaq2wwcl4ugngjz8pfzc5a35yg7luq0qmuqvctajcycs5lf6k4 # cspell:disable-line
 
 creation_rules:
@@ -13,5 +13,5 @@ creation_rules:
           - *admin_richie
           - *system_bob
           - *system_jeeves
-          - *system_router
+          - *system_leviathan
           - *system_rhapsody
