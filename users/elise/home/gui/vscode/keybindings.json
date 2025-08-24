@@ -1,0 +1,20 @@
+[
+  {
+    "key": "shift+alt+f",
+    "command": "editor.action.formatDocument",
+    "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
+  },
+  {
+    "key": "alt+a d",
+    "command": "cSpell.addWordToWorkspaceSettings"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "workbench.action.createTerminalEditor"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "-workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+  }
+]
