@@ -17,10 +17,10 @@ jobs:
           - "bob"
           - "jeeves"
           - "rhapsody-in-green"
+          - "leviathan"
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
         run: "nixos-rebuild build --flake ./#${{ matrix.system }}"
       - name: copy to nix-cache
         run: nix copy --to ssh://jeeves .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
-

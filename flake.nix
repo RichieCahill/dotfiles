@@ -89,6 +89,12 @@
           ];
           specialArgs = { inherit inputs outputs; };
         };
+        leviathan = lib.nixosSystem {
+          modules = [
+            ./systems/leviathan
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
       };
     };
 }
