@@ -1,3 +1,6 @@
+# Generate AGE keys from SSH keys with:
+#   ssh-keygen -A
+#   nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
 keys:
   - &admin_richie age1u8zj599elqqvcmhxn8zuwrufsz8w8w366d3ayrljjejljt2q45kq8mxw9c # cspell:disable-line
 
