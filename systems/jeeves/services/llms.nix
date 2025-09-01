@@ -23,4 +23,16 @@ in
       openFirewall = true;
     };
   };
+  systemd.services = {
+    ollama.serviceConfig = {
+      Nice = 19;
+      IOSchedulingPriority = 7;
+    };
+    ollama-model-loader.serviceConfig = {
+      Nice = 19;
+      CPUWeight = 50;
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
+    };
+  };
 }
