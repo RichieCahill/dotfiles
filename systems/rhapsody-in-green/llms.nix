@@ -3,7 +3,7 @@
     ollama = {
       user = "ollama";
       enable = true;
-      host = "0.0.0.0";
+      host = "127.0.0.1";
       loadModels = [
         "codellama:7b"
         "deepseek-r1:14b"
@@ -19,7 +19,7 @@
     };
     open-webui = {
       enable = true;
-      host = "0.0.0.0";
+      host = "127.0.0.1";
       environment = {
         ANONYMIZED_TELEMETRY = "False";
         DO_NOT_TRACK = "True";
