@@ -1,8 +1,8 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "Richie@tmmworkshop.com";
-    userName = "Richie Cahill";
+    userEmail = "matthew.michal11@gmail.com";
+    userName = "Matthew Michal";
     extraConfig = {
       pull.rebase = true;
       color.ui = true;
