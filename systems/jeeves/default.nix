@@ -24,6 +24,8 @@
     smartd.enable = true;
 
     snapshot_manager.path = ./snapshot_config.toml;
+
+    zerotierone.joinNetworks = [ "a09acf02330d37b9" ];
   };
 
   system.stateVersion = "24.05";
