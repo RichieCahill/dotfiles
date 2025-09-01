@@ -11,6 +11,7 @@
     ../../common/optional/yubikey.nix
     ../../common/optional/zerotier.nix
     ./hardware.nix
+    ./llms.nix
     ./syncthing.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
