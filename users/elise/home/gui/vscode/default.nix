@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  vscode_dir = "/home/richie/dotfiles/users/richie/home/gui/vscode";
+  vscode_dir = "/home/elise/.vscode";
 in
 {
   # mutable symlinks to key binds and settings
