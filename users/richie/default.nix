@@ -36,6 +36,7 @@ in
         "hass"
         "libvirtd"
         "networkmanager"
+        "ollama"
         "plugdev"
         "scanner"
         "transmission"
