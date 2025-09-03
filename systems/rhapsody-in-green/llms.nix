@@ -11,7 +11,6 @@
         "deepseek-r1:8b"
         "gemma3:12b"
         "gemma3:27b"
-        "gpt-oss:120b"
         "gpt-oss:20b"
         "qwen3:14b"
         "qwen3:30b"
