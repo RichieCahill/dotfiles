@@ -15,7 +15,6 @@
     ../../common/optional/nvidia.nix
     ./hardware.nix
     ./syncthing.nix
-    ./games.nix
     ./llms.nix
   ];
 

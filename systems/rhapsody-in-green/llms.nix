@@ -1,32 +1,19 @@
 {
-  services = {
-    ollama = {
-      user = "ollama";
-      enable = true;
-      host = "127.0.0.1";
-      loadModels = [
-        "codellama:7b"
-        "deepseek-r1:14b"
-        "deepseek-r1:32b"
-        "deepseek-r1:8b"
-        "gemma3:12b"
-        "gemma3:27b"
-        "gpt-oss:20b"
-        "qwen3:14b"
-        "qwen3:30b"
-      ];
-    };
-    open-webui = {
-      enable = true;
-      host = "127.0.0.1";
-      environment = {
-        ANONYMIZED_TELEMETRY = "False";
-        DO_NOT_TRACK = "True";
-        SCARF_NO_ANALYTICS = "True";
-        OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
-        WEBUI_AUTH = "False";
-      };
-    };
+  services.ollama = {
+    user = "ollama";
+    enable = true;
+    host = "127.0.0.1";
+    loadModels = [
+      "codellama:7b"
+      "deepseek-r1:14b"
+      "deepseek-r1:32b"
+      "deepseek-r1:8b"
+      "gemma3:12b"
+      "gemma3:27b"
+      "gpt-oss:20b"
+      "qwen3:14b"
+      "qwen3:30b"
+    ];
   };
   systemd.services = {
     ollama.serviceConfig = {

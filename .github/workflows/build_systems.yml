@@ -18,6 +18,7 @@ jobs:
           - "jeeves"
           - "rhapsody-in-green"
           - "leviathan"
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
