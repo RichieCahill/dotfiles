@@ -1,7 +1,7 @@
 {
   programs.ssh = {
     enable = true;
-
+    enableDefaultConfig = false;
     matchBlocks = {
       jeeves = {
         hostname = "192.168.90.40";
