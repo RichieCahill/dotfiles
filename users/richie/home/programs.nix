@@ -24,6 +24,8 @@
     unzip
     yazi
     zoxide
+    # data recovery
+    testdisk
     # system info
     hwloc
     lynis
