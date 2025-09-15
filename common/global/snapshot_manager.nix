@@ -11,33 +11,39 @@ in
 {
   options = {
     services.snapshot_manager = {
-      enable = lib.mkOption {
-        default = true;
-        example = true;
-        description = "Whether to enable k3s-net.";
-        type = lib.types.bool;
-      };
+      enable = lib.mkEnableOption "ZFS snapshot manager";
       path = lib.mkOption {
         type = lib.types.path;
-        description = "Path that needs to be updated via git pull";
         default = ./snapshot_config.toml;
+        description = "Path to the snapshot_manager TOML config.";
+      };
+      EnvironmentFile = lib.mkOption {
+        type = lib.types.nullOr (lib.types.coercedTo lib.types.path lib.isString lib.types.str);
+        default = null;
+        description = ''
+          Single environment file for the service (e.g. /etc/snapshot-manager/env).
+          Use a leading "-" to ignore if missing (systemd feature).
+        '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
     systemd = {
-      services."snapshot_manager" = {
+      services.snapshot_manager = {
         description = "ZFS Snapshot Manager";
         requires = [ "zfs-import.target" ];
         after = [ "zfs-import.target" ];
         path = [ pkgs.zfs ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/snapshot_manager --config-file='${cfg.path}'";
+          ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/snapshot_manager --config-file=${lib.escapeShellArg cfg.path}";
+        }
+        // lib.optionalAttrs (cfg.EnvironmentFile != null) {
+          EnvironmentFile = cfg.EnvironmentFile;
         };
       };
-      timers."snapshot_manager" = {
+      timers.snapshot_manager = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnBootSec = "15m";
