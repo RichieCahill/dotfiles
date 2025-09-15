@@ -1,3 +1,6 @@
+let
+  vars = import ./vars.nix;
+in
 {
   imports = [
     ../../users/richie
@@ -23,7 +26,10 @@
 
     smartd.enable = true;
 
-    snapshot_manager.path = ./snapshot_config.toml;
+    snapshot_manager = {
+      path = ./snapshot_config.toml;
+      EnvironmentFile = "${vars.secrets}/services/snapshot_manager";
+    };
 
     zerotierone.joinNetworks = [ "a09acf02330d37b9" ];
   };

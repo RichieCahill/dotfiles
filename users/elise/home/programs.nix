@@ -55,6 +55,5 @@
     nix-tree
     nixfmt-rfc-style
     treefmt
-    inputs.system_tools.packages.x86_64-linux.default
   ];
 }
