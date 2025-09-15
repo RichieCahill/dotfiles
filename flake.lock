@@ -199,11 +199,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1757903729,
-        "narHash": "sha256-H7iXNTaKPmtT4M/hDZozMETHPcOLVQn3faw/wFd86EA=",
+        "lastModified": 1757910132,
+        "narHash": "sha256-6r45DD/tMN+hYgnMc2/c82Z0bb1A7FnI/nvU8kZf/Us=",
         "owner": "RichieCahill",
         "repo": "system_tools",
-        "rev": "724fcb5ada4ea87a1795da203c2d49b404155e1b",
+        "rev": "d63c486fe3b76c24b2ed2fff33d6f54c847b50e8",
         "type": "github"
       },
       "original": {
