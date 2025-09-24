@@ -9,6 +9,7 @@
         identityFile = "~/.ssh/id_ed25519";
         port = 629;
         dynamicForwards = [ { port = 9050; } ];
+        compression = true;
       };
       unlock-jeeves = {
         hostname = "192.168.99.14";
