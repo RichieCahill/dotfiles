@@ -7,27 +7,26 @@
 
   home.packages = with pkgs; [
     candy-icons
-    chromium
-    discord-canary
     gimp
-    gparted
-    jetbrains.datagrip
-    mediainfo
-    nemo
-    nemo-fileroller
     obs-studio
     obsidian
-    prismlauncher
-    proxychains
-    prusa-slicer
-    signal-desktop
     sweet-nova
     util-linux
     vlc
+    # browser
+    chromium
+    firefox
+    # communication
+    discord-canary
+    signal-desktop
     zoom-us
+    # 3d modeling
+    blender
+    prusa-slicer
     # games
     dwarf-fortress
-    tower-pixel-dungeon
     endless-sky
+    prismlauncher
+    tower-pixel-dungeon
   ];
 }

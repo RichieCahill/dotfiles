@@ -19,7 +19,10 @@
   networking = {
     hostName = "rhapsody-in-green";
     hostId = "6404140d";
-    firewall.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ ];
+    };
     networkmanager.enable = true;
   };
 
