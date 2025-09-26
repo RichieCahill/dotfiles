@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }:
 {
@@ -8,8 +7,6 @@
   users = {
     users.dov = {
       isNormalUser = true;
-
-      hashedPasswordFile = "${config.sops.secrets.dov_password.path}";
 
       shell = pkgs.zsh;
       group = "dov";
@@ -26,6 +23,4 @@
 
     groups.dov.gid = 1004;
   };
-
-  home-manager.users.dov = import ./systems/${config.networking.hostName}.nix;
 }
