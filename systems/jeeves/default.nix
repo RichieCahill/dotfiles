@@ -5,6 +5,7 @@ in
   imports = [
     ../../users/richie
     ../../users/math
+    ../../users/dov
     ../../common/global
     ../../common/optional/docker.nix
     ../../common/optional/ssh_decrypt.nix
