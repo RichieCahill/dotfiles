@@ -23,10 +23,7 @@
   networking = {
     hostName = "brain";
     hostId = "93a06c6e";
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ ];
-    };
+    firewall.enable = true;
     networkmanager.enable = true;
   };
 
