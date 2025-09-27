@@ -77,6 +77,12 @@
           ];
           specialArgs = { inherit inputs outputs; };
         };
+        brain = lib.nixosSystem {
+          modules = [
+            ./systems/brain
+          ];
+          specialArgs = { inherit inputs outputs; };
+        };
         jeeves = lib.nixosSystem {
           modules = [
             ./systems/jeeves
