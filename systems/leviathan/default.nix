@@ -8,6 +8,7 @@
     ../../common/optional/steam.nix
     ../../common/optional/systemd-boot.nix
     ../../common/optional/update.nix
+    ../../common/optional/zerotier.nix
     ./hardware.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
