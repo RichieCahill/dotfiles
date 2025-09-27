@@ -27,20 +27,13 @@ in
       extraGroups = [
         "audio"
         "video"
-        "wheel"
         "users"
       ]
       ++ ifTheyExist [
         "dialout"
-        "docker"
-        "hass"
-        "libvirtd"
         "networkmanager"
         "plugdev"
         "scanner"
-        "transmission"
-        "uaccess"
-        "wireshark"
       ];
       uid = 1010;
     };
