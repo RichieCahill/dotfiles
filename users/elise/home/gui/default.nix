@@ -7,12 +7,14 @@
 
   home.packages = with pkgs; [
     candy-icons
-    gimp
     obs-studio
     obsidian
     sweet-nova
     util-linux
     vlc
+    # graphics tools
+    gimp3
+    xcursorgen
     # browser
     chromium
     firefox
