@@ -15,8 +15,8 @@
         http = {
           server_port = 8123;
           server_host = [
-            "192.168.99.14"
-            "192.168.95.9"
+            "192.168.90.35"
+            "192.168.95.35"
             "127.0.0.1"
           ];
           use_x_forwarded_for = true;
@@ -65,7 +65,7 @@
     esphome = {
       enable = true;
       openFirewall = true;
-      address = "192.168.90.40";
+      address = "192.168.90.35";
     };
   };
 }
