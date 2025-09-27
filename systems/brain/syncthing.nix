@@ -8,8 +8,8 @@
       "dotfiles" = {
         path = "/home/richie/dotfiles";
         devices = [
-          "jeeves"
           "bob"
+          "jeeves"
           "rhapsody-in-green"
         ];
         fsWatcherEnabled = true;
