@@ -3,8 +3,9 @@
     "dotfiles" = {
       path = "/home/richie/dotfiles";
       devices = [
-        "jeeves"
         "bob"
+        "brain"
+        "jeeves"
       ];
       fsWatcherEnabled = true;
     };
@@ -21,6 +22,7 @@
       path = "/home/richie/important";
       devices = [
         "bob"
+        "brain"
         "jeeves"
         "phone"
       ];

@@ -3,6 +3,7 @@
     "dotfiles" = {
       path = "/home/richie/dotfiles";
       devices = [
+        "brain"
         "jeeves"
         "rhapsody-in-green"
       ];
@@ -12,8 +13,9 @@
       id = "4ckma-gtshs"; # cspell:disable-line
       path = "/home/richie/important";
       devices = [
-        "phone"
+        "brain"
         "jeeves"
+        "phone"
         "rhapsody-in-green"
       ];
       fsWatcherEnabled = true;
