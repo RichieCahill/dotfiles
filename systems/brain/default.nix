@@ -30,7 +30,5 @@
     smartd.enable = true;
   };
 
-  users.mutableUsers = true;
-
   system.stateVersion = "25.05";
 }
