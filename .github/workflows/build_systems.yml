@@ -15,9 +15,10 @@ jobs:
       matrix:
         system:
           - "bob"
+          - "brain"
           - "jeeves"
-          - "rhapsody-in-green"
           - "leviathan"
+          - "rhapsody-in-green"
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
