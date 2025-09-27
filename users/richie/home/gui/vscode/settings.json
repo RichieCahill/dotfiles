@@ -54,6 +54,9 @@
   "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
   "[yaml]": { "editor.defaultFormatter": "redhat.vscode-yaml" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
 
   // spell check
   "cSpell.enabled": true,
