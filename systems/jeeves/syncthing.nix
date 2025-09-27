@@ -14,6 +14,7 @@ in
           path = "/home/richie/dotfiles";
           devices = [
             "bob"
+            "brain"
             "rhapsody-in-green"
           ];
           fsWatcherEnabled = true;
@@ -35,8 +36,9 @@ in
           path = "${vars.syncthing}/important";
           devices = [
             "bob"
-            "rhapsody-in-green"
+            "brain"
             "phone"
+            "rhapsody-in-green"
           ];
           fsWatcherEnabled = true;
         };
