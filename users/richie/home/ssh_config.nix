@@ -21,9 +21,8 @@
         hostname = "192.168.90.35";
         user = "richie";
         identityFile = "~/.ssh/id_ed25519";
-        port = 629;
+        port = 129;
         dynamicForwards = [ { port = 9050; } ];
-        compression = true;
       };
       unlock-brain = {
         hostname = "192.168.95.35";
