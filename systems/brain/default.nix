@@ -11,10 +11,7 @@
     ../../common/optional/zerotier.nix
     ./docker
     ./hardware.nix
-    ./networking.nix
-    ./nvidia.nix
     ./programs.nix
-    ./runners
     ./services
     ./syncthing.nix
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
