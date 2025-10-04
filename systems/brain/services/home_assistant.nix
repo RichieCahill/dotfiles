@@ -26,6 +26,9 @@
           time_zone = "America/New_York";
           unit_system = "us_customary";
           temperature_unit = "F";
+          packages = {
+            victron_modbuss = "!include updated elises groupsvictron_modbuss.yaml";
+          };
         };
         recorder = {
           db_url = "postgresql://@/hass";
@@ -56,9 +59,11 @@
       };
       extraPackages =
         python3Packages: with python3Packages; [
-          jellyfin-apiclient-python
-          psycopg2
-          uiprotect
+          pymodbus # for modbus
+          gtts # not sure what wants this
+          jellyfin-apiclient-python # for jellyfin
+          paho-mqtt # for mqtt
+          psycopg2 # for postgresql
         ];
       extraComponents = [ "isal" ];
     };
