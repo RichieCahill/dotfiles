@@ -3,7 +3,6 @@
   imports = [
     ./cli
     ./programs.nix
-    ./ssh_config.nix
   ];
 
   programs = {
