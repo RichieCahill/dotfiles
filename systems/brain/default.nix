@@ -24,6 +24,11 @@
     networkmanager.enable = true;
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   services = {
     openssh.ports = [ 129 ];
 
