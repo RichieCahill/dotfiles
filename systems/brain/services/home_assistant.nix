@@ -27,7 +27,7 @@
           unit_system = "us_customary";
           temperature_unit = "F";
           packages = {
-            victron_modbuss = "!include updated elises groupsvictron_modbuss.yaml";
+            victron_modbuss = "!include victron_modbuss.yaml";
           };
         };
         recorder = {
@@ -64,6 +64,7 @@
           jellyfin-apiclient-python # for jellyfin
           paho-mqtt # for mqtt
           psycopg2 # for postgresql
+          forecast-solar # for solar forecast
         ];
       extraComponents = [ "isal" ];
     };
