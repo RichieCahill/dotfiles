@@ -41,6 +41,7 @@ in
         "scanner"
         "transmission"
         "uaccess"
+        "uucp"
         "wireshark"
       ];
       uid = 1000;
