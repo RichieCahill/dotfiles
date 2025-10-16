@@ -1,0 +1,129 @@
+modbus:
+  - name: victron_gx
+    type: tcp
+    host: 192.168.103.30
+    port: 502
+    timeout: 3
+    delay: 2
+    sensors:
+      # ---- SOLAR CHARGER (Unit ID 226) ----
+      - name: Solar Voltage
+        slave: 226
+        address: 776
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "V"
+        device_class: voltage
+        state_class: measurement
+
+      - name: Solar Amperage
+        slave: 226
+        address: 777
+        input_type: holding
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "A"
+        device_class: current
+        state_class: measurement
+
+      - name: Solar Wattage
+        slave: 226
+        address: 789
+        input_type: holding
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+
+      - name: Solar Yield Today
+        slave: 226
+        address: 784
+        input_type: holding
+        data_type: uint16
+        scale: 0.1
+        precision: 3
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total
+
+      # DC system
+      - name: DC Voltage
+        slave: 100
+        address: 840
+        input_type: holding
+        data_type: uint16
+        scale: 0.1
+        precision: 2
+        unit_of_measurement: "V"
+        device_class: voltage
+        state_class: measurement
+        unique_id: dc_voltage
+
+      - name: DC Wattage
+        slave: 100
+        address: 860
+        input_type: holding
+        data_type: int16
+        scale: 1
+        precision: 0
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        unique_id: dc_wattage
+
+sensor:
+  - platform: integration
+    source: sensor.dc_wattage
+    name: DC System Energy
+    unit_prefix: k
+    round: 2
+    method: trapezoidal
+    max_sub_interval:
+      minutes: 5
+
+  - platform: integration
+    source: sensor.solar_wattage
+    name: Solar Yield
+    unit_prefix: k
+    round: 2
+    method: trapezoidal
+    max_sub_interval:
+      minutes: 5
+
+template:
+  - sensor:
+      - name: "Fake Energy Zero"
+        unique_id: fake_energy_zero
+        state: "0"
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+
+utility_meter:
+  dc_load_energy_daily:
+    source: sensor.dc_system_energy
+    cycle: daily
+
+  dc_load_energy_monthly:
+    source: sensor.dc_system_energy
+    cycle: monthly
+
+  solar_yield_daily:
+    source: sensor.solar_yield
+    cycle: daily
+
+  solar_yield_monthly:
+    source: sensor.solar_yield
+    cycle: monthly
+
+  fake_energy_zero_daily:
+    source: sensor.fake_energy_zero
+    cycle: daily
+
+  fake_energy_zero_monthly:
+    source: sensor.fake_energy_zero
+    cycle: monthly
