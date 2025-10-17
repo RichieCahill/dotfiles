@@ -128,12 +128,13 @@ in
       }
     ];
     ensureDatabases = [
-      "math"
       "gcw"
       "hass"
+      "math"
       "megan"
       "mxr_dev"
       "mxr_prod"
+      "n8n"
       "richie"
     ];
     # Thank you NotAShelf
