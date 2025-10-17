@@ -23,6 +23,9 @@
         device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_2TB_S7KHNJ0Y121613P-part2";
         bypassWorkqueues = true;
         allowDiscards = true;
+        keyFileSize = 4096;
+        keyFile = "/dev/disk/by-id/usb-USB_SanDisk_3.2Gen1_03021630090925173333-0:0";
+        fallbackToPassword = true;
       };
     };
     kernelModules = [ "kvm-intel" ];
