@@ -39,7 +39,7 @@ in
           Type = "oneshot";
           ExecStart = "${
             inputs.system_tools.packages.${pkgs.system}.default
-          }/bin/snapshot_manager --config-file=${lib.escapeShellArg cfg.path}";
+          }/bin/snapshot_manager ${lib.escapeShellArg cfg.path}";
         }
         // lib.optionalAttrs (cfg.EnvironmentFile != null) {
           EnvironmentFile = cfg.EnvironmentFile;
