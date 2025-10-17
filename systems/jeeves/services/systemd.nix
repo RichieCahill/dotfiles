@@ -25,7 +25,7 @@ in
         serviceConfig = {
           EnvironmentFile = "${vars.secrets}/services/server-validation";
           Type = "oneshot";
-          ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_system --config-file='${./validate_system.toml}'";
+          ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_system '${./validate_system.toml}'";
         };
       };
     };
