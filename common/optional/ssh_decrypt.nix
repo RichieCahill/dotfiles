@@ -10,6 +10,9 @@
         authorizedKeys = config.users.users.richie.openssh.authorizedKeys.keys;
       };
     };
-    availableKernelModules = [ "igb" ];
+    availableKernelModules = [
+      "igb"
+      "r8152"
+    ];
   };
 }
