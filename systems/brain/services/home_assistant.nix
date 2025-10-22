@@ -65,6 +65,8 @@
           paho-mqtt # for mqtt
           psycopg2 # for postgresql
           forecast-solar # for solar forecast
+          aioesphomeapi # for esphome
+          esphome-dashboard-api # for esphome
         ];
       extraComponents = [ "isal" ];
     };
