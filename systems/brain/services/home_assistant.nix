@@ -27,7 +27,7 @@
           unit_system = "us_customary";
           temperature_unit = "F";
           packages = {
-            victron_modbuss = "!include ${home_assistant/victron_modbuss.yaml}";
+            victron_modbuss = "!include ${./home_assistant/victron_modbuss.yaml}";
           };
         };
         recorder = {
