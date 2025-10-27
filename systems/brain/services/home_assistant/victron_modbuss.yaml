@@ -75,6 +75,78 @@ modbus:
         state_class: measurement
         unique_id: dc_wattage
 
+      # GPS
+      - name: GPS Latitude
+        slave: 100
+        address: 2800
+        input_type: holding
+        data_type: int32
+        scale: 0.0000001
+        precision: 7
+        state_class: measurement
+        unique_id: gps_latitude
+
+      - name: GPS Longitude
+        slave: 100
+        address: 2802
+        input_type: holding
+        data_type: int32
+        scale: 0.0000001
+        precision: 7
+        state_class: measurement
+        unique_id: gps_longitude
+
+      - name: GPS Course
+        slave: 100
+        address: 2804
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "°"
+        state_class: measurement
+        unique_id: gps_course
+
+      - name: GPS Speed
+        slave: 100
+        address: 2805
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "m/s"
+        state_class: measurement
+        unique_id: gps_speed
+
+      - name: GPS Fix
+        slave: 100
+        address: 2806
+        input_type: holding
+        data_type: uint16
+        scale: 1
+        state_class: measurement
+        unique_id: gps_fix
+
+      - name: GPS Satellites
+        slave: 100
+        address: 2807
+        input_type: holding
+        data_type: uint16
+        scale: 1
+        state_class: measurement
+        unique_id: gps_satellites
+
+      - name: GPS Altitude
+        slave: 100
+        address: 2808
+        input_type: holding
+        data_type: int32
+        scale: 0.16
+        precision: 1
+        unit_of_measurement: "m"
+        state_class: measurement
+        unique_id: gps_altitude
+
 sensor:
   - platform: integration
     source: sensor.dc_wattage
