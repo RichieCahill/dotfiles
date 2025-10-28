@@ -9,7 +9,6 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
-    ../../python
     ./fail2ban.nix
     ./fonts.nix
     ./libs.nix
@@ -17,8 +16,9 @@
     ./nh.nix
     ./nix.nix
     ./programs.nix
-    ./snapshot_manager.nix
     ./ssh.nix
+    ./snapshot_manager.nix
+    ../../python
   ];
 
   boot = {

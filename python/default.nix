@@ -1,8 +1,7 @@
 { pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    python313.withPackages
-    (
+  environment.systemPackages = [
+    (pkgs.python313.withPackages (
       ps: with ps; [
         apprise
         apscheduler
@@ -18,6 +17,6 @@
         typer
         types-requests
       ]
-    )
+    ))
   ];
 }
