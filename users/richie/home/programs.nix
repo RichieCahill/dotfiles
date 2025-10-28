@@ -40,7 +40,6 @@
     wget
     # python
     poetry
-    python313
     ruff
     uv
     # nodejs
