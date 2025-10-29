@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  outputs,
+  ...
+}:
 
 with lib;
 
@@ -69,6 +74,10 @@ in
               StrictHostKeyChecking no
               UserKnownHostsFile /dev/null
           '';
+          nixpkgs = {
+            overlays = builtins.attrValues outputs.overlays;
+            config.allowUnfree = true;
+          };
           services.github-runners.${name} = {
             enable = true;
             replace = true;
@@ -83,6 +92,7 @@ in
               nixos-rebuild
               openssh
               treefmt
+              my_python
             ];
           };
           users = {

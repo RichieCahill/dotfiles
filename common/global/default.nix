@@ -18,7 +18,6 @@
     ./programs.nix
     ./ssh.nix
     ./snapshot_manager.nix
-    ../../python
   ];
 
   boot = {
