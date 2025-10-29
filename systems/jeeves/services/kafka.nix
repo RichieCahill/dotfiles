@@ -3,7 +3,7 @@ let
 in
 {
   services.apache-kafka = {
-    enable = true;
+    enable = false;
     settings = {
       listeners = [ "PLAINTEXT://localhost:9092" ];
       "log.dirs" = [ vars.kafka ];
