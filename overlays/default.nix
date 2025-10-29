@@ -14,4 +14,24 @@
       config.allowUnfree = true;
     };
   };
+
+  python-env = final: _prev: {
+    my_python = final.python313.withPackages (
+      ps: with ps; [
+        apprise
+        apscheduler
+        mypy
+        polars
+        pyfakefs
+        pytest
+        pytest-cov
+        pytest-mock
+        pytest-xdist
+        requests
+        ruff
+        typer
+        types-requests
+      ]
+    );
+  };
 }
