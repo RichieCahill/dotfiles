@@ -1,24 +1,26 @@
-from enum import Enum
+"""voltage_drop."""
+
 import math
+from enum import Enum
 
 
 class TemperatureUnit(Enum):
+    """Temperature unit."""
+
     CELSIUS = "c"
     FAHRENHEIT = "f"
     KELVIN = "k"
 
 
 class Temperature:
+    """Temperature."""
+
     def __init__(
         self,
         temperature: float,
         unit: TemperatureUnit = TemperatureUnit.CELSIUS,
     ) -> None:
-        """
-        Args:
-            temperature (float): Temperature in degrees Celsius
-            unit (TemperatureUnit, optional): Temperature unit. Defaults to TemperatureUnit.CELSIUS.
-        """
+        """__init__."""
         unit_modifier = {
             TemperatureUnit.CELSIUS: 1,
             TemperatureUnit.FAHRENHEIT: 0.5556,
@@ -27,17 +29,23 @@ class Temperature:
         self.temperature = temperature * unit_modifier[unit]
 
     def __float__(self) -> float:
+        """Return the temperature in degrees Celsius."""
         return self.temperature
 
 
 class LengthUnit(Enum):
+    """Length unit."""
+
     METERS = "m"
     FEET = "ft"
     INCHES = "in"
 
 
 class Length:
-    def __init__(self, length: float, unit: LengthUnit):
+    """Length."""
+
+    def __init__(self, length: float, unit: LengthUnit) -> None:
+        """__init__."""
         self.meters = self._convert_to_meters(length, unit)
 
     def _convert_to_meters(self, length: float, unit: LengthUnit) -> float:
@@ -49,16 +57,21 @@ class Length:
         test = thing.get(unit)
         if test:
             return length * test
-        raise ValueError(f"Unsupported unit: {unit}")
+        error = f"Unsupported unit: {unit}"
+        raise ValueError(error)
 
-    def __float__(self):
+    def __float__(self) -> float:
+        """Return the length in meters."""
         return self.meters
 
     def feet(self) -> float:
+        """Return the length in feet."""
         return self.meters * 3.2808
 
 
 class MaterialType(Enum):
+    """Material type."""
+
     COPPER = "copper"
     ALUMINUM = "aluminum"
     CCA = "cca"
@@ -68,8 +81,11 @@ class MaterialType(Enum):
 
 def get_material_resistivity(
     material: MaterialType,
-    temperature: Temperature = Temperature(20.0),
+    temperature: Temperature | None = None,
 ) -> float:
+    """Get the resistivity of a material."""
+    if not temperature:
+        Temperature(20.0)
     material_info = {
         MaterialType.COPPER: (1.724e-8, 0.00393),
         MaterialType.ALUMINUM: (2.908e-8, 0.00403),
@@ -83,14 +99,7 @@ def get_material_resistivity(
 
 
 def calculate_awg_diameter_mm(gauge: int) -> float:
-    """
-    Calculate wire diameter in millimeters for a given AWG gauge.
-    Formula: diameter = 0.127 * 92^((36-gauge)/39)
-    Where:
-    - 0.127mm is the diameter of AWG 36
-    - 92 is the ratio of diameters between AWG 0000 and AWG 36
-    - 39 is the number of steps between AWG 0000 and AWG 36
-    """
+    """Calculate wire diameter in millimeters for a given AWG gauge."""
     return round(0.127 * 92 ** ((36 - gauge) / 39), 3)
 
 
@@ -124,6 +133,17 @@ def voltage_drop(
     length: Length,
     current_a: float,
 ) -> float:
+    """Calculate the voltage drop of a wire.
+
+    Args:
+        gauge (int): The AWG (American Wire Gauge) number of the wire
+        material (MaterialType): The type of conductor material (e.g., copper, aluminum)
+        length (Length): The length of the wire in meters
+        current_a (float): The current flowing through the wire in amperes
+
+    Returns:
+        float: The voltage drop of the wire in volts
+    """
     resistivity = get_material_resistivity(material)
     resistance_per_meter = resistivity / calculate_wire_area_m2(gauge)
     total_resistance = resistance_per_meter * float(length) * 2  # round-trip
@@ -145,7 +165,7 @@ def max_wire_length(
     material: MaterialType,
     current_amps: float,
     voltage_drop: float = 0.3,
-    temperature: Temperature = Temperature(100.0, unit=TemperatureUnit.FAHRENHEIT),
+    temperature: Temperature | None = None,
 ) -> Length:
     """Calculate the maximum allowable wire length based on voltage drop criteria.
 
@@ -154,10 +174,14 @@ def max_wire_length(
         material (MaterialType): The type of conductor material (e.g., copper, aluminum)
         current_amps (float): The current flowing through the wire in amperes
         voltage_drop (float, optional): Maximum allowable voltage drop as a decimal (default 0.1 or 10%)
+        temperature (Temperature | None, optional): The temperature of the wire. Defaults to None.
 
     Returns:
         float: Maximum wire length in meters that maintains the specified voltage drop
     """
+    if not temperature:
+        Temperature(100.0, unit=TemperatureUnit.FAHRENHEIT)
+
     resistivity = get_material_resistivity(material, temperature)
     resistance_per_meter = resistivity / calculate_wire_area_m2(gauge)
     # V = IR, solve for length where V is the allowed voltage drop

@@ -12,6 +12,8 @@ import typer
 from python.common import configure_logger, signal_alert
 from python.system_tests.components import systemd_tests, zpool_tests
 
+logger = logging.getLogger(__name__)
+
 
 def load_config_data(config_file: Path) -> dict[str, list[str]]:
     """Load a TOML configuration file.
@@ -30,7 +32,7 @@ def main(config_file: Path) -> None:
     configure_logger(level=environ.get("LOG_LEVEL", "INFO"))
 
     server_name = gethostname()
-    logging.info(f"Starting {server_name} validation")
+    logger.info(f"Starting {server_name} validation")
 
     config_data = load_config_data(config_file)
 
@@ -43,16 +45,16 @@ def main(config_file: Path) -> None:
             errors.extend(systemd_errors)
 
     except Exception as error:
-        logging.exception(f"{server_name} validation failed")
+        logger.exception(f"{server_name} validation failed")
         errors.append(f"{server_name} validation failed: {error}")
 
     if errors:
-        logging.error(f"{server_name} validation failed: \n{'\n'.join(errors)}")
+        logger.error(f"{server_name} validation failed: \n{'\n'.join(errors)}")
         signal_alert(f"{server_name} validation failed {errors}")
 
         sys.exit(1)
 
-    logging.info(f"{server_name} validation passed")
+    logger.info(f"{server_name} validation passed")
 
 
 def cli() -> None:

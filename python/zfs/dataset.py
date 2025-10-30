@@ -9,6 +9,8 @@ from typing import Any
 
 from python.common import bash_wrapper
 
+logger = logging.getLogger(__name__)
+
 
 def _zfs_list(zfs_list: str) -> dict[str, Any]:
     """Check the version of zfs."""
@@ -118,7 +120,7 @@ class Dataset:
         Args:
             snapshot_name (str): a snapshot name
         """
-        logging.debug(f"Creating {self.name}@{snapshot_name}")
+        logger.debug(f"Creating {self.name}@{snapshot_name}")
         _, return_code = bash_wrapper(f"zfs snapshot {self.name}@{snapshot_name}")
         if return_code == 0:
             return "snapshot created"
@@ -136,7 +138,7 @@ class Dataset:
         Args:
             snapshot_name (str): a snapshot name
         """
-        logging.debug(f"deleting {self.name}@{snapshot_name}")
+        logger.debug(f"deleting {self.name}@{snapshot_name}")
         msg, return_code = bash_wrapper(f"zfs destroy {self.name}@{snapshot_name}")
         if return_code != 0:
             if msg.startswith(f"cannot destroy '{self.name}@{snapshot_name}': snapshot has dependent clones"):
@@ -203,7 +205,7 @@ def get_datasets() -> list[Dataset]:
     Returns:
         list[Dataset]: A list of zfs datasets.
     """
-    logging.info("Getting zfs list")
+    logger.info("Getting zfs list")
 
     dataset_names, _ = bash_wrapper("zfs list -Hp -t filesystem -o name")
 
