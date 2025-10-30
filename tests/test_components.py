@@ -58,14 +58,23 @@ def test_zpool_tests_offline(mocker: MockerFixture) -> None:
     assert errors == ["Main is OFFLINE"]
 
 
-def test_systemd_tests() -> None:
+def test_systemd_tests(mocker: MockerFixture) -> None:
     """test_systemd_tests."""
+    mocker.patch(
+        f"{SYSTEM_TESTS_COMPONENTS}.bash_wrapper",
+        side_effect=[
+            ("inactive\n", ""),
+            ("active\n", ""),
+        ],
+    )
     errors = systemd_tests(("docker",))
     assert errors == []
+    """test_systemd_tests."""
 
 
-def test_systemd_tests_multiple_negative_retries() -> None:
+def test_systemd_tests_multiple_negative_retries(mocker: MockerFixture) -> None:
     """test_systemd_tests_fail."""
+    mocker.patch(f"{SYSTEM_TESTS_COMPONENTS}.bash_wrapper", return_value=("active\n", ""))
     errors = systemd_tests(("docker",), max_retries=-1, retry_delay_secs=-1)
     assert errors == []
 
