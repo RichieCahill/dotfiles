@@ -20,7 +20,6 @@
             "127.0.0.1"
           ];
           use_x_forwarded_for = true;
-          trusted_proxies = "192.168.90.40";
         };
         homeassistant = {
           time_zone = "America/New_York";
@@ -52,6 +51,7 @@
         ssdp = { };
         sun = { };
         webhook = { };
+        cloud = { };
         zeroconf = { };
         automation = "!include automations.yaml";
         script = "!include scripts.yaml";
