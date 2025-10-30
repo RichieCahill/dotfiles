@@ -12,3 +12,15 @@ command = "nixfmt"
 #options = []
 # Glob pattern of files to include
 includes = ["*.nix"]
+
+[formatter.ruff-format]
+command = "ruff"
+options = ["format"]
+includes = ["python/**/*.py"]
+priority = 0
+
+[formatter.ruff]
+command = "ruff"
+options = ["check", "--fix"]
+includes = ["python/**/*.py"]
+priority = 1
