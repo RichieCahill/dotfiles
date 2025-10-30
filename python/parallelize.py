@@ -6,7 +6,7 @@ import logging
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass
 from multiprocessing import cpu_count
-from typing import TYPE_CHECKING, Any, Generic, Literal, TypeVar
+from typing import TYPE_CHECKING, Any, Literal, TypeVar
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
@@ -19,7 +19,7 @@ modes = Literal["normal", "early_error"]
 
 
 @dataclass
-class ExecutorResults(Generic[R]):
+class ExecutorResults[R]:
     """Dataclass to store the results and exceptions of the parallel execution."""
 
     results: list[R]
@@ -30,7 +30,7 @@ class ExecutorResults(Generic[R]):
         return f"results={self.results} exceptions={self.exceptions}"
 
 
-def _parallelize_base(
+def _parallelize_base[R](
     executor_type: type[ThreadPoolExecutor | ProcessPoolExecutor],
     func: Callable[..., R],
     kwargs_list: Sequence[Mapping[str, Any]],
@@ -62,7 +62,7 @@ def _parallelize_base(
     return ExecutorResults(results, exceptions)
 
 
-def parallelize_thread(
+def parallelize_thread[R](
     func: Callable[..., R],
     kwargs_list: Sequence[Mapping[str, Any]],
     max_workers: int | None = None,
@@ -91,7 +91,7 @@ def parallelize_thread(
     )
 
 
-def parallelize_process(
+def parallelize_process[R](
     func: Callable[..., R],
     kwargs_list: Sequence[Mapping[str, Any]],
     max_workers: int | None = None,
@@ -123,7 +123,7 @@ def parallelize_process(
     )
 
 
-def process_executor_unchecked(
+def process_executor_unchecked[R](
     func: Callable[..., R],
     kwargs_list: Sequence[Mapping[str, Any]],
     max_workers: int | None,
