@@ -1,5 +1,6 @@
 """thing."""
 
+
 def caculat_batry_specs(
     cell_amp_hour: int,
     cell_voltage: float,
