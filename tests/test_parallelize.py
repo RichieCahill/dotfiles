@@ -91,8 +91,7 @@ def test_parallelize_process() -> None:
 
 def test_parallelize_process_to_many_max_workers(mocker: MockerFixture) -> None:
     """test_parallelize_process."""
-    mocker.patch(target="python"
-    ".parallelize.cpu_count", return_value=1)
+    mocker.patch(target="python.parallelize.cpu_count", return_value=1)
 
     with pytest.raises(RuntimeError, match="max_workers must be less than or equal to 1"):
         parallelize_process(func=add, kwargs_list=[{"a": 1, "b": 2}], max_workers=8)

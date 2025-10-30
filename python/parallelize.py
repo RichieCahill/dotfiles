@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING, Any, Generic, Literal, TypeVar
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
 
+logger = logging.getLogger(__name__)
+
 R = TypeVar("R")
 
 modes = Literal["normal", "early_error"]
@@ -45,7 +47,7 @@ def _parallelize_base(
     exceptions = []
     for index, future in enumerate(futures, 1):
         if exception := future.exception():
-            logging.error(f"{future} raised {exception.__class__.__name__}")
+            logger.error(f"{future} raised {exception.__class__.__name__}")
             exceptions.append(exception)
             if mode == "early_error":
                 executor.shutdown(wait=False)
@@ -55,7 +57,7 @@ def _parallelize_base(
         results.append(future.result())
 
         if progress_tracker and index % progress_tracker == 0:
-            logging.info(f"Progress: {index}/{total_work}")
+            logger.info(f"Progress: {index}/{total_work}")
 
     return ExecutorResults(results, exceptions)
 

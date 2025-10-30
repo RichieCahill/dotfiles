@@ -12,35 +12,36 @@ from re import search
 
 import typer
 
-from python.common import configure_logger, signal_alert
-from python.common import utcnow
+from python.common import configure_logger, signal_alert, utcnow
 from python.zfs import Dataset, get_datasets
+
+logger = logging.getLogger(__name__)
 
 
 def main(config_file: Path) -> None:
     """Main."""
     configure_logger(level="DEBUG")
-    logging.info("Starting snapshot_manager")
+    logger.info("Starting snapshot_manager")
 
     try:
         time_stamp = get_time_stamp()
 
         for dataset in get_datasets():
             status = dataset.create_snapshot(time_stamp)
-            logging.debug(f"{status=}")
+            logger.debug(f"{status=}")
             if status != "snapshot created":
                 msg = f"{dataset.name} failed to create snapshot {time_stamp}"
-                logging.error(msg)
+                logger.error(msg)
                 signal_alert(msg)
                 continue
 
             get_snapshots_to_delete(dataset, get_count_lookup(config_file, dataset.name))
     except Exception:
-        logging.exception("snapshot_manager failed")
+        logger.exception("snapshot_manager failed")
         signal_alert("snapshot_manager failed")
         sys.exit(1)
     else:
-        logging.info("snapshot_manager completed")
+        logger.info("snapshot_manager completed")
 
 
 def get_count_lookup(config_file: Path, dataset_name: str) -> dict[str, int]:
@@ -99,7 +100,7 @@ def get_snapshots_to_delete(
     snapshots = dataset.get_snapshots()
 
     if not snapshots:
-        logging.info(f"{dataset.name} has no snapshots")
+        logger.info(f"{dataset.name} has no snapshots")
         return
 
     filters = (
@@ -110,21 +111,21 @@ def get_snapshots_to_delete(
     )
 
     for filter_name, snapshot_filter in filters:
-        logging.debug(f"{filter_name=}\n{snapshot_filter=}")
+        logger.debug(f"{filter_name=}\n{snapshot_filter=}")
 
         filtered_snapshots = sorted(snapshot.name for snapshot in snapshots if search(snapshot_filter, snapshot.name))
 
-        logging.debug(f"{filtered_snapshots=}")
+        logger.debug(f"{filtered_snapshots=}")
 
         snapshots_wanted = count_lookup[filter_name]
         snapshots_being_deleted = filtered_snapshots[:-snapshots_wanted] if snapshots_wanted > 0 else filtered_snapshots
 
-        logging.info(f"{snapshots_being_deleted} are being deleted")
+        logger.info(f"{snapshots_being_deleted} are being deleted")
         for snapshot in snapshots_being_deleted:
             if error := dataset.delete_snapshot(snapshot):
                 error_message = f"{dataset.name}@{snapshot} failed to delete: {error}"
                 signal_alert(error_message)
-                logging.error(error_message)
+                logger.error(error_message)
 
 
 def get_time_stamp() -> str:

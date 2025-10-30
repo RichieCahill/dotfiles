@@ -14,6 +14,8 @@ from python.zfs import Zpool
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+logger = logging.getLogger(__name__)
+
 
 def zpool_tests(pool_names: Sequence[str], zpool_capacity_threshold: int = 90) -> list[str] | None:
     """Check the zpool health and capacity.
@@ -25,7 +27,7 @@ def zpool_tests(pool_names: Sequence[str], zpool_capacity_threshold: int = 90) -
     Returns:
         list[str] | None: A list of errors if any.
     """
-    logging.info("Testing zpool")
+    logger.info("Testing zpool")
 
     errors: list[str] = []
     for pool_name in pool_names:
@@ -63,7 +65,7 @@ def systemd_tests(
     Returns:
         list[str] | None: A list of errors if any.
     """
-    logging.info("Testing systemd service")
+    logger.info("Testing systemd service")
 
     max_retries = max(max_retries, 1)
     retry_delay_secs = max(retry_delay_secs, 1)
@@ -81,7 +83,7 @@ def systemd_tests(
     for retry in range(max_retries):
         if not service_names_set:
             break
-        logging.info(f"Testing systemd service in {retry + 1} of {max_retries}")
+        logger.info(f"Testing systemd service in {retry + 1} of {max_retries}")
         service_names_to_test = copy(service_names_set)
         for service_name in service_names_to_test:
             service_status, _ = bash_wrapper(f"systemctl is-active {service_name}")
