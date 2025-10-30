@@ -40,6 +40,10 @@ lint.ignore = [
 "tests/**" = [
     "S101", # (perm) pytest needs asserts
 ]
+"python/random/**" = [
+    "T201", # (perm) I don't care about print statements dir
+]
+
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

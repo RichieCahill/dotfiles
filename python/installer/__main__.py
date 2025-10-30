@@ -18,6 +18,8 @@ from python.installer.tui import draw_menu
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+logger = logging.getLogger(__name__)
+
 
 def bash_wrapper(command: str) -> str:
     """Execute a bash command and capture the output.
@@ -29,7 +31,7 @@ def bash_wrapper(command: str) -> str:
         Tuple[str, int]: A tuple containing the output of the command (stdout) as a string,
         the error output (stderr) as a string (optional), and the return code as an integer.
     """
-    logging.debug(f"running {command=}")
+    logger.debug(f"running {command=}")
     # This is a acceptable risk
     process = Popen(command.split(), stdout=PIPE, stderr=PIPE)
     output, _ = process.communicate()
@@ -50,7 +52,7 @@ def partition_disk(disk: str, swap_size: int, reserve: int = 0) -> None:
         reserve (int, optional): The size of the reserve partition in GB. Defaults to 0.
             minimum value is 0.
     """
-    logging.info(f"partitioning {disk=}")
+    logger.info(f"partitioning {disk=}")
     swap_size = max(swap_size, 1)
     reserve = max(reserve, 0)
 
@@ -58,16 +60,16 @@ def partition_disk(disk: str, swap_size: int, reserve: int = 0) -> None:
 
     if reserve > 0:
         msg = f"Creating swap partition on {disk=} with size {swap_size=}GiB and reserve {reserve=}GiB"
-        logging.info(msg)
+        logger.info(msg)
 
         swap_start = swap_size + reserve
         swap_partition = f"mkpart swap -{swap_start}GiB -{reserve}GiB "
     else:
-        logging.info(f"Creating swap partition on {disk=} with size {swap_size=}GiB")
+        logger.info(f"Creating swap partition on {disk=} with size {swap_size=}GiB")
         swap_start = swap_size
         swap_partition = f"mkpart swap -{swap_start}GiB 100% "
 
-    logging.debug(f"{swap_partition=}")
+    logger.debug(f"{swap_partition=}")
 
     create_partitions = (
         f"parted --script --align=optimal {disk} -- "
@@ -79,7 +81,7 @@ def partition_disk(disk: str, swap_size: int, reserve: int = 0) -> None:
     )
     bash_wrapper(create_partitions)
 
-    logging.info(f"{disk=} successfully partitioned")
+    logger.info(f"{disk=} successfully partitioned")
 
 
 def create_zfs_pool(pool_disks: Sequence[str], mnt_dir: str) -> None:
@@ -118,7 +120,7 @@ def create_zfs_pool(pool_disks: Sequence[str], mnt_dir: str) -> None:
     bash_wrapper(zpool_create)
     zpools = bash_wrapper("zpool list -o name")
     if "root_pool" not in zpools.splitlines():
-        logging.critical("Failed to create root_pool")
+        logger.critical("Failed to create root_pool")
         sys.exit(1)
 
 
@@ -138,7 +140,7 @@ def create_zfs_datasets() -> None:
     }
     missing_datasets = expected_datasets.difference(datasets.splitlines())
     if missing_datasets:
-        logging.critical(f"Failed to create pools {missing_datasets}")
+        logger.critical(f"Failed to create pools {missing_datasets}")
         sys.exit(1)
 
 
@@ -246,7 +248,7 @@ def installer(
     encrypt_key: str | None,
 ) -> None:
     """Main."""
-    logging.info("Starting installation")
+    logger.info("Starting installation")
 
     for disk in disks:
         partition_disk(disk, swap_size, reserve)
@@ -275,7 +277,7 @@ def installer(
 
     install_nixos(mnt_dir, disks, encrypt_key)
 
-    logging.info("Installation complete")
+    logger.info("Installation complete")
 
 
 def main() -> None:
@@ -286,11 +288,11 @@ def main() -> None:
 
     encrypt_key = getenv("ENCRYPT_KEY")
 
-    logging.info("installing_nixos")
-    logging.info(f"disks: {state.selected_device_ids}")
-    logging.info(f"swap_size: {state.swap_size}")
-    logging.info(f"reserve: {state.reserve_size}")
-    logging.info(f"encrypted: {bool(encrypt_key)}")
+    logger.info("installing_nixos")
+    logger.info(f"disks: {state.selected_device_ids}")
+    logger.info(f"swap_size: {state.swap_size}")
+    logger.info(f"reserve: {state.reserve_size}")
+    logger.info(f"encrypted: {bool(encrypt_key)}")
 
     sleep(3)
 

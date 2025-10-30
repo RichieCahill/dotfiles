@@ -7,6 +7,8 @@ import logging
 from collections import defaultdict
 from subprocess import PIPE, Popen
 
+logger = logging.getLogger(__name__)
+
 
 def bash_wrapper(command: str) -> str:
     """Execute a bash command and capture the output.
@@ -18,7 +20,7 @@ def bash_wrapper(command: str) -> str:
         Tuple[str, int]: A tuple containing the output of the command (stdout) as a string,
         the error output (stderr) as a string (optional), and the return code as an integer.
     """
-    logging.debug(f"running {command=}")
+    logger.debug(f"running {command=}")
     # This is a acceptable risk
     process = Popen(command.split(), stdout=PIPE, stderr=PIPE)
     output, _ = process.communicate()
