@@ -28,6 +28,7 @@
           temperature_unit = "F";
           packages = {
             victron_modbuss = "!include ${./home_assistant/victron_modbuss.yaml}";
+            battery_sensors = "!include ${./home_assistant/battery_sensors.yaml}";
           };
         };
         recorder = {
@@ -67,6 +68,8 @@
           forecast-solar # for solar forecast
           aioesphomeapi # for esphome
           esphome-dashboard-api # for esphome
+          py-improv-ble-client # for esphome
+          bleak-esphome # for esphome
         ];
       extraComponents = [ "isal" ];
     };

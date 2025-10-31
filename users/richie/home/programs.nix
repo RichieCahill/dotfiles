@@ -24,6 +24,8 @@
     unzip
     yazi
     zoxide
+    # Home Assistant
+    esphome
     # data recovery
     testdisk
     # system info

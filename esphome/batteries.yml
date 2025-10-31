@@ -1,0 +1,129 @@
+esphome:
+  name: batteries
+  friendly_name: batteries
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_key
+
+external_components:
+  - source: github://syssi/esphome-jk-bms@main
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+captive_portal:
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+
+ble_client:
+  - mac_address: "C8:47:80:29:0F:DB"
+    id: jk_ble0
+  - mac_address: "C8:47:80:37:9D:DD"
+    id: jk_ble1
+
+jk_bms_ble:
+  - ble_client_id: jk_ble0
+    protocol_version: JK02_32S
+    throttle: 1s
+    id: jk_bms0
+
+  - ble_client_id: jk_ble1
+    protocol_version: JK02_32S
+    throttle: 1s
+    id: jk_bms1
+
+sensor:
+  # BMS1 sensors
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    total_voltage:
+      name: "JK0 Total Voltage"
+    current:
+      name: "JK0 Current"
+    state_of_charge:
+      name: "JK0 SoC"
+    power:
+      name: "JK0 Power"
+    temperature_sensor_1:
+      name: "JK0 Temp 1"
+    temperature_sensor_2:
+      name: "JK0 Temp 2"
+    balancing:
+      name: "JK0 balancing"
+    charging_cycles:
+      name: "JK0 charging cycles"
+    total_runtime:
+      name: "JK0 total runtime"
+    balancing_current:
+      name: "JK0 balancing current"
+
+  # BMS2 sensors
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms1
+    total_voltage:
+      name: "JK1 Total Voltage"
+    current:
+      name: "JK1 Current"
+    state_of_charge:
+      name: "JK1 SoC"
+    power:
+      name: "Jk1 Power"
+    temperature_sensor_1:
+      name: "JK1 Temp 1"
+    temperature_sensor_2:
+      name: "Jk1 Temp 2"
+    balancing:
+      name: "JK1 balancing"
+    charging_cycles:
+      name: "JK1 charging cycles"
+    total_runtime:
+      name: "JK1 total runtime"
+    balancing_current:
+      name: "JK1 balancing current"
+
+text_sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    errors:
+      name: "JK0 Errors"
+
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms1
+    errors:
+      name: "JK1 Errors"
+
+switch:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    charging:
+      name: "JK0 Charging"
+    discharging:
+      name: "JK0 Discharging"
+    balancer:
+      name: "JK0 Balancing"
+
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms1
+    charging:
+      name: "JK1 Charging"
+    discharging:
+      name: "JK1 Discharging"
+    balancer:
+      name: "JK1 Balancing"
