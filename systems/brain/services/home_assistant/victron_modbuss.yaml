@@ -338,10 +338,10 @@ utility_meter:
     source: sensor.solar_yield
     cycle: monthly
 
-  charger_ac_wattage_daily:
+  charger_dc_wattage_daily:
     source: sensor.dc_charger_energy
     cycle: daily
 
-  charger_ac_wattage_monthly:
+  charger_dc_wattage_monthly:
     source: sensor.dc_charger_energy
     cycle: monthly
