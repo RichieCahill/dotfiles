@@ -2,8 +2,8 @@
 
 import logging
 
-from python.testing.logging.configure_logger import configure_logger
 from python.testing.logging.bar import bar
+from python.testing.logging.configure_logger import configure_logger
 from python.testing.logging.foo import foo
 
 logger = logging.getLogger(__name__)

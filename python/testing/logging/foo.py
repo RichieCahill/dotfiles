@@ -1,4 +1,4 @@
-"""foo"""
+"""foo."""
 
 import logging
 
@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 def foo() -> None:
     """Foo."""
-
     configure_logger("DEBUG", "FOO")
     logger.debug(f"foo {__name__}")
     logger.debug("foo")

@@ -43,7 +43,10 @@ lint.ignore = [
 "python/random/**" = [
     "T201", # (perm) I don't care about print statements dir
 ]
-
+"python/testing/**" = [
+    "T201",   # (perm) I don't care about print statements dir
+    "ERA001", # (perm) I don't care about print statements dir
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
