@@ -28,6 +28,7 @@
     # games
     dwarf-fortress
     endless-sky
+    osu-lazer
     prismlauncher
     tower-pixel-dungeon
   ];
