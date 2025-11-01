@@ -1,6 +1,6 @@
 title: "Richie Cahill"
 description: "ALL THE CHAOS THAT I CANT DO AT WORK"
-baseurl: "" # empty for user site, or "/my-blog" for project site
+baseurl: "/dotfiles"
 url: "https://richiecahill.github.io"
 
 remote_theme: pages-themes/hacker@v0.2.0
