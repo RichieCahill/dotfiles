@@ -80,6 +80,7 @@
   "nix.serverPath": "nil",
 
   // python tools
+  "python.defaultInterpreterPath": "/run/current-system/sw/bin/python",
   "mypy.runUsingActiveInterpreter": true,
 
   // force the use of rust-analyzer from dev shell
