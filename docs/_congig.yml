@@ -1,0 +1,21 @@
+title: "Richie Cahill"
+description: "ALL THE CHAOS THAT I CANT DO AT WORK"
+baseurl: "" # empty for user site, or "/my-blog" for project site
+url: "https://richiecahill.github.io"
+
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+paginate: 5
+paginate_path: "/page:num"
+
+author:
+  name: "Richie Cahill"
+  email: "richie@tmmworkshop.com"
+
+social_links:
+  github: "RichieCahill"
+  website: "https://tmmworkshop.com"
