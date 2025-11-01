@@ -1,0 +1,4 @@
+source "https://rubygems.org"
+
+# The github-pages gem pins all compatible versions of Jekyll and its plugins
+gem "github-pages", group: :jekyll_plugins
