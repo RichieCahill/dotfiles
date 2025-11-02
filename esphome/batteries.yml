@@ -48,8 +48,6 @@ sensor:
     jk_bms_ble_id: jk_bms0
     total_voltage:
       name: "JK0 Total Voltage"
-    current:
-      name: "JK0 Current"
     state_of_charge:
       name: "JK0 SoC"
     power:
@@ -58,12 +56,8 @@ sensor:
       name: "JK0 Temp 1"
     temperature_sensor_2:
       name: "JK0 Temp 2"
-    balancing:
-      name: "JK0 balancing"
     charging_cycles:
       name: "JK0 charging cycles"
-    total_runtime:
-      name: "JK0 total runtime"
     balancing_current:
       name: "JK0 balancing current"
 
@@ -72,8 +66,6 @@ sensor:
     jk_bms_ble_id: jk_bms1
     total_voltage:
       name: "JK1 Total Voltage"
-    current:
-      name: "JK1 Current"
     state_of_charge:
       name: "JK1 SoC"
     power:
@@ -82,12 +74,8 @@ sensor:
       name: "JK1 Temp 1"
     temperature_sensor_2:
       name: "Jk1 Temp 2"
-    balancing:
-      name: "JK1 balancing"
     charging_cycles:
       name: "JK1 charging cycles"
-    total_runtime:
-      name: "JK1 total runtime"
     balancing_current:
       name: "JK1 balancing current"
 
