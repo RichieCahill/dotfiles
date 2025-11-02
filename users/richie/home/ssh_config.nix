@@ -43,6 +43,12 @@
         identityFile = "~/.ssh/id_ed25519";
         port = 922;
       };
+      leviathan = {
+        hostname = "192.168.90.127";
+        user = "richie";
+        identityFile = "~/.ssh/id_ed25519";
+        port = 332;
+      };
     };
   };
 }

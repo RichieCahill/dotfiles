@@ -15,6 +15,7 @@
     # graphics tools
     gimp3
     xcursorgen
+    xf86_input_wacom
     # browser
     chromium
     firefox
