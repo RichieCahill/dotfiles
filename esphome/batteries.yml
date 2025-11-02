@@ -23,6 +23,7 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  fast_connect: true
 
 ble_client:
   - mac_address: "C8:47:80:29:0F:DB"
