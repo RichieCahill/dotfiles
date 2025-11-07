@@ -85,7 +85,7 @@ def get_material_resistivity(
 ) -> float:
     """Get the resistivity of a material."""
     if not temperature:
-        Temperature(20.0)
+        temperature = Temperature(20.0)
     material_info = {
         MaterialType.COPPER: (1.724e-8, 0.00393),
         MaterialType.ALUMINUM: (2.908e-8, 0.00403),
@@ -180,7 +180,7 @@ def max_wire_length(
         float: Maximum wire length in meters that maintains the specified voltage drop
     """
     if not temperature:
-        Temperature(100.0, unit=TemperatureUnit.FAHRENHEIT)
+        temperature = Temperature(100.0, unit=TemperatureUnit.FAHRENHEIT)
 
     resistivity = get_material_resistivity(material, temperature)
     resistance_per_meter = resistivity / calculate_wire_area_m2(gauge)
