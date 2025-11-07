@@ -29,6 +29,7 @@
         pytest-xdist
         requests
         ruff
+        sqlalchemy
         typer
         types-requests
       ]
