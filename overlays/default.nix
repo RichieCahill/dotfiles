@@ -22,6 +22,7 @@
         apscheduler
         mypy
         polars
+        psycopg
         pyfakefs
         pytest
         pytest-cov
