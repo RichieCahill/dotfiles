@@ -24,7 +24,7 @@ def safe_insert(orm_objects: Sequence[object], session: Session) -> list[tuple[E
         session (Session): Database session.
     """
     if unmapped := [orm_object for orm_object in orm_objects if not _is_mapped_instance(orm_object)]:
-        error = f"binary_search_insert expects ORM-mapped instances {unmapped}"
+        error = f"safe_insert expects ORM-mapped instances {unmapped}"
         raise TypeError(error)
     return _safe_insert(orm_objects, session)
 
