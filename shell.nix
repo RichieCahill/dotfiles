@@ -9,6 +9,7 @@
       nix
       home-manager
       git
+      my_python
 
       ssh-to-age
       gnupg
