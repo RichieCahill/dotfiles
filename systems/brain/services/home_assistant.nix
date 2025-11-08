@@ -19,7 +19,6 @@
             "192.168.95.35"
             "127.0.0.1"
           ];
-          use_x_forwarded_for = true;
         };
         homeassistant = {
           time_zone = "America/New_York";
