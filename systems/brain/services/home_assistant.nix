@@ -59,16 +59,17 @@
       };
       extraPackages =
         python3Packages: with python3Packages; [
-          pymodbus # for modbus
+          aioesphomeapi # for esphome
+          bleak-esphome # for esphome
+          esphome-dashboard-api # for esphome
+          forecast-solar # for solar forecast
           gtts # not sure what wants this
           jellyfin-apiclient-python # for jellyfin
           paho-mqtt # for mqtt
           psycopg2 # for postgresql
-          forecast-solar # for solar forecast
-          aioesphomeapi # for esphome
-          esphome-dashboard-api # for esphome
           py-improv-ble-client # for esphome
-          bleak-esphome # for esphome
+          pymodbus # for modbus
+          pyopenweathermap # for weather
         ];
       extraComponents = [ "isal" ];
     };
