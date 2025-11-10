@@ -35,7 +35,7 @@ in
         after = [ "zfs-import.target" ];
         path = [ pkgs.zfs ];
         environment = {
-          PYTHONPATH = "/home/richie/dotfiles";
+          PYTHONPATH = "${../..}/";
         };
         serviceConfig = {
           Type = "oneshot";
