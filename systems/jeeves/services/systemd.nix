@@ -22,7 +22,7 @@ in
         description = "validates startup";
         path = [ pkgs.zfs ];
         environment = {
-          PYTHONPATH = "/home/richie/dotfiles";
+          PYTHONPATH = "${../../..}/";
         };
         serviceConfig = {
           EnvironmentFile = "${vars.secrets}/services/server-validation";
