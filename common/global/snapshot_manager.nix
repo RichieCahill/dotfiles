@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   config,
@@ -35,11 +34,12 @@ in
         requires = [ "zfs-import.target" ];
         after = [ "zfs-import.target" ];
         path = [ pkgs.zfs ];
+        environment = {
+          PYTHONPATH = "/home/richie/dotfiles";
+        };
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${
-            inputs.system_tools.packages.${pkgs.system}.default
-          }/bin/snapshot_manager ${lib.escapeShellArg cfg.path}";
+          ExecStart = "${pkgs.my_python}/bin/python -m python.tools.snapshot_manager ${lib.escapeShellArg cfg.path}";
         }
         // lib.optionalAttrs (cfg.EnvironmentFile != null) {
           EnvironmentFile = cfg.EnvironmentFile;

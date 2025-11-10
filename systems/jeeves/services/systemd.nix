@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   ...
 }:
@@ -22,10 +21,13 @@ in
         wantedBy = [ "multi-user.target" ];
         description = "validates startup";
         path = [ pkgs.zfs ];
+        environment = {
+          PYTHONPATH = "/home/richie/dotfiles";
+        };
         serviceConfig = {
           EnvironmentFile = "${vars.secrets}/services/server-validation";
           Type = "oneshot";
-          ExecStart = "${inputs.system_tools.packages.x86_64-linux.default}/bin/validate_system '${./validate_system.toml}'";
+          ExecStart = "${pkgs.my_python}/bin/python -m python.tools.validate_system '${./validate_system.toml}'";
         };
       };
     };
