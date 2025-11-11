@@ -1,18 +1,19 @@
+{ self, ... }:
 {
   imports = [
-    ../../users/richie
-    ../../users/gaming
-    ../../common/global
-    ../../common/optional/desktop.nix
-    ../../common/optional/docker.nix
-    ../../common/optional/scanner.nix
-    ../../common/optional/steam.nix
-    ../../common/optional/syncthing_base.nix
-    ../../common/optional/systemd-boot.nix
-    ../../common/optional/update.nix
-    ../../common/optional/yubikey.nix
-    ../../common/optional/zerotier.nix
-    ../../common/optional/nvidia.nix
+    "${self}/users/richie"
+    "${self}/users/gaming"
+    "${self}/common/global"
+    "${self}/common/optional/desktop.nix"
+    "${self}/common/optional/docker.nix"
+    "${self}/common/optional/scanner.nix"
+    "${self}/common/optional/steam.nix"
+    "${self}/common/optional/syncthing_base.nix"
+    "${self}/common/optional/systemd-boot.nix"
+    "${self}/common/optional/update.nix"
+    "${self}/common/optional/yubikey.nix"
+    "${self}/common/optional/zerotier.nix"
+    "${self}/common/optional/nvidia.nix"
     ./hardware.nix
     ./syncthing.nix
     ./llms.nix
