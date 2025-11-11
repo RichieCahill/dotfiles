@@ -1,19 +1,19 @@
-{ self, ... }:
+{ inputs, ... }:
 {
   imports = [
-    "${self}/users/richie"
-    "${self}/users/gaming"
-    "${self}/common/global"
-    "${self}/common/optional/desktop.nix"
-    "${self}/common/optional/docker.nix"
-    "${self}/common/optional/scanner.nix"
-    "${self}/common/optional/steam.nix"
-    "${self}/common/optional/syncthing_base.nix"
-    "${self}/common/optional/systemd-boot.nix"
-    "${self}/common/optional/update.nix"
-    "${self}/common/optional/yubikey.nix"
-    "${self}/common/optional/zerotier.nix"
-    "${self}/common/optional/nvidia.nix"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/users/gaming"
+    "${inputs.self}/common/global"
+    "${inputs.self}/common/optional/desktop.nix"
+    "${inputs.self}/common/optional/docker.nix"
+    "${inputs.self}/common/optional/scanner.nix"
+    "${inputs.self}/common/optional/steam.nix"
+    "${inputs.self}/common/optional/syncthing_base.nix"
+    "${inputs.self}/common/optional/systemd-boot.nix"
+    "${inputs.self}/common/optional/update.nix"
+    "${inputs.self}/common/optional/yubikey.nix"
+    "${inputs.self}/common/optional/zerotier.nix"
+    "${inputs.self}/common/optional/nvidia.nix"
     ./hardware.nix
     ./syncthing.nix
     ./llms.nix
