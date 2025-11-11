@@ -44,7 +44,10 @@
     # firmware update
     fwupd.enable = true;
 
-    snapshot_manager.enable = lib.mkDefault true;
+    snapshot_manager = {
+      enable = lib.mkDefault true;
+      PYTHONPATH = "${inputs.self}/";
+    };
 
     zfs = {
       trim.enable = lib.mkDefault true;

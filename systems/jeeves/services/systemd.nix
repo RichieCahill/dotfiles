@@ -1,5 +1,6 @@
 {
   pkgs,
+  self,
   ...
 }:
 let
@@ -22,7 +23,7 @@ in
         description = "validates startup";
         path = [ pkgs.zfs ];
         environment = {
-          PYTHONPATH = "${../../..}/";
+          PYTHONPATH = "${self}/";
         };
         serviceConfig = {
           EnvironmentFile = "${vars.secrets}/services/server-validation";

@@ -16,6 +16,12 @@ in
         default = ./snapshot_config.toml;
         description = "Path to the snapshot_manager TOML config.";
       };
+      PYTHONPATH = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          the PYTHONPATH to use for the snapshot_manager service.
+        '';
+      };
       EnvironmentFile = lib.mkOption {
         type = lib.types.nullOr (lib.types.coercedTo lib.types.path toString lib.types.str);
         default = null;
@@ -35,7 +41,7 @@ in
         after = [ "zfs-import.target" ];
         path = [ pkgs.zfs ];
         environment = {
-          PYTHONPATH = "${../..}/";
+          PYTHONPATH = cfg.PYTHONPATH;
         };
         serviceConfig = {
           Type = "oneshot";
