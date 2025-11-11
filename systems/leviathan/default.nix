@@ -1,14 +1,14 @@
-{ inputs, self, ... }:
+{ inputs, ... }:
 {
   imports = [
-    "${self}/users/elise"
-    "${self}/users/richie"
-    "${self}/common/global"
-    "${self}/common/optional/desktop.nix"
-    "${self}/common/optional/steam.nix"
-    "${self}/common/optional/systemd-boot.nix"
-    "${self}/common/optional/update.nix"
-    "${self}/common/optional/zerotier.nix"
+    "${inputs.self}/users/elise"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/common/global"
+    "${inputs.self}/common/optional/desktop.nix"
+    "${inputs.self}/common/optional/steam.nix"
+    "${inputs.self}/common/optional/systemd-boot.nix"
+    "${inputs.self}/common/optional/update.nix"
+    "${inputs.self}/common/optional/zerotier.nix"
     ./hardware.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];

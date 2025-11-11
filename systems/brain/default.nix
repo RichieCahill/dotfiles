@@ -1,14 +1,14 @@
-{ inputs, self, ... }:
+{ inputs, ... }:
 {
   imports = [
-    "${self}/users/richie"
-    "${self}/common/global"
-    "${self}/common/optional/docker.nix"
-    "${self}/common/optional/ssh_decrypt.nix"
-    "${self}/common/optional/syncthing_base.nix"
-    "${self}/common/optional/systemd-boot.nix"
-    "${self}/common/optional/update.nix"
-    "${self}/common/optional/zerotier.nix"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/common/global"
+    "${inputs.self}/common/optional/docker.nix"
+    "${inputs.self}/common/optional/ssh_decrypt.nix"
+    "${inputs.self}/common/optional/syncthing_base.nix"
+    "${inputs.self}/common/optional/systemd-boot.nix"
+    "${inputs.self}/common/optional/update.nix"
+    "${inputs.self}/common/optional/zerotier.nix"
     ./docker
     ./hardware.nix
     ./programs.nix

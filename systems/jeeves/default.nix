@@ -1,18 +1,18 @@
-{ self, ... }:
+{ inputs, ... }:
 let
   vars = import ./vars.nix;
 in
 {
   imports = [
-    "${self}/users/richie"
-    "${self}/users/math"
-    "${self}/users/dov"
-    "${self}/common/global"
-    "${self}/common/optional/docker.nix"
-    "${self}/common/optional/ssh_decrypt.nix"
-    "${self}/common/optional/syncthing_base.nix"
-    "${self}/common/optional/update.nix"
-    "${self}/common/optional/zerotier.nix"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/users/math"
+    "${inputs.self}/users/dov"
+    "${inputs.self}/common/global"
+    "${inputs.self}/common/optional/docker.nix"
+    "${inputs.self}/common/optional/ssh_decrypt.nix"
+    "${inputs.self}/common/optional/syncthing_base.nix"
+    "${inputs.self}/common/optional/update.nix"
+    "${inputs.self}/common/optional/zerotier.nix"
     ./docker
     ./services
     ./hardware.nix
