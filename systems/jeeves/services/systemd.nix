@@ -1,6 +1,6 @@
 {
   pkgs,
-  self,
+  inputs,
   ...
 }:
 let
@@ -23,12 +23,12 @@ in
         description = "validates startup";
         path = [ pkgs.zfs ];
         environment = {
-          PYTHONPATH = "${self}/";
+          PYTHONPATH = "${inputs.self}/";
         };
         serviceConfig = {
           EnvironmentFile = "${vars.secrets}/services/server-validation";
           Type = "oneshot";
-          ExecStart = "${pkgs.my_python}/bin/python -m python.tools.validate_system '${./validate_system.toml}'";
+          ExecStart = "${pkgs.my_python}/bin/python -m python.system_tests.validate_system '${./validate_system.toml}'";
         };
       };
     };
