@@ -15,3 +15,11 @@ You can read my latest posts below
   </li>
   {% endfor %}
 </ul>
+
+## Other Resources
+
+<ul>
+  <li>
+    <a href="{{ './cool_tools.md' | relative_url }}">Cool Tools</a>
+  </li>
+</ul>
