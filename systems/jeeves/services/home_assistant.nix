@@ -68,7 +68,7 @@ in
           jellyfin-apiclient-python
           psycopg2
           pymetno
-          pyownet
+          aio-ownet
           rokuecp
           uiprotect
           wakeonlan
