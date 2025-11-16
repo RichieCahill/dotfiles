@@ -69,13 +69,15 @@ class PlayerState:
         """Total tokens in player's bank."""
         return sum(self.tokens.values())
 
-    def update_card_score(self) -> None:
-        """Recalculate card score."""
-        self.card_score = sum(card.points for card in self.cards)
-
-    def update_noble_score(self) -> None:
-        """Recalculate noble score."""
+    def add_noble(self, noble: Noble) -> None:
+        """Add a noble to the player."""
+        self.nobles.append(noble)
         self.noble_score = sum(noble.points for noble in self.nobles)
+
+    def add_card(self, card: Card) -> None:
+        """Add a card to the player."""
+        self.cards.append(card)
+        self.card_score = sum(card.points for card in self.cards)
 
     @property
     def score(self) -> int:
@@ -118,7 +120,7 @@ class PlayerState:
                 self.tokens["gold"] -= use_gold
                 payment["gold"] += use_gold
 
-        self.cards.append(card)
+        self.add_card(card)
         self.discounts[card.color] += 1
         return payment
 
@@ -213,7 +215,7 @@ class GameState:
         return eligible[0]
 
 
-class Action(Protocol):
+class Action:
     """Marker protocol for actions."""
 
 
@@ -237,7 +239,14 @@ class BuyCard(Action):
 
     tier: int
     index: int
-    from_reserved: bool = False
+
+
+@dataclass
+class BuyCardReserved(Action):
+    """Buy a face-up card."""
+
+    tier: int
+    index: int
 
 
 @dataclass
@@ -347,7 +356,7 @@ def check_nobles_for_player(
     game.available_nobles.remove(chosen)
     game.get_noble_min_requirements()
 
-    player.nobles.append(chosen)
+    player.add_noble(chosen)
 
 
 def apply_take_different(game: GameState, strategy: Strategy, action: TakeDifferent) -> None:
@@ -384,28 +393,31 @@ def apply_buy_card(game: GameState, _strategy: Strategy, action: BuyCard) -> Non
     """Mutate game state according to action."""
     player = game.current_player
 
-    if action.from_reserved:
-        if not (0 <= action.index < len(player.reserved)):
-            return
-        card = player.reserved[action.index]
-        if not player.can_afford(card):
-            return
-        player.reserved.pop(action.index)
-        payment = player.pay_for_card(card)
-        for color, amount in payment.items():
-            game.bank[color] += amount
-    else:
-        row = game.table_by_tier.get(action.tier)
-        if row is None or not (0 <= action.index < len(row)):
-            return
-        card = row[action.index]
-        if not player.can_afford(card):
-            return
-        row.pop(action.index)
-        payment = player.pay_for_card(card)
-        for color, amount in payment.items():
-            game.bank[color] += amount
-        game.refill_table()
+    row = game.table_by_tier.get(action.tier)
+    if row is None or not (0 <= action.index < len(row)):
+        return
+    card = row[action.index]
+    if not player.can_afford(card):
+        return
+    row.pop(action.index)
+    payment = player.pay_for_card(card)
+    for color, amount in payment.items():
+        game.bank[color] += amount
+    game.refill_table()
+
+
+def apply_buy_card_reserved(game: GameState, _strategy: Strategy, action: BuyCardReserved) -> None:
+    """Mutate game state according to action."""
+    player = game.current_player
+    if not (0 <= action.index < len(player.reserved)):
+        return
+    card = player.reserved[action.index]
+    if not player.can_afford(card):
+        return
+    player.reserved.pop(action.index)
+    payment = player.pay_for_card(card)
+    for color, amount in payment.items():
+        game.bank[color] += amount
 
 
 def apply_reserve_card(game: GameState, strategy: Strategy, action: ReserveCard) -> None:
@@ -446,6 +458,7 @@ def apply_action(game: GameState, strategy: Strategy, action: Action) -> None:
         TakeDouble: apply_take_double,
         BuyCard: apply_buy_card,
         ReserveCard: apply_reserve_card,
+        BuyCardReserved: apply_buy_card_reserved,
     }
     action_func = actions.get(type(action))
     if action_func is None:

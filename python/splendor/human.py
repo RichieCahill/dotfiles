@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
@@ -14,6 +13,7 @@ from .base import (
     GEM_COLORS,
     Action,
     BuyCard,
+    BuyCardReserved,
     Card,
     GameState,
     GemColor,
@@ -24,6 +24,9 @@ from .base import (
     TakeDifferent,
     TakeDouble,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 # Abbreviations used when rendering costs
 COST_ABBR: dict[GemColor, str] = {
@@ -63,7 +66,8 @@ def parse_color_token(raw: str) -> GemColor:
     if key in COLOR_ABBR_TO_FULL:
         return COLOR_ABBR_TO_FULL[key]
 
-    raise ValueError(f"Unknown color: {raw}")
+    error = f"Unknown color: {raw}"
+    raise ValueError(error)
 
 
 def format_cost(cost: Mapping[GemColor, int]) -> str:
@@ -140,6 +144,7 @@ def fmt_gem(color: GemColor) -> str:
 
 
 def fmt_number(value: int) -> str:
+    """Return a Rich-markup colored 'value' string."""
     return f"[bold cyan]{value}[/]"
 
 
@@ -161,12 +166,14 @@ def color_token(name: GemColor, amount: int) -> str:
 class Board(Widget):
     """Big board widget with the layout you sketched."""
 
-    def __init__(self, game: GameState, me: PlayerState, **kwargs: Any) -> None:
+    def __init__(self, game: GameState, me: PlayerState, **kwargs: Any) -> None:  # noqa: ANN401
+        """Initialize the board widget."""
         super().__init__(**kwargs)
         self.game = game
         self.me = me
 
     def compose(self) -> ComposeResult:
+        """Compose the board widget."""
         # Structure:
         # ┌ bank row
         # ├ middle row (tiers | nobles)
@@ -182,9 +189,11 @@ class Board(Widget):
             yield Static(id="players_box")
 
     def on_mount(self) -> None:
+        """Refresh the board content."""
         self.refresh_content()
 
     def refresh_content(self) -> None:
+        """Refresh the board content."""
         self._render_bank()
         self._render_tiers()
         self._render_nobles()
@@ -217,8 +226,7 @@ class Board(Widget):
         if not self.game.available_nobles:
             lines.append("  (none)")
         else:
-            for noble in self.game.available_nobles:
-                lines.append("  - " + format_noble(noble))
+            lines.extend("  - " + format_noble(noble) for noble in self.game.available_nobles)
         nobles_box.update("\n".join(lines))
 
     def _render_players(self) -> None:
@@ -329,13 +337,15 @@ class ActionApp(App[None]):
     """
 
     def __init__(self, game: GameState, player: PlayerState) -> None:
+        """Initialize the action app."""
         super().__init__()
         self.game = game
         self.player = player
         self.result: Action | None = None
         self.message: str = ""
 
-    def compose(self) -> ComposeResult:  # type: ignore[override]
+    def compose(self) -> ComposeResult:
+        """Compose the action app."""
         # Row 1: input + Actions text
         with Vertical(id="command_zone"):
             yield Input(
@@ -350,7 +360,8 @@ class ActionApp(App[None]):
         # Row 3: footer
         yield Footer()
 
-    def on_mount(self) -> None:  # type: ignore[override]
+    def on_mount(self) -> None:
+        """Mount the action app."""
         self._update_prompt()
         self.query_one(Input).focus()
 
@@ -377,7 +388,77 @@ class ActionApp(App[None]):
             lines.append(f"[bold red]Message:[/] {self.message}")
         self.query_one("#prompt", Static).update("\n".join(lines))
 
-    def on_input_submitted(self, event: Input.Submitted) -> None:  # type: ignore[override]
+    def _cmd_1(self, parts: list[str]) -> str | None:
+        """Take up to 3 different gem colors: 1 white blue red  OR  1 w b r."""
+        color_names = parts[1:]
+        if not color_names:
+            return "Need at least one color (full name or abbreviation)."
+        colors: list[GemColor] = []
+        for name in color_names:
+            color = parse_color_token(name)
+            if self.game.bank[color] <= 0:
+                return f"No tokens left for color: {color}"
+            colors.append(color)
+        self.result = TakeDifferent(colors=colors[:3])
+        self.exit()
+        return None
+
+    def _cmd_2(self, parts: list[str]) -> str | None:
+        """Take two of the same color."""
+        if len(parts) < 2:  # noqa: PLR2004
+            return "Usage: 2 <color>"
+        color = parse_color_token(parts[1])
+        if self.game.bank[color] < self.game.config.minimum_tokens_to_buy_2:
+            return "Bank must have at least 4 of that color."
+        self.result = TakeDouble(color=color)
+        self.exit()
+        return None
+
+    def _cmd_3(self, parts: list[str]) -> str | None:
+        """Buy face-up card."""
+        if len(parts) < 3:  # noqa: PLR2004
+            return "Usage: 3 <tier> <index>"
+        tier = int(parts[1])
+        idx = int(parts[2])
+        self.result = BuyCard(tier=tier, index=idx)
+        self.exit()
+        return None
+
+    def _cmd_4(self, parts: list[str]) -> str | None:
+        """Buy reserved card."""
+        if len(parts) < 2:  # noqa: PLR2004
+            return "Usage: 4 <reserved_index>"
+        idx = int(parts[1])
+        if not (0 <= idx < len(self.player.reserved)):
+            return "Reserved index out of range."
+        self.result = BuyCardReserved(tier=0, index=idx)
+        self.exit()
+        return None
+
+    def _cmd_5(self, parts: list[str]) -> str | None:
+        """Reserve face-up card."""
+        if len(parts) < 3:  # noqa: PLR2004
+            return "Usage: 5 <tier> <index>"
+        tier = int(parts[1])
+        idx = int(parts[2])
+        self.result = ReserveCard(tier=tier, index=idx, from_deck=False)
+        self.exit()
+        return None
+
+    def _cmd_6(self, parts: list[str]) -> str | None:
+        """Reserve top of deck."""
+        if len(parts) < 2:  # noqa: PLR2004
+            return "Usage: 6 <tier>"
+        tier = int(parts[1])
+        self.result = ReserveCard(tier=tier, index=None, from_deck=True)
+        self.exit()
+        return None
+
+    def _unknown_cmd(self, _parts: list[str]) -> str:
+        return "Unknown command."
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        """Handle user input."""
         text = (event.value or "").strip()
         event.input.value = ""
         if not text:
@@ -388,80 +469,21 @@ class ActionApp(App[None]):
             return
 
         parts = text.split()
+
+        cmds = {
+            "1": self._cmd_1,
+            "2": self._cmd_2,
+            "3": self._cmd_3,
+            "4": self._cmd_4,
+            "5": self._cmd_5,
+            "6": self._cmd_6,
+        }
         cmd = parts[0]
 
-        try:
-            if cmd == "1":
-                # Take up to 3 different gem colors: 1 white blue red  OR  1 w b r
-                color_names = parts[1:]
-                if not color_names:
-                    raise ValueError("Need at least one color (full name or abbreviation).")
-                colors: list[GemColor] = []
-                for name in color_names:
-                    color = parse_color_token(name)
-                    if self.game.bank[color] <= 0:
-                        raise ValueError(f"No tokens left for color: {color}")
-                    colors.append(color)
-                self.result = TakeDifferent(colors=colors[:3])
-                self.exit()
-                return
+        error = cmds.get(cmd, self._unknown_cmd)(parts)
 
-            if cmd == "2":
-                # TakeDouble: 2 color  (full name or abbreviation)
-                if len(parts) < 2:
-                    raise ValueError("Usage: 2 <color>")
-                raw_color = parts[1]
-                color = parse_color_token(raw_color)
-                if self.game.bank[color] < 4:
-                    raise ValueError("Bank must have at least 4 of that color.")
-                self.result = TakeDouble(color=color)
-                self.exit()
-                return
-
-            if cmd == "3":
-                # Buy face-up card: 3 tier index
-                if len(parts) < 3:
-                    raise ValueError("Usage: 3 <tier> <index>")
-                tier = int(parts[1])
-                idx = int(parts[2])
-                self.result = BuyCard(tier=tier, index=idx)
-                self.exit()
-                return
-
-            if cmd == "4":
-                # Buy reserved card: 4 index
-                if len(parts) < 2:
-                    raise ValueError("Usage: 4 <reserved_index>")
-                idx = int(parts[1])
-                if not (0 <= idx < len(self.player.reserved)):
-                    raise ValueError("Reserved index out of range.")
-                self.result = BuyCard(tier=0, index=idx, from_reserved=True)
-                self.exit()
-                return
-
-            if cmd == "5":
-                # Reserve face-up card: 5 tier index
-                if len(parts) < 3:
-                    raise ValueError("Usage: 5 <tier> <index>")
-                tier = int(parts[1])
-                idx = int(parts[2])
-                self.result = ReserveCard(tier=tier, index=idx, from_deck=False)
-                self.exit()
-                return
-
-            if cmd == "6":
-                # Reserve top of deck: 6 tier
-                if len(parts) < 2:
-                    raise ValueError("Usage: 6 <tier>")
-                tier = int(parts[1])
-                self.result = ReserveCard(tier=tier, index=None, from_deck=True)
-                self.exit()
-                return
-
-            raise ValueError("Unknown command.")
-
-        except ValueError as exc:
-            self.message = str(exc)
+        if error:
+            self.message = error
             self._update_prompt()
             return
 
@@ -488,6 +510,7 @@ class DiscardApp(App[None]):
     """
 
     def __init__(self, game: GameState, player: PlayerState) -> None:
+        """Initialize the discard app."""
         super().__init__()
         self.game = game
         self.player = player
@@ -495,6 +518,7 @@ class DiscardApp(App[None]):
         self.message: str = ""
 
     def compose(self) -> ComposeResult:  # type: ignore[override]
+        """Compose the discard app."""
         yield Header(show_clock=False)
 
         with Vertical(id="command_zone"):
@@ -510,6 +534,7 @@ class DiscardApp(App[None]):
         yield Footer()
 
     def on_mount(self) -> None:  # type: ignore[override]
+        """Mount the discard app."""
         self._update_prompt()
         self.query_one(Input).focus()
 
@@ -535,6 +560,7 @@ class DiscardApp(App[None]):
         self.query_one("#prompt", Static).update("\n".join(lines))
 
     def on_input_submitted(self, event: Input.Submitted) -> None:  # type: ignore[override]
+        """Handle user input."""
         raw = (event.value or "").strip()
         event.input.value = ""
         if not raw:
@@ -594,6 +620,7 @@ class NobleChoiceApp(App[None]):
         player: PlayerState,
         nobles: list[Noble],
     ) -> None:
+        """Initialize the noble choice app."""
         super().__init__()
         self.game = game
         self.player = player
@@ -602,6 +629,7 @@ class NobleChoiceApp(App[None]):
         self.message: str = ""
 
     def compose(self) -> ComposeResult:  # type: ignore[override]
+        """Compose the noble choice app."""
         yield Header(show_clock=False)
 
         with Vertical(id="command_zone"):
@@ -617,6 +645,7 @@ class NobleChoiceApp(App[None]):
         yield Footer()
 
     def on_mount(self) -> None:  # type: ignore[override]
+        """Mount the noble choice app."""
         self._update_prompt()
         self.query_one(Input).focus()
 
@@ -632,6 +661,7 @@ class NobleChoiceApp(App[None]):
         self.query_one("#prompt", Static).update("\n".join(lines))
 
     def on_input_submitted(self, event: Input.Submitted) -> None:  # type: ignore[override]
+        """Handle user input."""
         raw = (event.value or "").strip()
         event.input.value = ""
         if not raw:
@@ -653,7 +683,12 @@ class NobleChoiceApp(App[None]):
 class TuiHuman(Strategy):
     """Textual-based human player Strategy with colorful board."""
 
-    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+    def choose_action(
+        self,
+        game: GameState,
+        player: PlayerState,
+    ) -> Action | None:
+        """Choose an action for the player."""
         if not sys.stdout.isatty():
             return None
         app = ActionApp(game, player)
@@ -666,6 +701,7 @@ class TuiHuman(Strategy):
         player: PlayerState,
         excess: int,  # noqa: ARG002
     ) -> dict[GemColor, int]:
+        """Choose tokens to discard."""
         if not sys.stdout.isatty():
             return dict.fromkeys(GEM_COLORS, 0)
         app = DiscardApp(game, player)
@@ -678,9 +714,9 @@ class TuiHuman(Strategy):
         player: PlayerState,
         nobles: list[Noble],
     ) -> Noble:
+        """Choose a noble for the player."""
         if not sys.stdout.isatty():
             return nobles[0]
         app = NobleChoiceApp(game, player, nobles)
         app.run()
-        assert app.result is not None
         return app.result
