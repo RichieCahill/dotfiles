@@ -331,6 +331,14 @@ def enforce_token_limit(
             game.bank[color] += amount
 
 
+def _check_nobles_for_player(player: PlayerState, noble: Noble) -> bool:
+    # this rule is slower
+    for color, cost in noble.requirements.items():  # noqa: SIM110
+        if player.discounts[color] < cost:
+            return False
+    return True
+
+
 def check_nobles_for_player(
     game: GameState,
     strategy: Strategy,
@@ -340,11 +348,7 @@ def check_nobles_for_player(
     if game.noble_min_requirements > max(player.discounts.values()):
         return
 
-    candidates = [
-        noble
-        for noble in game.available_nobles
-        if all(player.discounts.get(color, 0) >= requirement for color, requirement in noble.requirements.items())
-    ]
+    candidates = [noble for noble in game.available_nobles if _check_nobles_for_player(player, noble)]
 
     if not candidates:
         return
