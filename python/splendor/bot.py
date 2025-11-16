@@ -1,3 +1,5 @@
+"""Bot for Splendor game."""
+
 from __future__ import annotations
 
 import random
@@ -6,6 +8,7 @@ from .base import (
     BASE_COLORS,
     Action,
     BuyCard,
+    Card,
     GameState,
     GemColor,
     PlayerState,
@@ -15,6 +18,18 @@ from .base import (
     TakeDouble,
     auto_discard_tokens,
 )
+
+
+def can_bot_afford(player: PlayerState, card: Card) -> bool:
+    """Check if player can afford card, using discounts + gold."""
+    missing = 0
+    gold = player.tokens["gold"]
+    for color, cost in card.cost.items():
+        missing += max(0, cost - player.discounts.get(color, 0) - player.tokens.get(color, 0))
+        if missing > gold:
+            return False
+
+    return True
 
 
 class RandomBot(Strategy):
@@ -27,7 +42,7 @@ class RandomBot(Strategy):
         affordable: list[tuple[int, int]] = []
         for tier, row in game.table_by_tier.items():
             for idx, card in enumerate(row):
-                if player.can_afford(card):
+                if can_bot_afford(player, card):
                     affordable.append((tier, idx))
         if affordable and random.random() < 0.5:
             tier, idx = random.choice(affordable)
