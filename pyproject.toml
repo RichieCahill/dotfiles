@@ -48,6 +48,10 @@ lint.ignore = [
     "ERA001", # (perm) I don't care about print statements dir
 ]
 
+"python/splendor/**" = [
+    "S311", # (perm) there is no security issue here
+]
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
