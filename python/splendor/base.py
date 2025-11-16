@@ -148,6 +148,7 @@ class GameConfig:
     token_limit: int = 10
     turn_limit: int = 1000
     minimum_tokens_to_buy_2: int = 4
+    max_token_take: int = 3
 
     cards: list[Card] = field(default_factory=list)
     nobles: list[Noble] = field(default_factory=list)
@@ -366,11 +367,9 @@ def check_nobles_for_player(
 def apply_take_different(game: GameState, strategy: Strategy, action: TakeDifferent) -> None:
     """Mutate game state according to action."""
     player = game.current_player
-    max_token_take = 3
 
-    colors = list(dict.fromkeys(action.colors))
-    colors = [c for c in colors if c in BASE_COLORS and game.bank[c] > 0]
-    if not (1 <= len(colors) <= max_token_take):
+    colors = [color for color in action.colors if color in BASE_COLORS and game.bank[color] > 0]
+    if not (1 <= len(colors) <= game.config.max_token_take):
         return
 
     for color in colors:
