@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import itertools
+import json
 import random
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
 GemColor = Literal["white", "blue", "green", "red", "black", "gold"]
 
@@ -600,6 +602,18 @@ def create_random_nobles() -> list[Noble]:
             ),
         )
     return nobles
+
+
+def load_nobles(file: Path) -> list[Noble]:
+    """Load nobles from a file."""
+    nobles = json.loads(file.read_text())
+    return [Noble(**noble) for noble in nobles]
+
+
+def load_cards(file: Path) -> list[Card]:
+    """Load cards from a file."""
+    cards = json.loads(file.read_text())
+    return [Card(**card) for card in cards]
 
 
 def new_game(
