@@ -37,6 +37,8 @@
         TcpKeepAlive = "no";
         X11Forwarding = lib.mkDefault false;
         KexAlgorithms = [
+          "sntrup761x25519-sha512@openssh.com"
+          "mlkem768x25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
