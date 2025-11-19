@@ -4,17 +4,18 @@ from __future__ import annotations
 
 from collections import defaultdict
 from pathlib import Path
+from statistics import mean
 
 from .base import GameConfig, load_cards, load_nobles, new_game, run_game
-from .bot import RandomBot
+from .bot import PersonalizedBot, PersonalizedBot4, PersonalizedBot3, RandomBot
 
 
 def main() -> None:
     """Main entry point."""
     turn_limit = 1000
     good_games = 0
-    games = 10000
-    winners: dict[str, int] = defaultdict(int)
+    games = 1
+    winners: dict[str, list] = defaultdict(list)
     game_data = Path(__file__).parent / "game_data"
 
     cards = load_cards(game_data / "cards/default.json")
@@ -24,7 +25,7 @@ def main() -> None:
         bot_a = RandomBot("bot_a")
         bot_b = RandomBot("bot_b")
         bot_c = RandomBot("bot_c")
-        bot_d = RandomBot("bot_d")
+        bot_d = PersonalizedBot4("my_bot")
         config = GameConfig(
             cards=cards,
             nobles=nobles,
@@ -35,11 +36,13 @@ def main() -> None:
         winner, turns = run_game(game_state)
         if turns < turn_limit:
             good_games += 1
-            winners[winner.strategy.name] += 1
+            winners[winner.strategy.name].append(turns)
 
-    print(f"out of {games} {turn_limit} turn games with 4 random bots there where {good_games} games where a bot won")
-    for k, v in winners.items():
-        print(f"{k} won {v}")
+    print(
+        f"out of {games} {turn_limit} turn games with {len(players)} random bots there where {good_games} games where a bot won"
+    )
+    for name, turns in winners.items():
+        print(f"{name} won {len(turns)} games in {mean(turns):.2f} turns")
 
 
 if __name__ == "__main__":
