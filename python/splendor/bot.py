@@ -8,6 +8,7 @@ from .base import (
     BASE_COLORS,
     Action,
     BuyCard,
+    BuyCardReserved,
     Card,
     GameState,
     GemColor,
@@ -17,6 +18,7 @@ from .base import (
     TakeDifferent,
     TakeDouble,
     auto_discard_tokens,
+    get_legal_actions,
 )
 
 
@@ -35,7 +37,7 @@ def can_bot_afford(player: PlayerState, card: Card) -> bool:
 class RandomBot(Strategy):
     """Dumb bot that follows rules but doesn't think."""
 
-    def __init__(self, name: str = "Bot") -> None:
+    def __init__(self, name: str) -> None:
         super().__init__(name=name)
 
     def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
@@ -62,6 +64,196 @@ class RandomBot(Strategy):
 
         colors_for_diff = [c for c in BASE_COLORS if game.bank[c] > 0]
         random.shuffle(colors_for_diff)
+        return TakeDifferent(colors=colors_for_diff[:3])
+
+    def choose_discard(
+        self,
+        game: GameState,
+        player: PlayerState,
+        excess: int,
+    ) -> dict[GemColor, int]:
+        return auto_discard_tokens(player, excess)
+
+
+class PersonalizedBot(Strategy):
+    """Dumb bot that follows rules but doesn't think."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name=name)
+
+    def check_cards_in_tier(self, row: list[Card], player: PlayerState) -> bool:
+        """Check if player can afford card, using discounts + gold."""
+        return [index for index, card in enumerate(row) if can_bot_afford(player, card)]
+
+    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+        for tier in (1, 2, 3):
+            row = game.table_by_tier[tier]
+            if affordable := check_cards_in_tier(row, player):
+                index = random.choice(affordable)
+                return BuyCard(tier=tier, index=index)
+
+        colors_for_diff = [c for c in BASE_COLORS if game.bank[c] > 0]
+        random.shuffle(colors_for_diff)
+        return TakeDifferent(colors=colors_for_diff[:3])
+
+    def choose_discard(
+        self,
+        game: GameState,
+        player: PlayerState,
+        excess: int,
+    ) -> dict[GemColor, int]:
+        return auto_discard_tokens(player, excess)
+
+
+def check_cards_in_tier(row: list[Card], player: PlayerState) -> bool:
+    """Check if player can afford card, using discounts + gold."""
+    return [index for index, card in enumerate(row) if can_bot_afford(player, card)]
+
+
+class PersonalizedBot2(Strategy):
+    """Dumb bot that follows rules but doesn't think."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name=name)
+
+    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+        tiers = (1, 2, 3)
+        for tier in tiers:
+            row = game.table_by_tier[tier]
+            if affordable := check_cards_in_tier(row, player):
+                index = random.choice(affordable)
+                return BuyCard(tier=tier, index=index)
+
+        if affordable := check_cards_in_tier(player.reserved, player):
+            index = random.choice(affordable)
+            return BuyCardReserved(index=index)
+
+        colors_for_diff = [c for c in BASE_COLORS if game.bank[c] > 0]
+        if len(colors_for_diff) >= 3:
+            random.shuffle(colors_for_diff)
+            return TakeDifferent(colors=colors_for_diff[:3])
+
+        for tier in tiers:
+            len_deck = len(game.decks_by_tier[tier])
+            if len_deck:
+                return ReserveCard(tier=tier, index=None, from_deck=True)
+
+        return TakeDifferent(colors=colors_for_diff[:3])
+
+    def choose_discard(
+        self,
+        game: GameState,
+        player: PlayerState,
+        excess: int,
+    ) -> dict[GemColor, int]:
+        return auto_discard_tokens(player, excess)
+
+
+def buy_card_reserved(player: PlayerState) -> Action | None:
+    if affordable := check_cards_in_tier(player.reserved, player):
+        index = random.choice(affordable)
+        return BuyCardReserved(index=index)
+    return None
+
+
+def buy_card(game: GameState, player: PlayerState) -> Action | None:
+    for tier in (1, 2, 3):
+        row = game.table_by_tier[tier]
+        if affordable := check_cards_in_tier(row, player):
+            index = random.choice(affordable)
+            return BuyCard(tier=tier, index=index)
+    return None
+
+
+def take_toekns(game: GameState) -> Action | None:
+    colors_for_diff = [color for color in BASE_COLORS if game.bank[color] > 0]
+    if len(colors_for_diff) >= 3:
+        random.shuffle(colors_for_diff)
+        return TakeDifferent(colors=colors_for_diff[: game.config.max_token_take])
+    return None
+
+
+class PersonalizedBot3(Strategy):
+    """Dumb bot that follows rules but doesn't think."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name=name)
+
+    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+        print(len(get_legal_actions(game, player)))
+        print(get_legal_actions(game, player))
+        if action := buy_card_reserved(player):
+            return action
+        if action := buy_card(game, player):
+            return action
+
+        colors_for_diff = [color for color in BASE_COLORS if game.bank[color] > 0]
+        if len(colors_for_diff) >= 3:
+            random.shuffle(colors_for_diff)
+            return TakeDifferent(colors=colors_for_diff[:3])
+
+        for tier in (1, 2, 3):
+            len_deck = len(game.decks_by_tier[tier])
+            if len_deck:
+                return ReserveCard(tier=tier, index=None, from_deck=True)
+
+        return TakeDifferent(colors=colors_for_diff[:3])
+
+    def choose_discard(
+        self,
+        game: GameState,
+        player: PlayerState,
+        excess: int,
+    ) -> dict[GemColor, int]:
+        return auto_discard_tokens(player, excess)
+
+
+def estimate_value_of_card(game: GameState, player: PlayerState, color: GemColor) -> int:
+    """Estimate value of a color in the player's bank."""
+    return game.bank[color] - player.discounts.get(color, 0)
+
+
+def estimate_value_of_token(game: GameState, player: PlayerState, color: GemColor) -> int:
+    """Estimate value of a color in the player's bank."""
+    return game.bank[color] - player.discounts.get(color, 0)
+
+
+class PersonalizedBot4(Strategy):
+    def __init__(self, name: str) -> None:
+        super().__init__(name=name)
+
+    def filter_actions(self, actions: list[Action]) -> list[Action]:
+        return [
+            action
+            for action in actions
+            if isinstance(action, TakeDifferent) and len(action.colors) == 3 or not isinstance(action, TakeDifferent)
+        ]
+
+    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+        legal_actions = get_legal_actions(game, player)
+        print(len(legal_actions))
+
+        good_actions = [action for action in self.filter_actions(legal_actions)]
+        print(len(good_actions))
+
+        print(good_actions)
+
+        print(len(get_legal_actions(game, player)))
+        if action := buy_card_reserved(player):
+            return action
+        if action := buy_card(game, player):
+            return action
+
+        colors_for_diff = [color for color in BASE_COLORS if game.bank[color] > 0]
+        if len(colors_for_diff) >= 3:
+            random.shuffle(colors_for_diff)
+            return TakeDifferent(colors=colors_for_diff[:3])
+
+        for tier in (1, 2, 3):
+            len_deck = len(game.decks_by_tier[tier])
+            if len_deck:
+                return ReserveCard(tier=tier, index=None, from_deck=True)
+
         return TakeDifferent(colors=colors_for_diff[:3])
 
     def choose_discard(

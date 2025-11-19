@@ -101,7 +101,7 @@ class PlayerState:
     def pay_for_card(self, card: Card) -> dict[GemColor, int]:
         """Pay tokens for card, move card to tableau, return payment for bank."""
         if not self.can_afford(card):
-            msg = f"{self.name} cannot afford card {card}"
+            msg = f"cannot afford card {card}"
             raise ValueError(msg)
 
         payment: dict[GemColor, int] = dict.fromkeys(GEM_COLORS, 0)
@@ -248,7 +248,6 @@ class BuyCard(Action):
 class BuyCardReserved(Action):
     """Buy a face-up card."""
 
-    tier: int
     index: int
 
 
@@ -472,9 +471,9 @@ def apply_action(game: GameState, strategy: Strategy, action: Action) -> None:
     action_func(game, strategy, action)
 
 
-def legal_actions(
+def get_legal_actions(
     game: GameState,
-    player_index: int | None = None,
+    player: PlayerState | None = None,
 ) -> list[Action]:
     """Enumerate all syntactically legal actions for the given player.
 
@@ -483,9 +482,8 @@ def legal_actions(
     - reserve limits
     - affordability for buys
     """
-    if player_index is None:
-        player_index = game.current_player_index
-    player = game.players[player_index]
+    if player is None:
+        player = game.players[game.current_player_index]
 
     actions: list[Action] = []
 
@@ -504,7 +502,7 @@ def legal_actions(
 
     for idx, card in enumerate(player.reserved):
         if player.can_afford(card):
-            actions.append(BuyCard(tier=0, index=idx, from_reserved=True))
+            actions.append(BuyCardReserved(index=idx))
 
     if len(player.reserved) < game.config.reserve_limit:
         for tier, row in game.table_by_tier.items():
