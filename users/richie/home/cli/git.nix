@@ -3,7 +3,7 @@
     enable = true;
     userEmail = "Richie@tmmworkshop.com";
     userName = "Richie Cahill";
-    extraConfig = {
+    settings = {
       pull.rebase = true;
       color.ui = true;
     };

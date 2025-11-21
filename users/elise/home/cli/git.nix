@@ -3,7 +3,7 @@
     enable = true;
     userEmail = "DumbPuppy208@gmail.com";
     userName = "Elise Corvidae";
-    extraConfig = {
+    settings = {
       pull.rebase = true;
       color.ui = true;
     };
