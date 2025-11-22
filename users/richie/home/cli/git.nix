@@ -1,9 +1,11 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "Richie@tmmworkshop.com";
-    userName = "Richie Cahill";
     settings = {
+      user = {
+        email = "Richie@tmmworkshop.com";
+        name = "Richie Cahill";
+      };
       pull.rebase = true;
       color.ui = true;
     };
