@@ -1,9 +1,11 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "mousikos112@gmail.com";
-    userName = "megan";
     settings = {
+      user = {
+        email= "mousikos112@gmail.com";
+        name= "megan";
+      };
       pull.rebase = true;
       color.ui = true;
     };
