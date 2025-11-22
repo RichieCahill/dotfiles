@@ -1,9 +1,11 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "matthew.michal11@gmail.com";
-    userName = "Matthew Michal";
     settings = {
+      user = {
+        email = "matthew.michal11@gmail.com";
+        name = "Matthew Michal";
+      };
       pull.rebase = true;
       color.ui = true;
     };
