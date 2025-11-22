@@ -3,8 +3,8 @@
     enable = true;
     settings = {
       user = {
-        email= "mousikos112@gmail.com";
-        name= "megan";
+        email = "mousikos112@gmail.com";
+        name = "megan";
       };
       pull.rebase = true;
       color.ui = true;
