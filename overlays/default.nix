@@ -30,7 +30,9 @@
         pytest-xdist
         requests
         ruff
+        scalene
         sqlalchemy
+        textual
         typer
         types-requests
       ]
