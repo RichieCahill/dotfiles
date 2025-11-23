@@ -74,6 +74,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-linux-firmware-20251011": {
+      "locked": {
+        "lastModified": 1760099975,
+        "narHash": "sha256-/fXH2TIVxVgmBbPouQNMsEPfUFB8Z9n6T9t40HMeC/k=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f9430900368d5a7346e30e6ecc7b26c9f7cc35cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f9430900368d5a7346e30e6ecc7b26c9f7cc35cf",
+        "type": "github"
+      }
+    },
     "nixpkgs-master": {
       "locked": {
         "lastModified": 1763774007,
@@ -112,6 +128,7 @@
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-linux-firmware-20251011": "nixpkgs-linux-firmware-20251011",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-stable": "nixpkgs-stable",
         "sops-nix": "sops-nix",

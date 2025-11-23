@@ -19,6 +19,8 @@
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
     systems.url = "github:nix-systems/default-linux";
 
+    nixpkgs-linux-firmware-20251011.url = "github:NixOS/nixpkgs/f9430900368d5a7346e30e6ecc7b26c9f7cc35cf";
+
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
     home-manager = {
@@ -82,6 +84,7 @@
         jeeves = lib.nixosSystem {
           modules = [
             ./systems/jeeves
+            ./systems/jeeves/linux-firmware-20251011.nix
           ];
           specialArgs = { inherit inputs outputs; };
         };

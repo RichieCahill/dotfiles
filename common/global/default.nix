@@ -22,7 +22,22 @@
 
   boot = {
     tmp.useTmpfs = true;
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_6_12;
+    kernelPackages = lib.mkDefault (
+      pkgs.linuxPackages_6_12.extend (
+        self: super: {
+          kernel = super.kernel.override {
+            argsOverride = {
+              version = "6.12.52";
+              modDirVersion = "6.12.52";
+              src = pkgs.fetchurl {
+                url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.52.tar.xz";
+                sha256 = "sha256-tIUM9nCgMscPOLcTon1iBGxfdHyvAoxfULGPmGBqnrE=";
+              };
+            };
+          };
+        }
+      )
+    );
     zfs.package = lib.mkDefault pkgs.zfs_2_3;
   };
 
