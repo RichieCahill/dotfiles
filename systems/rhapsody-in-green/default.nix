@@ -13,6 +13,7 @@
     ./hardware.nix
     ./llms.nix
     ./syncthing.nix
+    ./qmk.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
 
