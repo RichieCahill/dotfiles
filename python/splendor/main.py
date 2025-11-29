@@ -1,3 +1,5 @@
+"""Main entry point for Splendor game."""
+
 from __future__ import annotations
 
 from .base import new_game, run_game

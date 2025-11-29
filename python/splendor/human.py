@@ -407,7 +407,7 @@ class ActionApp(App[None]):
 
     def _cmd_2(self, parts: list[str]) -> str | None:
         """Take two of the same color."""
-        if len(parts) < 2:  # noqa: PLR2004
+        if len(parts) < 2:
             return "Usage: 2 <color>"
         color = parse_color_token(parts[1])
         if self.game.bank[color] < self.game.config.minimum_tokens_to_buy_2:
@@ -418,7 +418,7 @@ class ActionApp(App[None]):
 
     def _cmd_3(self, parts: list[str]) -> str | None:
         """Buy face-up card."""
-        if len(parts) < 3:  # noqa: PLR2004
+        if len(parts) < 3:
             return "Usage: 3 <tier> <index>"
         tier = int(parts[1])
         idx = int(parts[2])
@@ -428,7 +428,7 @@ class ActionApp(App[None]):
 
     def _cmd_4(self, parts: list[str]) -> str | None:
         """Buy reserved card."""
-        if len(parts) < 2:  # noqa: PLR2004
+        if len(parts) < 2:
             return "Usage: 4 <reserved_index>"
         idx = int(parts[1])
         if not (0 <= idx < len(self.player.reserved)):
@@ -439,7 +439,7 @@ class ActionApp(App[None]):
 
     def _cmd_5(self, parts: list[str]) -> str | None:
         """Reserve face-up card."""
-        if len(parts) < 3:  # noqa: PLR2004
+        if len(parts) < 3:
             return "Usage: 5 <tier> <index>"
         tier = int(parts[1])
         idx = int(parts[2])
@@ -449,7 +449,7 @@ class ActionApp(App[None]):
 
     def _cmd_6(self, parts: list[str]) -> str | None:
         """Reserve top of deck."""
-        if len(parts) < 2:  # noqa: PLR2004
+        if len(parts) < 2:
             return "Usage: 6 <tier>"
         tier = int(parts[1])
         self.result = ReserveCard(tier=tier, index=None, from_deck=True)
