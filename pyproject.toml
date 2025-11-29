@@ -50,6 +50,7 @@ lint.ignore = [
 
 "python/splendor/**" = [
     "S311", # (perm) there is no security issue here
+    "T201", # (perm) I don't care about print statements dir
 ]
 
 [tool.ruff.lint.pydocstyle]

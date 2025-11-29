@@ -7,7 +7,7 @@ from pathlib import Path
 from statistics import mean
 
 from .base import GameConfig, load_cards, load_nobles, new_game, run_game
-from .bot import PersonalizedBot, PersonalizedBot4, PersonalizedBot3, RandomBot
+from .bot import PersonalizedBot4, RandomBot
 
 
 def main() -> None:
