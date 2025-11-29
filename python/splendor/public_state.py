@@ -1,3 +1,5 @@
+"""Public state for RL/search."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -25,12 +27,16 @@ class ObsCard:
 
 @dataclass(frozen=True)
 class ObsNoble:
+    """Numeric-ish noble view for RL/search."""
+
     points: int
     requirements: list[int]
 
 
 @dataclass(frozen=True)
 class ObsPlayer:
+    """Numeric-ish player view for RL/search."""
+
     tokens: list[int]
     discounts: list[int]
     score: int
@@ -41,6 +47,8 @@ class ObsPlayer:
 
 @dataclass(frozen=True)
 class Observation:
+    """Full public state for RL/search."""
+
     current_player: int
     bank: list[int]
     players: list[ObsPlayer]

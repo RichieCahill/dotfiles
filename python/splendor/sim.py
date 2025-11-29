@@ -1,3 +1,5 @@
+"""Simulate a step in the game."""
+
 from __future__ import annotations
 
 import copy
@@ -13,7 +15,8 @@ class SimStrategy(RandomBot):
     but we reuse discard/noble-selection logic.
     """
 
-    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
+    def choose_action(self, game: GameState, player: PlayerState) -> Action | None:  # noqa: ARG002
+        """Choose an action for the current player."""
         msg = "SimStrategy.choose_action should not be used in simulate_step"
         raise RuntimeError(msg)
 

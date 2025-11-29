@@ -39,7 +39,8 @@ def main() -> None:
             winners[winner.strategy.name].append(turns)
 
     print(
-        f"out of {games} {turn_limit} turn games with {len(players)} random bots there where {good_games} games where a bot won"
+        f"out of {games} {turn_limit} turn games with {len(players)}"
+        f"random bots there where {good_games} games where a bot won"
     )
     for name, turns in winners.items():
         print(f"{name} won {len(turns)} games in {mean(turns):.2f} turns")

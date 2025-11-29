@@ -471,7 +471,8 @@ def apply_action(game: GameState, strategy: Strategy, action: Action) -> None:
     action_func(game, strategy, action)
 
 
-def get_legal_actions(
+# not sure how to simplify this yet
+def get_legal_actions(  # noqa: C901
     game: GameState,
     player: PlayerState | None = None,
 ) -> list[Action]:
