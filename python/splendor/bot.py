@@ -78,6 +78,11 @@ class RandomBot(Strategy):
         return auto_discard_tokens(player, excess)
 
 
+def check_cards_in_tier(row: list[Card], player: PlayerState) -> list[int]:
+    """Check if player can afford card, using discounts + gold."""
+    return [index for index, card in enumerate(row) if can_bot_afford(player, card)]
+
+
 class PersonalizedBot(Strategy):
     """PersonalizedBot."""
 
@@ -86,10 +91,6 @@ class PersonalizedBot(Strategy):
     def __init__(self, name: str) -> None:
         """Initialize the bot."""
         super().__init__(name=name)
-
-    def check_cards_in_tier(self, row: list[Card], player: PlayerState) -> bool:
-        """Check if player can afford card, using discounts + gold."""
-        return [index for index, card in enumerate(row) if can_bot_afford(player, card)]
 
     def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
         """Choose an action for the current player."""
@@ -111,11 +112,6 @@ class PersonalizedBot(Strategy):
     ) -> dict[GemColor, int]:
         """Choose how many tokens to discard."""
         return auto_discard_tokens(player, excess)
-
-
-def check_cards_in_tier(row: list[Card], player: PlayerState) -> bool:
-    """Check if player can afford card, using discounts + gold."""
-    return [index for index, card in enumerate(row) if can_bot_afford(player, card)]
 
 
 class PersonalizedBot2(Strategy):
@@ -180,7 +176,7 @@ def buy_card(game: GameState, player: PlayerState) -> Action | None:
     return None
 
 
-def take_toekns(game: GameState) -> Action | None:
+def take_tokens(game: GameState) -> Action | None:
     """Take tokens."""
     colors_for_diff = [color for color in BASE_COLORS if game.bank[color] > 0]
     if len(colors_for_diff) >= 3:
