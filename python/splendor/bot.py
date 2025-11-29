@@ -233,7 +233,7 @@ class PersonalizedBot4(Strategy):
         legal_actions = get_legal_actions(game, player)
         print(len(legal_actions))
 
-        good_actions = [action for action in self.filter_actions(legal_actions)]
+        good_actions = self.filter_actions(legal_actions)
         print(len(good_actions))
 
         print(good_actions)
