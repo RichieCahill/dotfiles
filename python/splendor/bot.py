@@ -226,7 +226,7 @@ class PersonalizedBot4(Strategy):
         return [
             action
             for action in actions
-            if isinstance(action, TakeDifferent) and len(action.colors) == 3 or not isinstance(action, TakeDifferent)
+            if (isinstance(action, TakeDifferent) and len(action.colors) == 3) or not isinstance(action, TakeDifferent)
         ]
 
     def choose_action(self, game: GameState, player: PlayerState) -> Action | None:
