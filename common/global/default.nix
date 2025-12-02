@@ -16,6 +16,7 @@
     ./nh.nix
     ./nix.nix
     ./programs.nix
+    ./safe_reboot.nix
     ./ssh.nix
     ./snapshot_manager.nix
   ];
@@ -47,6 +48,11 @@
     snapshot_manager = {
       enable = lib.mkDefault true;
       PYTHONPATH = "${inputs.self}/";
+    };
+
+    safe_reboot = {
+      enable = lib.mkDefault true;
+      datasetPrefix = "root_pool/";
     };
 
     zfs = {
