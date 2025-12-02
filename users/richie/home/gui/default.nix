@@ -9,23 +9,24 @@
   home.packages = with pkgs; [
     candy-icons
     chromium
-    discord-canary
     gimp
-    gparted
-    jetbrains.datagrip
     mediainfo
-    nemo
-    nemo-fileroller
     obs-studio
     obsidian
     prismlauncher
-    proxychains
     prusa-slicer
-    signal-desktop
     sweet-nova
     util-linux
     vlc
+    # comms
+    discord-canary
+    signal-desktop
     zoom-us
+    # dev tools
+    jetbrains.datagrip
+    proxychains
+    master.antigravity-fhs
+    gparted
     # games
     dwarf-fortress
     tower-pixel-dungeon
