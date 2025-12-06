@@ -1,0 +1,132 @@
+esphome:
+  name: batteries
+  friendly_name: batteries
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_key
+
+external_components:
+  - source: github://syssi/esphome-jk-bms@main
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: on
+
+captive_portal:
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+
+ble_client:
+  - mac_address: "C8:47:80:29:0F:DB"
+    id: jk_ble0
+
+jk_bms_ble:
+  - ble_client_id: jk_ble0
+    protocol_version: JK02_32S
+    throttle: 1s
+    id: jk_bms0
+
+button:
+  - platform: jk_bms_ble
+    retrieve_settings:
+      name: "JK0 retrieve settings"
+    retrieve_device_info:
+      name: "JK0 retrieve device info"
+
+sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    total_voltage:
+      name: "JK0 Total Voltage"
+    state_of_charge:
+      name: "JK0 SoC"
+    charging_power:
+      name: "JK0 charging power"
+    discharging_power:
+      name: "JK0 discharging power"
+    temperature_sensor_1:
+      name: "JK0 Temp 1"
+    temperature_sensor_2:
+      name: "JK0 Temp 2"
+    balancing:
+      name: "JK0 balancing"
+    total_runtime:
+      name: "JK0 total runtime"
+    balancing_current:
+      name: "JK0 balancing current"
+    delta_cell_voltage:
+      name: "JK0 cell delta voltage"
+    average_cell_voltage:
+      name: "JK0 cell average voltage"
+    cell_voltage_1:
+      name: "JK0 cell voltage 1"
+    cell_voltage_2:
+      name: "JK0 cell voltage 2"
+    cell_voltage_3:
+      name: "JK0 cell voltage 3"
+    cell_voltage_4:
+      name: "JK0 cell voltage 4"
+    cell_voltage_5:
+      name: "JK0 cell voltage 5"
+    cell_voltage_6:
+      name: "JK0 cell voltage 6"
+    cell_voltage_7:
+      name: "JK0 cell voltage 7"
+    cell_voltage_8:
+      name: "JK0 cell voltage 8"
+    cell_resistance_1:
+      name: "JK0 cell resistance 1"
+    cell_resistance_2:
+      name: "JK0 cell resistance 2"
+    cell_resistance_3:
+      name: "JK0 cell resistance 3"
+    cell_resistance_4:
+      name: "JK0 cell resistance 4"
+    cell_resistance_5:
+      name: "JK0 cell resistance 5"
+    cell_resistance_6:
+      name: "JK0 cell resistance 6"
+    cell_resistance_7:
+      name: "JK0 cell resistance 7"
+    cell_resistance_8:
+      name: "JK0 cell resistance 8"
+    total_charging_cycle_capacity:
+      name: "JK0 total charging cycle capacity"
+
+text_sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    errors:
+      name: "JK0 Errors"
+
+switch:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    charging:
+      name: "JK0 Charging"
+    discharging:
+      name: "JK0 Discharging"
+    balancer:
+      name: "JK0 Balancing"
+
+  - platform: ble_client
+    ble_client_id: jk_ble0
+    name: "JK0 enable bluetooth connection"
+    id: ble_client_switch0
