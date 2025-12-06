@@ -1,0 +1,47 @@
+name: Fix Evaluation Warnings
+
+on:
+  workflow_run:
+    workflows: ["build_systems"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  analyze-and-fix:
+    runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download logs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          gh run view $RUN_ID --log > build.log
+          
+      - name: Run Fix Script
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          python3 python/tools/fix_eval_warnings.py build.log
+
+      - name: Create Pull Request
+        if: hashFiles('fix_suggestions.md') != ''
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ github.token }}
+          commit-message: "fix: automated evaluation warning fixes"
+          title: "fix: automated evaluation warning fixes"
+          body-path: fix_suggestions.md
+          branch: "auto-fix-eval-warnings-${{ github.event.workflow_run.id }}"
+          base: main
+          labels: "automated-fix"
