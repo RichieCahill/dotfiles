@@ -31,6 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           RUN_ID: ${{ github.event.workflow_run.id }}
+          PYTHONPATH: .
         run: |
           python3 python/tools/fix_eval_warnings.py build.log
 
