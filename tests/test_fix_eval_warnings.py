@@ -7,6 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 from python.tools.fix_eval_warnings import Config, app, generate_fix, parse_warnings
+from tests.conftest import TOKEN
 
 runner = CliRunner()
 
@@ -33,7 +34,7 @@ def test_generate_fix(mock_post: MagicMock) -> None:
     mock_response.json.return_value = {"choices": [{"message": {"content": "Use stdenv.hostPlatform.system"}}]}
     mock_post.return_value = mock_response
 
-    config = Config(github_token="dummy_token")
+    config = Config(github_token=TOKEN)
     fix = generate_fix("evaluation warning: 'system' is deprecated", config)
 
     assert fix == "Use stdenv.hostPlatform.system"
@@ -47,16 +48,13 @@ def test_main(mock_generate_fix: MagicMock, mock_logger: MagicMock, log_file: Pa
     mock_generate_fix.return_value = "Fixed it"
 
     # We need to mock GITHUB_TOKEN env var or the script will warn/fail
-    with patch.dict("os.environ", {"GITHUB_TOKEN": "dummy"}):
+    with patch.dict("os.environ", {"GITHUB_TOKEN": TOKEN}):
         result = runner.invoke(app, [str(log_file)])
 
     assert result.exit_code == 0
     # Verify logger calls instead of stdout, as CliRunner might not capture logging output correctly
     # when logging is configured to write to sys.stdout directly.
     assert any("Found 1 warnings" in str(call) for call in mock_logger.info.call_args_list)
-    assert any(
-        "Fix suggestions written to fix_suggestions.md" in str(call)
-        for call in mock_logger.info.call_args_list
-    )
+    assert any("Fix suggestions written to fix_suggestions.md" in str(call) for call in mock_logger.info.call_args_list)
     assert Path("fix_suggestions.md").exists()
     Path("fix_suggestions.md").unlink()

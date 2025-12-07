@@ -58,7 +58,7 @@ builtins-ignorelist = ["id"]
 max-args = 9
 
 [tool.coverage.run]
-source = ["system_tools"]
+source = ["python"]
 
 [tool.coverage.report]
 exclude_lines = [
