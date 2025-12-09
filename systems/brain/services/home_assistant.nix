@@ -70,6 +70,8 @@
           py-improv-ble-client # for esphome
           pymodbus # for modbus
           pyopenweathermap # for weather
+          ical # for todo
+          uiprotect # unfi integration
         ];
       extraComponents = [ "isal" ];
     };
