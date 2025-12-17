@@ -71,7 +71,8 @@
           pymodbus # for modbus
           pyopenweathermap # for weather
           ical # for todo
-          uiprotect # unfi integration
+          uiprotect # for ubiquiti integration
+          unifi-discovery # for ubiquiti integration
         ];
       extraComponents = [ "isal" ];
     };
