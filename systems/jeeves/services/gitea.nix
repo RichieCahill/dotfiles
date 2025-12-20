@@ -9,7 +9,6 @@ in
     appName = "TMM Workshop";
     stateDir = "${vars.services}/gitea/";
     lfs.enable = true;
-    recommendedDefaults = true;
     database = {
       type = "postgres";
       name = "gitea";
@@ -21,11 +20,11 @@ in
     settings = {
       service.DISABLE_REGISTRATION = true;
       server = {
-        DOMAIN = "nayeonie.com";
-        ROOT_URL = "https://nayeonie.com/";
+        DOMAIN = "tmmworkshop.com";
+        ROOT_URL = "https://gitea.tmmworkshop.com/";
         HTTP_PORT = 6443;
-        SSH_PORT = 2222;
-        SSH_LISTEN_PORT = 2223;
+        SSH_PORT = 2223;
+        SSH_LISTEN_PORT = 2224;
         START_SSH_SERVER = true;
         PUBLIC_URL_DETECTION = "auto";
       };
