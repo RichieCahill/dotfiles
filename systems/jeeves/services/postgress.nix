@@ -28,13 +28,7 @@ in
 
       #type database DBuser origin-address auth-method
       local hass     hass     trust
-
-      # ipv4
-      host  hass     hass     192.168.90.1/24 trust
-      host  hass     hass     127.0.0.1/32 trust
-
-      # ipv6
-      host hass      hass     ::1/128         trust
+      local gitea    gitea    trust
 
       # megan
       host  megan    megan    192.168.90.1/24 trust
@@ -97,6 +91,16 @@ in
         };
       }
       {
+        name = "gitea";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
+          createrole = true;
+          createdb = true;
+          replication = true;
+        };
+      }
+      {
         name = "megan";
         ensureDBOwnership = true;
         ensureClauses = {
@@ -130,6 +134,7 @@ in
     ensureDatabases = [
       "gcw"
       "hass"
+      "gitea"
       "math"
       "megan"
       "mxr_dev"
