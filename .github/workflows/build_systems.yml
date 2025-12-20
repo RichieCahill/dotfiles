@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build default package
+        id: build_default_package
         run: "nixos-rebuild build --flake ./#${{ matrix.system }}"
       - name: copy to nix-cache
+        # only runs if there was an update worth adding to the cache
+        if: ${{ steps.build_default_package.outputs.elapsed > 10 }}
         run: nix copy --to ssh://jeeves .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
