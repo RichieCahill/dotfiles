@@ -36,10 +36,6 @@ in
         LEVEL = "Trace";
         ENABLE_SSH_LOG = true;
       };
-      log.console-warn = {
-        LEVEL = "Trace";
-        ENABLE_SSH_LOG = true;
-      };
     };
   };
 
