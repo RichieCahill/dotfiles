@@ -29,12 +29,17 @@ in
     mkIf cfg.enable {
       autoStart = true;
       bindMounts = {
-        "/storage" = {
+        storage = {
           mountPoint = "/zfs/media/github-runners/${name}";
           isReadOnly = false;
         };
-        "/secrets".mountPoint = "${vars.secrets}/services/github-runners/${name}";
-        "ssh-keys".mountPoint = "${vars.secrets}/services/github-runners/id_ed25519_github-runners";
+        host-nix = {
+          mountPoint = "/host-nix/var/nix/daemon-socket";
+          hostPath = "/nix/var/nix/daemon-socket";
+          isReadOnly = false;
+        };
+        secrets.mountPoint = "${vars.secrets}/services/github-runners/${name}";
+        ssh-keys.mountPoint = "${vars.secrets}/services/github-runners/id_ed25519_github-runners";
       };
       config =
         {
