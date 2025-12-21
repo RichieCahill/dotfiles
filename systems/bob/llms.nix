@@ -16,7 +16,6 @@
         "Qihoo360-Light-R1-32B"
       ];
       models = "/zfs/models";
-      acceleration = "cuda";
       openFirewall = true;
     };
     # open-webui = {
