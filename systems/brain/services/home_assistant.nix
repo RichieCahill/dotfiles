@@ -60,18 +60,20 @@
       extraPackages =
         python3Packages: with python3Packages; [
           aioesphomeapi # for esphome
+          aiounifi # for ubiquiti integration
           bleak-esphome # for esphome
           esphome-dashboard-api # for esphome
           forecast-solar # for solar forecast
           gtts # not sure what wants this
+          ical # for todo
           jellyfin-apiclient-python # for jellyfin
           paho-mqtt # for mqtt
           psycopg2 # for postgresql
           py-improv-ble-client # for esphome
           pymodbus # for modbus
           pyopenweathermap # for weather
-          ical # for todo
-          uiprotect # unfi integration
+          uiprotect # for ubiquiti integration
+          unifi-discovery # for ubiquiti integration
         ];
       extraComponents = [ "isal" ];
     };
