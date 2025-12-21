@@ -39,7 +39,6 @@ in
           isReadOnly = false;
         };
         secrets.mountPoint = "${vars.secrets}/services/github-runners/${name}";
-        ssh-keys.mountPoint = "${vars.secrets}/services/github-runners/id_ed25519_github-runners";
       };
       config =
         {
