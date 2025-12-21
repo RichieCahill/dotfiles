@@ -33,14 +33,6 @@ in
           mountPoint = "/zfs/media/github-runners/${name}";
           isReadOnly = false;
         };
-        "/host-nix" = {
-          mountPoint = "/nix";
-          isReadOnly = false;
-        };
-        "/host-nix/var/nix/daemon-socket" = {
-          mountPoint = "/nix/var/nix/daemon-socket";
-          isReadOnly = false;
-        };
         "/secrets".mountPoint = "${vars.secrets}/services/github-runners/${name}";
         "ssh-keys".mountPoint = "${vars.secrets}/services/github-runners/id_ed25519_github-runners";
       };
