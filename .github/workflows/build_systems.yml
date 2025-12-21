@@ -25,4 +25,4 @@ jobs:
       - name: Build default package
         run: "nixos-rebuild build --flake ./#${{ matrix.system }}"
       - name: copy to nix-cache
-        run: nix copy --to ssh://jeeves .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
+        run: nix copy --to file:///host-nix/store .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
