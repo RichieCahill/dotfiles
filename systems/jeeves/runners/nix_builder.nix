@@ -28,6 +28,8 @@ in
     name: cfg:
     mkIf cfg.enable {
       autoStart = true;
+      privateNetwork = true;
+      ephemeral = true;
       bindMounts = {
         storage = {
           mountPoint = "/zfs/media/github-runners/${name}";
@@ -38,7 +40,10 @@ in
           hostPath = "/nix/var/nix/daemon-socket";
           isReadOnly = false;
         };
-        secrets.mountPoint = "${vars.secrets}/services/github-runners/${name}";
+        secrets = {
+          mountPoint = "${vars.secrets}/services/github-runners/${name}";
+          isReadOnly = true;
+        };
       };
       config =
         {
@@ -67,6 +72,12 @@ in
             experimental-features = [
               "flakes"
               "nix-command"
+            ];
+            sandbox = true;
+            allowed-users = [ "github-runners" ];
+            trusted-users = [
+              "root"
+              "github-runners"
             ];
           };
           nixpkgs = {
