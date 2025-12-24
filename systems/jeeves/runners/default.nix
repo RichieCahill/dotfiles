@@ -16,11 +16,11 @@
   };
 
   services.nix_builder.containers = {
-    nix-builder-0.enable = true;
-    nix-builder-1.enable = true;
-    nix-builder-2.enable = true;
-    nix-builder-3.enable = true;
-    nix-builder-4.enable = true;
-    nix-builder-5.enable = true;
+    nix-builder-00.enable = true;
+    nix-builder-01.enable = true;
+    nix-builder-02.enable = true;
+    nix-builder-03.enable = true;
+    nix-builder-04.enable = true;
+    nix-builder-05.enable = true;
   };
 }
