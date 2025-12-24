@@ -69,6 +69,8 @@ in
             networking = {
               useDHCP = lib.mkDefault true;
               interfaces.eth0.useDHCP = true;
+              # Ensure containers don't inherit the host's stub resolver (127.0.0.53) which
+              useHostResolvConf = false;
             };
             nix.settings = {
               trusted-substituters = [
