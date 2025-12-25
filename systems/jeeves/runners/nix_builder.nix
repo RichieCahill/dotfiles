@@ -69,7 +69,7 @@ in
             networking = {
               useDHCP = lib.mkDefault true;
               interfaces.eth0.useDHCP = true;
-              # Ensure containers don't inherit the host's stub resolver (127.0.0.53) which
+              # Ensure containers don't inherit the host's stub resolver (127.0.0.53) which was causing issues
               useHostResolvConf = false;
             };
             nix.settings = {
@@ -128,7 +128,7 @@ in
               };
               groups.github-runners.gid = 601;
             };
-            system.stateVersion = "24.11";
+            system.stateVersion = "24.05";
           };
       }
     ) cfg.containers;
