@@ -23,7 +23,7 @@
   boot = {
     tmp.useTmpfs = true;
     kernelPackages = lib.mkDefault pkgs.linuxPackages_6_12;
-    zfs.package = lib.mkDefault pkgs.zfs_2_3;
+    zfs.package = lib.mkDefault pkgs.zfs_2_4;
   };
 
   hardware.enableRedistributableFirmware = true;
