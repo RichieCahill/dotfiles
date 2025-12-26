@@ -2,7 +2,7 @@
 {
   boot = {
     kernelPackages = pkgs.linuxPackages_6_17;
-    zfs.package = pkgs.zfs_unstable;
+    zfs.package = pkgs.zfs_2_4;
   };
 
   hardware.bluetooth = {
