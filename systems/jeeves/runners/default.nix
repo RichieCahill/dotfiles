@@ -22,5 +22,14 @@
     nix-builder-03.enable = true;
     nix-builder-04.enable = true;
     nix-builder-05.enable = true;
+    nix-builder-06.enable = true;
+    nix-builder-07.enable = true;
+    nix-builder-08.enable = true;
+    nix-builder-09.enable = true;
+    nix-builder-10.enable = true;
+    nix-builder-11.enable = true;
+    nix-builder-12.enable = true;
+    nix-builder-13.enable = true;
+    nix-builder-14.enable = true;
   };
 }
