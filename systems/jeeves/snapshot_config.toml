@@ -64,19 +64,7 @@ hourly = 12
 daily = 14
 monthly = 2
 
-["scratch/qbitvpn"]
-15_min = 0
-hourly = 0
-daily = 0
-monthly = 0
-
 ["scratch/transmission"]
-15_min = 0
-hourly = 0
-daily = 0
-monthly = 0
-
-["storage/qbitvpn"]
 15_min = 0
 hourly = 0
 daily = 0

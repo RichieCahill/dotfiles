@@ -10,8 +10,6 @@ in
   docker_configs = "${zfs_media}/docker/configs";
   home_assistant = "${zfs_media}/home_assistant";
   notes = "${zfs_media}/notes";
-  qbitvpn = "${zfs_storage}/qbitvpn";
-  qbitvpn_scratch = "${zfs_scratch}/qbitvpn";
   secrets = "${zfs_storage}/secrets";
   services = "${zfs_media}/services";
   share = "${zfs_media}/share";
