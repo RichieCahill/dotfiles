@@ -6,7 +6,6 @@
 }:
 
 with lib;
-
 let
   vars = import ../vars.nix;
   cfg = config.services.nix_builder;
@@ -52,9 +51,9 @@ in
             hostPath = "/nix/var/nix/daemon-socket";
             isReadOnly = false;
           };
-          secrets = {
-            hostPath = "${vars.secrets}/services/github-runners/${name}";
-            mountPoint = "${vars.secrets}/services/github-runners/${name}";
+          pat = {
+            hostPath = "${vars.secrets}/services/github-runners/runner_pat";
+            mountPoint = "${vars.secrets}/services/github-runners/runner_pat";
             isReadOnly = true;
           };
         };
@@ -109,7 +108,7 @@ in
               workDir = "/zfs/media/github-runners/${name}";
               url = "https://github.com/RichieCahill/dotfiles";
               extraLabels = [ "nixos" ];
-              tokenFile = "${vars.secrets}/services/github-runners/${name}";
+              tokenFile = "${vars.secrets}/services/github-runners/runner_pat";
               user = "github-runners";
               group = "github-runners";
               extraPackages = with pkgs; [
