@@ -12,7 +12,7 @@ sudo zpool add storage -o ashift=12 special mirror
 sudo zpool add storage -o ashift=12 logs mirror
 
 # scratch
-sudo zpool create -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -m /zfs/scratch scratch
+sudo zpool create scratch -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -O encryption=aes-256-gcm -O keyformat=hex -O keylocation=file:///key -m /zfs/scratch
 
 # media datasets
 sudo zfs create -o compression=zstd-9 media/docker
@@ -25,9 +25,8 @@ sudo zfs create -o exec=off media/share
 sudo zfs create -o recordsize=16k -o primarycache=metadata -o mountpoint=/zfs/media/database/postgres media/postgres
 
 # scratch datasets
-sudo zfs create -o recordsize=16k -o sync=disabled scratch/qbitvpn
-sudo zfs create -o recordsize=16k -o sync=disabled scratch/transmission
-sudo zfs create -o recordsize=1M scratch/kafka
+sudo zfs create scratch/kafka -o mountpoint=/zfs/scratch/kafka -o recordsize=1M
+sudo zfs create scratch/transmission -o mountpoint=/zfs/scratch/transmission -o recordsize=16k -o sync=disabled
 
 # storage datasets
 sudo zfs create -o recordsize=1M -o compression=zstd-19 storage/archive
