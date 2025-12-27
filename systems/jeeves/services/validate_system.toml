@@ -4,7 +4,6 @@ services = [
     "cloud_flare_tunnel",
     "haproxy",
     "docker",
-    "filebrowser",
     "home-assistant",
     "jellyfin",
 ]
