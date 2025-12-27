@@ -71,12 +71,6 @@ in
         "luks-media_pool-nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1" =
           makeLuksSSD "/dev/disk/by-id/nvme-INTEL_SSDPE2ME012T4_CVMD5130000U1P2HGN-part1";
 
-        # Scratch pool
-        "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01C-part1" =
-          makeLuksSSD "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01C-part1";
-        "luks-scratch-pool-ata-CT480BX500SSD1_2314E6C3C01E-part1" =
-          makeLuksSSD "/dev/disk/by-id/ata-CT480BX500SSD1_2314E6C3C01E-part1";
-
         # Storage pool
         "luks-storage_pool-nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1" =
           makeLuksSSD "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S6S2NS0T834822N-part1";
