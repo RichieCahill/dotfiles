@@ -112,6 +112,7 @@ in
               user = "github-runners";
               group = "github-runners";
               extraPackages = with pkgs; [
+                busybox
                 nixfmt-rfc-style
                 nixos-rebuild
                 treefmt
