@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: nix develop .#devShells.x86_64-linux.default -c pytest tests
+        run: nix develop .#devShells.x86_64-linux.default -c unshare --map-root-user --user --net -- pytest tests
