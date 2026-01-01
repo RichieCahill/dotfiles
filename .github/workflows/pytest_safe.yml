@@ -1,0 +1,19 @@
+name: pytest_safe
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  merge_group:
+
+jobs:
+  pytest:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: unshare --map-root-user --user --net -- pytest tests

@@ -4,6 +4,7 @@
     # cli
     bat
     btop
+    busybox
     eza
     fd
     ffmpegthumbnailer
@@ -21,7 +22,6 @@
     ripgrep
     starship
     tmux
-    unzip
     yazi
     zoxide
     # Home Assistant
@@ -31,13 +31,11 @@
     # system info
     hwloc
     lynis
-    pciutils
     smartmontools
     usbutils
     # networking
     iperf3
     nmap
-    wget
     # python
     poetry
     ruff
