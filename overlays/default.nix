@@ -16,7 +16,7 @@
   };
 
   python-env = final: _prev: {
-    my_python = final.python313.withPackages (
+    my_python = final.python314.withPackages (
       ps: with ps; [
         apprise
         apscheduler
