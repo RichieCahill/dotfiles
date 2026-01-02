@@ -23,10 +23,11 @@
     signal-desktop
     zoom-us
     # dev tools
-    jetbrains.datagrip
-    proxychains
-    master.antigravity-fhs
+    claude-code
     gparted
+    jetbrains.datagrip
+    master.antigravity-fhs
+    proxychains
     # games
     dwarf-fortress
     tower-pixel-dungeon
