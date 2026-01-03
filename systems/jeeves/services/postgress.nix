@@ -30,18 +30,6 @@ in
       local hass     hass     trust
       local gitea    gitea    trust
 
-      # megan
-      host  megan    megan    192.168.90.1/24 trust
-      host  megan    megan    127.0.0.1/32 trust
-
-      host  gcw      megan    192.168.90.1/24 trust
-      host  gcw      megan    127.0.0.1/32 trust
-
-      # gcw
-      local gcw      gcw      trust
-      host  gcw      gcw      192.168.90.1/24 trust
-      host  gcw      gcw      127.0.0.1/32 trust
-
       # math
       local postgres  math   trust
       host  postgres  math   127.0.0.1/32    trust
@@ -101,26 +89,6 @@ in
         };
       }
       {
-        name = "megan";
-        ensureDBOwnership = true;
-        ensureClauses = {
-          login = true;
-          createrole = true;
-          createdb = true;
-          replication = true;
-        };
-      }
-      {
-        name = "gcw";
-        ensureDBOwnership = true;
-        ensureClauses = {
-          login = true;
-          createrole = true;
-          createdb = true;
-          replication = true;
-        };
-      }
-      {
         name = "math";
         ensureDBOwnership = true;
         ensureClauses = {
@@ -132,13 +100,9 @@ in
       }
     ];
     ensureDatabases = [
-      "gcw"
       "hass"
       "gitea"
       "math"
-      "megan"
-      "mxr_dev"
-      "mxr_prod"
       "n8n"
       "richie"
     ];
