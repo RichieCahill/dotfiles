@@ -14,6 +14,8 @@ in
       "deepseek-r1:32b"
       "deepseek-r1:8b"
       "devstral-small-2:24b"
+      "dolphin-llama3:70b"
+      "dolphin-llama3:8b"
       "functiongemma:270m"
       "gemma3:12b"
       "gemma3:27b"
