@@ -3,8 +3,10 @@
     user = "ollama";
     enable = true;
     host = "127.0.0.1";
+    syncModels = true;
     loadModels = [
       "codellama:7b"
+      "deepscaler:1.5b"
       "deepseek-r1:14b"
       "deepseek-r1:32b"
       "deepseek-r1:8b"
