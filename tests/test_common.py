@@ -57,5 +57,5 @@ def test_test_bash_wrapper_error() -> None:
     """test_test_bash_wrapper_error."""
     expected_error = 2
     stdout, returncode = bash_wrapper("ls /this/path/does/not/exist")
-    assert stdout == "ls: cannot access '/this/path/does/not/exist': No such file or directory\n"
+    assert stdout == "ls: /this/path/does/not/exist: No such file or directory\n"
     assert returncode == expected_error
