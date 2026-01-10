@@ -26,8 +26,9 @@
     claude-code
     gparted
     jetbrains.datagrip
-    master.antigravity-fhs
+    antigravity-fhs
     proxychains
+    opencode
     # games
     dwarf-fortress
     tower-pixel-dungeon
