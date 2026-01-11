@@ -22,6 +22,7 @@
         apprise
         apscheduler
         fastapi
+        fastapi-cli
         mypy
         polars
         psycopg
