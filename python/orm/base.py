@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from os import getenv
+from typing import cast
 
 from sqlalchemy import DateTime, MetaData, create_engine, func
 from sqlalchemy.engine import URL, Engine
@@ -34,11 +35,11 @@ class TableBase(AbstractConcreteBase, RichieBase):
     __abstract__ = True
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    created_at: Mapped[datetime] = mapped_column(
+    created: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
     )
-    updated_at: Mapped[datetime] = mapped_column(
+    updated: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
@@ -63,7 +64,7 @@ def get_connection_info() -> tuple[str, str, str, str, str | None]:
             f"password{'***' if password else None}\n"
         )
         raise ValueError(error)
-    return database, host, port, username, password
+    return cast("tuple[str, str, str, str, str | None]", (database, host, port, username, password))
 
 
 def get_postgres_engine(*, pool_pre_ping: bool = True) -> Engine:
