@@ -165,3 +165,7 @@ test.*
 
 # syncthing
 .stfolder
+
+# Frontend build output
+frontend/dist/
+frontend/node_modules/
