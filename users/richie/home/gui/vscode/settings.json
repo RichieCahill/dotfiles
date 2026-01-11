@@ -95,5 +95,6 @@
   "gitlens.plusFeatures.enabled": false,
   // new
   "hediet.vscode-drawio.resizeImages": null,
-  "hediet.vscode-drawio.appearance": "automatic"
+  "hediet.vscode-drawio.appearance": "automatic",
+  "claudeCode.preferredLocation": "panel"
 }
