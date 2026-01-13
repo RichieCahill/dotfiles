@@ -18,8 +18,10 @@
   python-env = final: _prev: {
     my_python = final.python314.withPackages (
       ps: with ps; [
+        alembic
         apprise
         apscheduler
+        fastapi
         mypy
         polars
         psycopg
@@ -31,6 +33,7 @@
         requests
         ruff
         scalene
+        sqlalchemy
         sqlalchemy
         textual
         typer

@@ -47,11 +47,16 @@ lint.ignore = [
     "T201",   # (perm) I don't care about print statements dir
     "ERA001", # (perm) I don't care about print statements dir
 ]
-
 "python/splendor/**" = [
     "S311",    # (perm) there is no security issue here
     "T201",    # (perm) I don't care about print statements dir
     "PLR2004", # (temps) need to think about this
+]
+"python/orm/**" = [
+    "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
+]
+"python/alembic/**" = [
+    "INP001", # (perm) this creates LSP issues for alembic
 ]
 
 [tool.ruff.lint.pydocstyle]
