@@ -6,5 +6,6 @@ in
     enable = true;
     openFirewall = true;
     dataDir = "${vars.services}/jellyfin";
+    cacheDir = "${vars.services}/jellyfin/cache";
   };
 }
