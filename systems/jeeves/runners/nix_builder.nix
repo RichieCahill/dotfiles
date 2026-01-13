@@ -112,7 +112,7 @@ in
               user = "github-runners";
               group = "github-runners";
               extraPackages = with pkgs; [
-                nixfmt-rfc-style
+                nixfmt
                 nixos-rebuild
                 treefmt
                 my_python

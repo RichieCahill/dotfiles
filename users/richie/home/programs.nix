@@ -56,7 +56,7 @@
     nix-output-monitor
     nix-prefetch
     nix-tree
-    nixfmt-rfc-style
+    nixfmt
     treefmt
   ];
 }
