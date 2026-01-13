@@ -2,7 +2,6 @@
 {
   imports = [
     "${inputs.self}/users/richie"
-    "${inputs.self}/users/gaming"
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/desktop.nix"
     "${inputs.self}/common/optional/docker.nix"
@@ -27,15 +26,6 @@
   };
 
   services = {
-    displayManager = {
-      enable = true;
-      autoLogin = {
-        user = "gaming";
-        enable = true;
-      };
-      defaultSession = "plasma";
-    };
-
     openssh.ports = [ 262 ];
 
     snapshot_manager.path = ./snapshot_config.toml;
