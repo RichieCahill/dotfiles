@@ -61,7 +61,6 @@ def get_connection_info() -> tuple[str, str, str, str, str | None]:
             f"{host=}\n"
             f"{port=}\n"
             f"{username=}\n"
-            f"password{'***' if password else None}\n"
         )
         raise ValueError(error)
     return cast("tuple[str, str, str, str, str | None]", (database, host, port, username, password))
