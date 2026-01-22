@@ -40,7 +40,7 @@ lint.ignore = [
 "tests/**" = [
     "S101", # (perm) pytest needs asserts
 ]
-"python/random/**" = [
+"python/stuff/**" = [
     "T201", # (perm) I don't care about print statements dir
 ]
 "python/testing/**" = [
