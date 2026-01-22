@@ -51,6 +51,9 @@
     cargo-generate
     cargo-audit
     cargo-update
+    # cpp
+    clang-tools
+    clang_20
     # nix
     nix-init
     nix-output-monitor
