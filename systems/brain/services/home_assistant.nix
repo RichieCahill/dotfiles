@@ -12,14 +12,7 @@
       enable = true;
       openFirewall = true;
       config = {
-        http = {
-          server_port = 8123;
-          server_host = [
-            "192.168.90.35"
-            "192.168.95.35"
-            "127.0.0.1"
-          ];
-        };
+        http.server_port = 8123;
         homeassistant = {
           time_zone = "America/New_York";
           unit_system = "us_customary";
@@ -27,6 +20,7 @@
           packages = {
             victron_modbuss = "!include ${./home_assistant/victron_modbuss.yaml}";
             battery_sensors = "!include ${./home_assistant/battery_sensors.yaml}";
+            gps_location = "!include ${./home_assistant/gps_location.yaml}";
           };
         };
         recorder = {
@@ -72,6 +66,7 @@
           py-improv-ble-client # for esphome
           pymodbus # for modbus
           pyopenweathermap # for weather
+          pymetno # for met.no weather
           uiprotect # for ubiquiti integration
           unifi-discovery # for ubiquiti integration
         ];
