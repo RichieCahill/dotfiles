@@ -18,11 +18,6 @@ in
       config = {
         http = {
           server_port = 8123;
-          server_host = [
-            "192.168.99.14"
-            "192.168.90.40"
-            "127.0.0.1"
-          ];
           use_x_forwarded_for = true;
           trusted_proxies = "127.0.0.1";
         };

@@ -1,0 +1,122 @@
+title: Van Overview
+views:
+  - title: Overview
+    path: overview
+    type: sections
+    sections:
+      # Battery Status Section
+      - type: grid
+        title: Battery Status
+        cards:
+          - type: gauge
+            entity: sensor.jk0_soc
+            name: Battery 0
+            min: 0
+            max: 100
+            severity:
+              green: 50
+              yellow: 20
+              red: 0 
+            needle: true
+
+          - type: gauge
+            entity: sensor.jk1_soc
+            name: Battery 1
+            min: 0
+            max: 100
+            severity:
+              green: 50
+              yellow: 20
+              red: 0
+            needle: true
+
+          - type: entity
+            entity: sensor.jk0_total_voltage
+            name: Batt 0 Voltage
+
+          - type: entity
+            entity: sensor.jk1_total_voltage
+            name: Batt 1 Voltage
+
+      # Solar Production Section
+      - type: grid
+        title: Solar Production
+        cards:
+          - type: gauge
+            entity: sensor.solar_wattage
+            name: Solar Now
+            min: 0
+            max: 400
+            severity:
+              green: 100
+              yellow: 50
+              red: 0
+            needle: true
+
+          - type: entity
+            entity: sensor.solar_yield_today
+            name: Today's Yield
+
+          - type: entity
+            entity: sensor.estimated_energy_production_today
+            name: Forecast Today
+
+          - type: entity
+            entity: sensor.estimated_energy_production_tomorrow
+            name: Forecast Tomorrow
+
+      # Environment Section
+      - type: grid
+        title: Van Environment
+        cards:
+          - type: entity
+            entity: sensor.environment_temperature
+            name: Inside Temp
+
+          - type: entity
+            entity: sensor.environment_humidity
+            name: Inside Humidity
+
+          - type: entity
+            entity: sensor.current_weather_temperature
+            name: Outside Temp
+
+          - type: entity
+            entity: sensor.current_weather_humidity
+            name: Outside Humidity
+
+          - type: entity
+            entity: sensor.current_weather_condition
+            name: Weather
+
+      # Charger Status Section
+      - type: grid
+        title: Charger
+        cards:
+          - type: entity
+            entity: sensor.charger_dc_wattage
+            name: Charging Power
+
+          - type: entity
+            entity: sensor.charger_charge_state
+            name: Charge State
+
+          - type: entity
+            entity: sensor.charger_dc_wattage_daily
+            name: Charged Today
+
+      # Location Section
+      - type: grid
+        title: Location
+        cards:
+          - type: entity
+            entity: sensor.gps_location
+            name: Current Location
+
+          - type: entity
+            entity: sensor.gps_speed
+            name: Speed
+
+          - type: entity
+            entity: binary_sensor.gps_fix_available
+            name: GPS Fix
