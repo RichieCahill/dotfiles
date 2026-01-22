@@ -1,5 +1,6 @@
 """FastAPI interface for Contact database."""
 
+import logging
 import shutil
 import subprocess
 import tempfile
@@ -14,7 +15,10 @@ import uvicorn
 from fastapi import FastAPI
 
 from python.api.routers import contact_router, create_frontend_router
+from python.common import configure_logger
 from python.orm.base import get_postgres_engine
+
+logger = logging.getLogger(__name__)
 
 
 def create_app(frontend_dir: Path | None = None) -> FastAPI:
@@ -32,14 +36,11 @@ def create_app(frontend_dir: Path | None = None) -> FastAPI:
     app.include_router(contact_router)
 
     if frontend_dir:
-        print(f"Serving frontend from {frontend_dir}")
+        logger.info(f"Serving frontend from {frontend_dir}")
         frontend_router = create_frontend_router(frontend_dir)
         app.include_router(frontend_router)
 
     return app
-
-
-cli = typer.Typer()
 
 
 def build_frontend(source_dir: Path | None, cache_dir: Path | None = None) -> Path | None:
@@ -58,10 +59,10 @@ def build_frontend(source_dir: Path | None, cache_dir: Path | None = None) -> Pa
         return None
 
     if not source_dir.exists():
-        error = f"Error: Frontend directory {source_dir} does not exist"
+        error = f"Frontend directory {source_dir} does not exist"
         raise FileExistsError(error)
 
-    print(f"Building frontend from {source_dir}...")
+    logger.info("Building frontend from %s...", source_dir)
 
     # Copy source to a writable temp directory
     build_dir = Path(tempfile.mkdtemp(prefix="contact_frontend_build_"))
@@ -82,15 +83,15 @@ def build_frontend(source_dir: Path | None, cache_dir: Path | None = None) -> Pa
 
     output_dir = Path(tempfile.mkdtemp(prefix="contact_frontend_"))
     shutil.copytree(dist_dir, output_dir, dirs_exist_ok=True)
-    print(f"Frontend built and copied to {output_dir}")
+    logger.info(f"Frontend built and copied to {output_dir}")
 
     shutil.rmtree(build_dir)
 
     return output_dir
 
 
-@cli.command()
 def serve(
+    host: Annotated[str, typer.Option("--host", "-h", help="Host to bind to")],
     frontend_dir: Annotated[
         Path | None,
         typer.Option(
@@ -99,15 +100,18 @@ def serve(
             help="Frontend source directory. If provided, runs npm build and serves from temp dir.",
         ),
     ] = None,
-    host: Annotated[str, typer.Option("--host", "-h", help="Host to bind to")] = "0.0.0.0",
     port: Annotated[int, typer.Option("--port", "-p", help="Port to bind to")] = 8000,
+    log_level: Annotated[str, typer.Option("--log-level", "-l", help="Log level")] = "INFO",
 ) -> None:
     """Start the Contact API server."""
-    serve_dir = build_frontend(frontend_dir)
+    configure_logger(log_level)
+
+    cache_dir = Path(environ["HOME"]) / ".npm"
+    serve_dir = build_frontend(frontend_dir, cache_dir=cache_dir)
 
     app = create_app(frontend_dir=serve_dir)
     uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == "__main__":
-    cli()
+    typer.run(serve)
