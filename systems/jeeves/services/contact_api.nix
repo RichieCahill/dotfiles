@@ -15,18 +15,25 @@
     ];
     requires = [ "postgresql.service" ];
     wantedBy = [ "multi-user.target" ];
+    path = [
+      pkgs.nodejs
+      pkgs.coreutils
+      pkgs.bash
+    ];
 
     environment = {
       PYTHONPATH = "${inputs.self}";
       POSTGRES_DB = "richie";
       POSTGRES_HOST = "/run/postgresql";
       POSTGRES_USER = "richie";
-      FRONTEND_DIR = "/home/richie/dotfiles/frontend/dist/";
+      POSTGRES_PORT = "5432";
+      HOME = "/var/lib/contact-api";
     };
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.my_python}/bin/fastapi run ${inputs.self}/python/api/contact_api.py --port 8069";
+      ExecStart = "${pkgs.my_python}/bin/python -m python.api.main --host 192.168.90.40 --port 8069 --frontend-dir ${inputs.self}/frontend";
+      StateDirectory = "contact-api";
       Restart = "on-failure";
       RestartSec = "5s";
       StandardOutput = "journal";
@@ -38,7 +45,6 @@
       PrivateTmp = true;
       ReadOnlyPaths = [
         "${inputs.self}"
-        "/home/richie/dotfiles/frontend/dist/"
       ];
     };
   };
