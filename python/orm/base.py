@@ -55,13 +55,7 @@ def get_connection_info() -> tuple[str, str, str, str, str | None]:
     password = getenv("POSTGRES_PASSWORD")
 
     if None in (database, host, port, username):
-        error = (
-            "Missing environment variables for Postgres connection.\n"
-            f"{database=}\n"
-            f"{host=}\n"
-            f"{port=}\n"
-            f"{username=}\n"
-        )
+        error = f"Missing environment variables for Postgres connection.\n{database=}\n{host=}\n{port=}\n{username=}\n"
         raise ValueError(error)
     return cast("tuple[str, str, str, str, str | None]", (database, host, port, username, password))
 

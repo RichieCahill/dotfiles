@@ -73,8 +73,8 @@ def build_frontend(source_dir: Path | None, cache_dir: Path | None = None) -> Pa
         cache_dir.mkdir(parents=True, exist_ok=True)
         env["npm_config_cache"] = str(cache_dir)
 
-    subprocess.run(["npm", "install"], cwd=build_dir, env=env, check=True)
-    subprocess.run(["npm", "run", "build"], cwd=build_dir, env=env, check=True)
+    subprocess.run(["npm", "install"], cwd=build_dir, env=env, check=True)  # noqa: S607
+    subprocess.run(["npm", "run", "build"], cwd=build_dir, env=env, check=True)  # noqa: S607
 
     dist_dir = build_dir / "dist"
     if not dist_dir.exists():
