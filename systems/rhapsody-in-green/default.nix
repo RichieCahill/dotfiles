@@ -30,6 +30,7 @@
 
   services = {
     openssh.ports = [ 922 ];
+    flatpak.enable = true;
   };
 
   system.stateVersion = "24.05";
