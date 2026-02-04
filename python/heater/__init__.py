@@ -1,0 +1,1 @@
+"""Tuya heater control service."""

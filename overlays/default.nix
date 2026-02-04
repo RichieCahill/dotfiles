@@ -23,9 +23,11 @@
         apscheduler
         fastapi
         fastapi-cli
+        httpx
         mypy
         polars
         psycopg
+        pydantic
         pyfakefs
         pytest
         pytest-cov
@@ -37,6 +39,7 @@
         sqlalchemy
         sqlalchemy
         textual
+        tinytuya
         typer
         types-requests
       ]
