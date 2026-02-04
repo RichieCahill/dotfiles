@@ -1,0 +1,41 @@
+rest:
+  - resource: http://localhost:8124/status
+    scan_interval: 30
+    sensor:
+      - name: "Heater Setpoint"
+        unique_id: heater_setpoint
+        value_template: "{{ value_json.setpoint }}"
+        unit_of_measurement: "F"
+        device_class: temperature
+      - name: "Heater State"
+        unique_id: heater_state
+        value_template: "{{ value_json.state }}"
+      - name: "Heater Error Code"
+        unique_id: heater_error_code
+        value_template: "{{ value_json.error_code }}"
+    binary_sensor:
+      - name: "Heater Power"
+        unique_id: heater_power
+        value_template: "{{ value_json.power }}"
+        device_class: running
+
+rest_command:
+  heater_on:
+    url: http://localhost:8124/on
+    method: POST
+  heater_off:
+    url: http://localhost:8124/off
+    method: POST
+  heater_toggle:
+    url: http://localhost:8124/toggle
+    method: POST
+
+template:
+  - switch:
+      - unique_id: heater_switch
+        name: Heater
+        state: "{{ is_state('binary_sensor.heater_power', 'on') }}"
+        turn_on:
+          - action: rest_command.heater_on
+        turn_off:
+          - action: rest_command.heater_off

@@ -7,7 +7,7 @@ requires-python = "~=3.13.0"
 readme = "README.md"
 license = "MIT"
 # these dependencies are a best effort and aren't guaranteed to work
-dependencies = ["apprise", "apscheduler", "polars", "requests", "typer"]
+dependencies = ["apprise", "apscheduler", "httpx", "polars", "pydantic", "pyyaml", "requests", "typer"]
 
 [dependency-groups]
 dev = [
@@ -53,6 +53,9 @@ lint.ignore = [
     "PLR2004", # (temps) need to think about this
 ]
 "python/orm/**" = [
+    "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
+]
+"python/congress_tracker/**" = [
     "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
 ]
 "python/alembic/**" = [
