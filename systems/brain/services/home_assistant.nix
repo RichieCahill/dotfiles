@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   users = {
     users.hass = {
@@ -21,6 +22,8 @@
             victron_modbuss = "!include ${./home_assistant/victron_modbuss.yaml}";
             battery_sensors = "!include ${./home_assistant/battery_sensors.yaml}";
             gps_location = "!include ${./home_assistant/gps_location.yaml}";
+            heater = "!include ${./home_assistant/heater.yaml}";
+            van_weather = "!include ${./home_assistant/van_weather_template.yaml}";
           };
         };
         recorder = {
@@ -69,8 +72,13 @@
           pymetno # for met.no weather
           uiprotect # for ubiquiti integration
           unifi-discovery # for ubiquiti integration
+          jsonpath # for rest sensors
         ];
       extraComponents = [ "isal" ];
+      customComponents = with pkgs.home-assistant-custom-components; [
+        pirate-weather
+      ];
+
     };
     esphome = {
       enable = true;
