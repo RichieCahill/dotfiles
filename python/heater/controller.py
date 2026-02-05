@@ -20,6 +20,7 @@ class HeaterController:
     """Controls a Tuya heater device via local network."""
 
     def __init__(self, config: DeviceConfig) -> None:
+        """Initialize the controller."""
         self.device = tinytuya.Device(config.device_id, config.ip, config.local_key)
         self.device.set_version(config.version)
         self.device.set_socketTimeout(0.5)
@@ -45,7 +46,7 @@ class HeaterController:
     def turn_on(self) -> ActionResult:
         """Turn heater on."""
         try:
-            self.device.set_value(DPS_POWER, True)
+            self.device.set_value(index=DPS_POWER, value=True)
             return ActionResult(success=True, action="on", power=True)
         except Exception as error:
             logger.exception("Failed to turn on")
@@ -54,7 +55,7 @@ class HeaterController:
     def turn_off(self) -> ActionResult:
         """Turn heater off."""
         try:
-            self.device.set_value(DPS_POWER, False)
+            self.device.set_value(index=DPS_POWER, value=False)
             return ActionResult(success=True, action="off", power=False)
         except Exception as error:
             logger.exception("Failed to turn off")
