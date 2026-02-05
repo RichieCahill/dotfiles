@@ -11,9 +11,9 @@
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        PYTHONPATH = "${inputs.self}/";
-      };
+    environment = {
+      PYTHONPATH = "${inputs.self}/";
+    };
 
     serviceConfig = {
       Type = "simple";
