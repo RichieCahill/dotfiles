@@ -1,6 +1,7 @@
 """Van weather service - fetches weather with masked GPS for privacy."""
 
 import logging
+import time
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
@@ -108,6 +109,22 @@ def fetch_weather(api_key: str, lat: float, lon: float) -> Weather:
 
 def post_to_ha(url: str, token: str, weather: Weather) -> None:
     """Post weather data to Home Assistant as sensor entities."""
+    max_retries = 6
+    retry_delay = 10
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            _post_weather_data(url, token, weather)
+        except requests.RequestException:
+            if attempt == max_retries:
+                logger.exception(f"Failed to post weather to HA after {max_retries} attempts")
+                return
+            logger.warning(f"Post to HA failed (attempt {attempt}/{max_retries}), retrying in {retry_delay}s")
+            time.sleep(retry_delay)
+
+
+def _post_weather_data(url: str, token: str, weather: Weather) -> None:
+    """Post all weather data to Home Assistant. Raises on failure."""
     headers = {"Authorization": f"Bearer {token}"}
 
     # Post current weather as individual sensors
@@ -148,12 +165,13 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
 
     for entity_id, data in sensors.items():
         if data["state"] is not None:
-            requests.post(f"{url}/api/states/{entity_id}", headers=headers, json=data, timeout=30)
+            response = requests.post(f"{url}/api/states/{entity_id}", headers=headers, json=data, timeout=30)
+            response.raise_for_status()
 
     # Post daily forecast as JSON attribute sensor
     daily_forecast = [
         {
-            "datetime": daily_forecast.date_time,
+            "datetime": daily_forecast.date_time.isoformat(),
             "condition": daily_forecast.condition,
             "temperature": daily_forecast.temperature,
             "templow": daily_forecast.templow,
@@ -162,17 +180,18 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
         for daily_forecast in weather.daily_forecasts
     ]
 
-    requests.post(
+    response = requests.post(
         f"{url}/api/states/sensor.van_weather_forecast_daily",
         headers=headers,
         json={"state": len(daily_forecast), "attributes": {"forecast": daily_forecast}},
         timeout=30,
     )
+    response.raise_for_status()
 
     # Post hourly forecast as JSON attribute sensor
     hourly_forecast = [
         {
-            "datetime": hourly_forecast.date_time,
+            "datetime": hourly_forecast.date_time.isoformat(),
             "condition": hourly_forecast.condition,
             "temperature": hourly_forecast.temperature,
             "precipitation_probability": int((hourly_forecast.precipitation_probability or 0) * 100),
@@ -180,12 +199,13 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
         for hourly_forecast in weather.hourly_forecasts
     ]
 
-    requests.post(
+    response = requests.post(
         f"{url}/api/states/sensor.van_weather_forecast_hourly",
         headers=headers,
         json={"state": len(hourly_forecast), "attributes": {"forecast": hourly_forecast}},
         timeout=30,
     )
+    response.raise_for_status()
 
 
 def update_weather(config: Config) -> None:
