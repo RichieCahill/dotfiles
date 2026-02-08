@@ -1,15 +1,19 @@
-weather:
-  - platform: template
-    name: "Van Weather"
-    unique_id: van_weather_template
-    condition_template: "{{ states('sensor.van_weather_condition') }}"
-    temperature_template: "{{ states('sensor.van_weather_temperature') }}"
-    apparent_temperature_template: "{{ states('sensor.van_weather_apparent_temperature') }}"
-    humidity_template: "{{ states('sensor.van_weather_humidity') }}"
-    pressure_template: "{{ states('sensor.van_weather_pressure') }}"
-    wind_speed_template: "{{ states('sensor.van_weather_wind_speed') }}"
-    wind_bearing_template: "{{ states('sensor.van_weather_wind_bearing') }}"
-    visibility_template: "{{ states('sensor.van_weather_visibility') }}"
-    forecast_daily_template: "{{ state_attr('sensor.van_weather_forecast_daily', 'forecast') }}"
-    forecast_hourly_template: "{{ state_attr('sensor.van_weather_forecast_hourly', 'forecast') }}"
-    attribution_template: "Powered by Pirate Weather"
+template:
+  - weather:
+      - name: "Van Weather"
+        unique_id: van_weather_template
+        condition_template: "{{ states('sensor.van_weather_condition') }}"
+        temperature_template: "{{ states('sensor.van_weather_temperature') }}"
+        temperature_unit: "°F"
+        apparent_temperature_template: "{{ states('sensor.van_weather_apparent_temperature') }}"
+        humidity_template: "{{ states('sensor.van_weather_humidity') }}"
+        pressure_template: "{{ states('sensor.van_weather_pressure') }}"
+        pressure_unit: "mbar"
+        wind_speed_template: "{{ states('sensor.van_weather_wind_speed') }}"
+        wind_speed_unit: "mph"
+        wind_bearing_template: "{{ states('sensor.van_weather_wind_bearing') }}"
+        visibility_template: "{{ states('sensor.van_weather_visibility') }}"
+        visibility_unit: "mi"
+        forecast_daily_template: "{{ state_attr('sensor.van_weather_forecast_daily', 'forecast') }}"
+        forecast_hourly_template: "{{ state_attr('sensor.van_weather_forecast_hourly', 'forecast') }}"
+        attribution_template: "Powered by Pirate Weather"
