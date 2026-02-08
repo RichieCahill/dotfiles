@@ -6,7 +6,8 @@
 {
   systemd.services.van-weather = {
     description = "Van Weather Service";
-    after = [ "network.target" ];
+    after = [ "network.target" "home-assistant.service" ];
+    requires = [ "home-assistant.service" ];
     wantedBy = [ "multi-user.target" ];
 
     environment = {
