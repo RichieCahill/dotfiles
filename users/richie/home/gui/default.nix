@@ -1,27 +1,24 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
+    "${inputs.self}/users/shared/comms.nix"
+    "${inputs.self}/users/shared/games.nix"
+    "${inputs.self}/users/shared/sweet.nix"
     ./firefox
-    ./vscode
     ./kitty.nix
+    ./vscode
   ];
 
   home.packages = with pkgs; [
-    candy-icons
-    chromium
     gimp
     mediainfo
     obs-studio
     obsidian
     prismlauncher
     prusa-slicer
-    sweet-nova
-    util-linux
     vlc
-    # comms
-    discord-canary
-    signal-desktop
-    zoom-us
+    # browser
+    chromium
     # dev tools
     claude-code
     gparted
@@ -29,9 +26,5 @@
     antigravity-fhs
     proxychains
     opencode
-    # games
-    dwarf-fortress
-    tower-pixel-dungeon
-    endless-sky
   ];
 }
