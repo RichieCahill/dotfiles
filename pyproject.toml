@@ -58,6 +58,9 @@ lint.ignore = [
 "python/congress_tracker/**" = [
     "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
 ]
+"python/eval_warnings/**" = [
+    "S607", # (perm) gh and git are expected on PATH in the runner environment
+]
 "python/alembic/**" = [
     "INP001", # (perm) this creates LSP issues for alembic
 ]

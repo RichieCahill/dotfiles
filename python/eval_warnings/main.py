@@ -36,6 +36,7 @@ class FileChange:
     original: str
     fixed: str
 
+
 WARNING_PATTERN = re.compile(r"(?:^[\d\-T:.Z]+ )?(warning:|trace: warning:)")
 TIMESTAMP_PREFIX = re.compile(r"^[\d\-T:.Z]+ ")
 NIX_STORE_PATH = re.compile(r"/nix/store/[^/]+-source/([^:]+\.nix)")
