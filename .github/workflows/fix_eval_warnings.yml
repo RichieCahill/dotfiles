@@ -1,0 +1,31 @@
+name: fix_eval_warnings
+on:
+  workflow_run:
+    workflows: ["build_systems"]
+    types: [completed]
+
+jobs:
+  check-warnings:
+    if: >-
+      github.event.workflow_run.conclusion != 'cancelled' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'schedule')
+    runs-on: self-hosted
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fix eval warnings
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+        run: >-
+          nix develop .#devShells.x86_64-linux.default -c
+          python -m python.eval_warnings.main
+          --run-id "${{ github.event.workflow_run.id }}"
+          --repo "${{ github.repository }}"
+          --ollama-url "${{ vars.OLLAMA_URL }}"
+          --run-url "${{ github.event.workflow_run.html_url }}"
