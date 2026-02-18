@@ -98,12 +98,11 @@ def parse_warnings(logs: dict[str, str]) -> set[EvalWarning]:
     for name, content in sorted(logs.items()):
         system = name.split("/")[0].removeprefix("build-")
         for line in content.splitlines():
-            if line.startswith("warning: ignoring untrusted flake configuration setting"):
-                logger.info("Ignoring untrusted flake configuration setting warning.")
-                continue
             if warning_pattern.search(line):
-                logger.debug(f"Found warning: {line}")
                 message = timestamp_prefix.sub("", line).strip()
+                if message.startswith("warning: ignoring untrusted flake configuration setting"):
+                    continue
+                logger.debug(f"Found warning: {line}")
                 warnings.add(EvalWarning(system=system, message=message))
 
     logger.info("Found %d unique warnings", len(warnings))
@@ -260,7 +259,7 @@ say so in REASONING and do not suggest changes"""
 
 
 def parse_changes(response: str) -> list[FileChange]:
-    """Parse file changes from the LLM response.
+    """Parse file changes from the **CHANGES** section of the LLM response.
 
     Expects blocks in the format:
         FILE: path/to/file.nix
@@ -276,13 +275,19 @@ def parse_changes(response: str) -> list[FileChange]:
     Returns:
         List of parsed file changes.
     """
+    if "**CHANGES**" not in response:
+        logger.warning("LLM response missing **CHANGES** section")
+        return []
+
+    changes_section = response.split("**CHANGES**", 1)[1]
+
     changes: list[FileChange] = []
     current_file = ""
     section: str | None = None
     original_lines: list[str] = []
     fixed_lines: list[str] = []
 
-    for line in response.splitlines():
+    for line in changes_section.splitlines():
         stripped = line.strip()
         if stripped.startswith("FILE:"):
             current_file = stripped.removeprefix("FILE:").strip()
@@ -315,8 +320,12 @@ def apply_changes(changes: list[FileChange]) -> int:
         Number of changes successfully applied.
     """
     applied = 0
+    cwd = Path.cwd().resolve()
     for change in changes:
-        path = Path(change.file_path)
+        path = Path(change.file_path).resolve()
+        if not path.is_relative_to(cwd):
+            logger.warning("Path traversal blocked: %s", change.file_path)
+            continue
         if not path.is_file():
             logger.warning("File not found: %s", change.file_path)
             continue
