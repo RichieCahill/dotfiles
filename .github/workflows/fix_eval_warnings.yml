@@ -11,7 +11,6 @@ jobs:
       github.event.workflow_run.head_branch == 'main' &&
       (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'schedule')
     runs-on: self-hosted
-
     permissions:
       contents: write
       pull-requests: write
