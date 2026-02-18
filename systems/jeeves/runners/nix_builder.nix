@@ -112,6 +112,8 @@ in
               user = "github-runners";
               group = "github-runners";
               extraPackages = with pkgs; [
+                gitMinimal
+                gh
                 nixfmt
                 nixos-rebuild
                 treefmt
