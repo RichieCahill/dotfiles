@@ -33,6 +33,8 @@ in
       ];
       warn-dirty = false;
       flake-registry = ""; # disable global flake registries
+      connect-timeout = 10;
+      fallback = true;
     };
 
     # Add each flake input as a registry and nix_path

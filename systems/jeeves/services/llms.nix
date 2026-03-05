@@ -21,6 +21,7 @@ in
       "gemma3:27b"
       "gpt-oss:120b"
       "gpt-oss:20b"
+      "lfm2:24b"
       "llama3.1:70b"
       "llama3.1:8b"
       "llama3.2:1b"
@@ -31,7 +32,7 @@ in
       "qwen3-coder:30b"
       "qwen3-vl:32b"
       "qwen3:14b"
-      "qwen3:30b"
+      "qwen3.5:35b"
     ];
     models = vars.ollama;
     openFirewall = true;
