@@ -46,7 +46,7 @@
     );
   };
   ds-env = final: _prev: {
-    ds_python = final.python311.withPackages (
+    ds_python = final.python313.withPackages (
       ps: with ps; [
         faster-whisper
         polars
