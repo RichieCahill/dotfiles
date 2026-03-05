@@ -5,6 +5,7 @@ modbus:
     port: 502
     timeout: 3
     delay: 2
+    lazy_error_count: 10
     sensors:
       # ---- SOLAR CHARGER (Unit ID 226) ----
       - name: Solar Voltage
