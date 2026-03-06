@@ -45,16 +45,4 @@
       ]
     );
   };
-  ds-env = final: _prev: {
-    ds_python = final.python313.withPackages (
-      ps: with ps; [
-        faster-whisper
-        polars
-        psycopg
-        pyannote-pipeline
-        pydantic
-      ]
-    );
-  };
-
 }
