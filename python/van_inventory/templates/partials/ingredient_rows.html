@@ -1,0 +1,16 @@
+<table>
+    <thead>
+        <tr><th>Item</th><th>Needed</th><th>Have</th><th>Unit</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for mi in meal.ingredients %}
+        <tr>
+            <td>{{ mi.item.name }}</td>
+            <td>{{ mi.quantity_needed }}</td>
+            <td>{{ mi.item.quantity }}</td>
+            <td>{{ mi.item.unit }}</td>
+            <td><button class="danger" hx-delete="/meals/{{ meal.id }}/ingredients/{{ mi.item_id }}" hx-target="#ingredient-list" hx-swap="innerHTML" hx-confirm="Remove {{ mi.item.name }}?">X</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
