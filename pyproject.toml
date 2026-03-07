@@ -7,7 +7,22 @@ requires-python = "~=3.13.0"
 readme = "README.md"
 license = "MIT"
 # these dependencies are a best effort and aren't guaranteed to work
-dependencies = ["apprise", "apscheduler", "httpx", "polars", "pydantic", "pyyaml", "requests", "typer"]
+dependencies = [
+    "alembic",
+    "apprise",
+    "apscheduler",
+    "httpx",
+    "polars",
+    "psycopg[binary]",
+    "pydantic",
+    "pyyaml",
+    "requests",
+    "sqlalchemy",
+    "typer",
+]
+
+[project.scripts]
+database = "python.database_cli:app"
 
 [dependency-groups]
 dev = [

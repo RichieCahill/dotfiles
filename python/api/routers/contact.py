@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from python.api.dependencies import DbSession
-from python.orm.contact import Contact, ContactRelationship, Need, RelationshipType
+from python.orm.richie.contact import Contact, ContactRelationship, Need, RelationshipType
 
 
 class NeedBase(BaseModel):
