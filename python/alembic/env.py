@@ -72,6 +72,7 @@ def include_name(
         return name == target_metadata.schema
     return True
 
+
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
