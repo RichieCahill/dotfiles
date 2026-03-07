@@ -1,0 +1,21 @@
+<table>
+    <thead>
+        <tr><th>Name</th><th>Qty</th><th>Unit</th><th>Category</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>
+                <form hx-patch="/items/{{ item.id }}" hx-target="#item-list" hx-swap="innerHTML" style="display:inline; margin:0;">
+                    <input type="number" name="quantity" value="{{ item.quantity }}" step="any" style="width:5rem">
+                    <button type="submit" style="padding:0.2rem 0.5rem; font-size:0.8rem;">Update</button>
+                </form>
+            </td>
+            <td>{{ item.unit }}</td>
+            <td>{{ item.category or "" }}</td>
+            <td><button class="danger" hx-delete="/items/{{ item.id }}" hx-target="#item-list" hx-swap="innerHTML" hx-confirm="Delete {{ item.name }}?">X</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,15 @@
+<table>
+    <thead>
+        <tr><th>Name</th><th>Ingredients</th><th>Instructions</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for meal in meals %}
+        <tr>
+            <td><a href="/meals/{{ meal.id }}">{{ meal.name }}</a></td>
+            <td>{{ meal.ingredients | length }}</td>
+            <td>{{ (meal.instructions or "")[:50] }}</td>
+            <td><button class="danger" hx-delete="/meals/{{ meal.id }}" hx-target="#meal-list" hx-swap="innerHTML" hx-confirm="Delete {{ meal.name }}?">X</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

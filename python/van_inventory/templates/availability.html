@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}What Can I Make? - Van{% endblock %}
+{% block content %}
+<h1>What Can I Make?</h1>
+
+<table>
+    <thead>
+        <tr><th>Meal</th><th>Status</th><th>Missing</th></tr>
+    </thead>
+    <tbody>
+    {% for meal in availability %}
+        <tr>
+            <td><a href="/meals/{{ meal.meal_id }}">{{ meal.meal_name }}</a></td>
+            <td>
+                {% if meal.can_make %}
+                    <span class="badge yes">Ready</span>
+                {% else %}
+                    <span class="badge no">Missing items</span>
+                {% endif %}
+            </td>
+            <td class="missing-list">
+                {% for m in meal.missing %}
+                    {{ m.item_name }}: need {{ m.short }} more {{ m.unit }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
