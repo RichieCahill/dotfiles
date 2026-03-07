@@ -13,7 +13,6 @@
     imagemagick
     jq
     ncdu
-    neofetch
     ouch
     p7zip
     poppler
