@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Meals - Van{% endblock %}
+{% block content %}
+<h1>Meals</h1>
+
+<form hx-post="/meals" hx-target="#meal-list" hx-swap="innerHTML" hx-on::after-request="this.reset()">
+    <label>Name <input type="text" name="name" required></label>
+    <label>Instructions <input type="text" name="instructions" placeholder="optional"></label>
+    <button type="submit">Add Meal</button>
+</form>
+
+<div id="meal-list">
+    {% include "partials/meal_rows.html" %}
+</div>
+{% endblock %}

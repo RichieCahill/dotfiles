@@ -1,0 +1,1 @@
+"""Van inventory FastAPI application."""
