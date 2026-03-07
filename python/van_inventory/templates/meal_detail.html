@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ meal.name }} - Van{% endblock %}
+{% block content %}
+<h1>{{ meal.name }}</h1>
+{% if meal.instructions %}<p>{{ meal.instructions }}</p>{% endif %}
+
+<h2>Ingredients</h2>
+<form hx-post="/meals/{{ meal.id }}/ingredients" hx-target="#ingredient-list" hx-swap="innerHTML" hx-on::after-request="this.reset()">
+    <label>Item
+        <select name="item_id" required>
+            <option value="">--</option>
+            {% for item in items %}
+            <option value="{{ item.id }}">{{ item.name }} ({{ item.unit }})</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Qty needed <input type="number" name="quantity_needed" step="any" required></label>
+    <button type="submit">Add</button>
+</form>
+
+<div id="ingredient-list">
+    {% include "partials/ingredient_rows.html" %}
+</div>
+{% endblock %}

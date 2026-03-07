@@ -7,7 +7,25 @@ requires-python = "~=3.13.0"
 readme = "README.md"
 license = "MIT"
 # these dependencies are a best effort and aren't guaranteed to work
-dependencies = ["apprise", "apscheduler", "httpx", "polars", "pydantic", "pyyaml", "requests", "typer"]
+# for up-to-date dependencies, see overlays/default.nix
+dependencies = [
+    "alembic",
+    "apprise",
+    "apscheduler",
+    "httpx",
+    "python-multipart",
+    "polars",
+    "psycopg[binary]",
+    "pydantic",
+    "pyyaml",
+    "requests",
+    "sqlalchemy",
+    "typer",
+]
+
+[project.scripts]
+database = "python.database_cli:app"
+van-inventory = "python.van_inventory.main:serve"
 
 [dependency-groups]
 dev = [
