@@ -16,7 +16,7 @@ from fastapi import FastAPI
 
 from python.api.routers import contact_router, create_frontend_router
 from python.common import configure_logger
-from python.orm.base import get_postgres_engine
+from python.orm.common import get_postgres_engine
 
 logger = logging.getLogger(__name__)
 
