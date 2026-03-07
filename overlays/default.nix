@@ -24,6 +24,7 @@
         fastapi
         fastapi-cli
         httpx
+        python-multipart
         mypy
         polars
         psycopg
