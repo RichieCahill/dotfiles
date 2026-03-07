@@ -9,20 +9,24 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from alembic import context
 from alembic.script import write_hooks
+from sqlalchemy.schema import CreateSchema
 
 from python.common import bash_wrapper
-from python.orm import RichieBase
-from python.orm.base import get_postgres_engine
+from python.orm.common import get_postgres_engine
 
 if TYPE_CHECKING:
     from collections.abc import MutableMapping
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+    from sqlalchemy.orm import DeclarativeBase
+
 config = context.config
 
+base_class: type[DeclarativeBase] = config.attributes.get("base")
+if base_class is None:
+    error = "No base class provided. Use the database CLI to run alembic commands."
+    raise RuntimeError(error)
 
-target_metadata = RichieBase.metadata
+target_metadata = base_class.metadata
 logging.basicConfig(
     level="DEBUG",
     datefmt="%Y-%m-%dT%H:%M:%S%z",
@@ -35,8 +39,9 @@ logging.basicConfig(
 def dynamic_schema(filename: str, _options: dict[Any, Any]) -> None:
     """Dynamic schema."""
     original_file = Path(filename).read_text()
-    dynamic_schema_file_part1 = original_file.replace(f"schema='{RichieBase.schema_name}'", "schema=schema")
-    dynamic_schema_file = dynamic_schema_file_part1.replace(f"'{RichieBase.schema_name}.", "f'{schema}.")
+    schema_name = base_class.schema_name
+    dynamic_schema_file_part1 = original_file.replace(f"schema='{schema_name}'", "schema=schema")
+    dynamic_schema_file = dynamic_schema_file_part1.replace(f"'{schema_name}.", "f'{schema}.")
     Path(filename).write_text(dynamic_schema_file)
 
 
@@ -52,12 +57,12 @@ def include_name(
     type_: Literal["schema", "table", "column", "index", "unique_constraint", "foreign_key_constraint"],
     _parent_names: MutableMapping[Literal["schema_name", "table_name", "schema_qualified_table_name"], str | None],
 ) -> bool:
-    """This filter table to be included in the migration.
+    """Filter tables to be included in the migration.
 
     Args:
         name (str): The name of the table.
         type_ (str): The type of the table.
-        parent_names (list[str]): The names of the parent tables.
+        _parent_names (MutableMapping): The names of the parent tables.
 
     Returns:
         bool: True if the table should be included, False otherwise.
@@ -67,7 +72,6 @@ def include_name(
         return name == target_metadata.schema
     return True
 
-
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
@@ -75,14 +79,24 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = get_postgres_engine()
+    env_prefix = config.attributes.get("env_prefix", "POSTGRES")
+    connectable = get_postgres_engine(name=env_prefix)
 
     with connectable.connect() as connection:
+        schema = base_class.schema_name
+        if not connectable.dialect.has_schema(connection, schema):
+            answer = input(f"Schema {schema!r} does not exist. Create it? [y/N] ")
+            if answer.lower() != "y":
+                error = f"Schema {schema!r} does not exist. Exiting."
+                raise SystemExit(error)
+            connection.execute(CreateSchema(schema))
+            connection.commit()
+
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
             include_schemas=True,
-            version_table_schema=RichieBase.schema_name,
+            version_table_schema=schema,
             include_name=include_name,
         )
 

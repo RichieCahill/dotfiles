@@ -7,7 +7,7 @@ from enum import Enum
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from python.orm.base import RichieBase, TableBase
+from python.orm.richie.base import RichieBase, TableBase
 
 
 class RelationshipType(str, Enum):
