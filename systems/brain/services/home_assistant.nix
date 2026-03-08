@@ -73,6 +73,7 @@
           uiprotect # for ubiquiti integration
           unifi-discovery # for ubiquiti integration
           jsonpath # for rest sensors
+          typedmonarchmoney # for monarch
         ];
       extraComponents = [ "isal" ];
       customComponents = with pkgs.home-assistant-custom-components; [
