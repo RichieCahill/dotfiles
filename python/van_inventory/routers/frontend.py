@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
@@ -12,10 +12,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from python.orm.van_inventory.models import Item, Meal, MealIngredient
-from python.van_inventory.routers.api import _check_meal
 
-if TYPE_CHECKING:
-    from python.van_inventory.dependencies import DbSession
+# FastAPI needs DbSession at runtime to resolve the Depends() annotation
+from python.van_inventory.dependencies import DbSession  # noqa: TC001
+from python.van_inventory.routers.api import _check_meal
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 templates = Jinja2Templates(directory=TEMPLATE_DIR)

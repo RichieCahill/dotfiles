@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import TYPE_CHECKING, Annotated
 
 import typer
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from python.common import configure_logger
 from python.orm.common import get_postgres_engine
 from python.van_inventory.routers import api_router, frontend_router
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -30,6 +34,7 @@ def create_app() -> FastAPI:
         app.state.engine.dispose()
 
     app = FastAPI(title="Van Inventory", lifespan=lifespan)
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
     app.include_router(api_router)
     app.include_router(frontend_router)
     return app
