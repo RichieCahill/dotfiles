@@ -4,12 +4,9 @@ from __future__ import annotations
 
 import base64
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import httpx
-
-if TYPE_CHECKING:
-    from python.signal_bot.models import LLMConfig
 
 logger = logging.getLogger(__name__)
 
@@ -17,16 +14,17 @@ logger = logging.getLogger(__name__)
 class LLMClient:
     """Talk to an ollama instance.
 
-    Designed to be swappable — change ``config.model`` to try a new LLM
-    without touching any calling code.
-
     Args:
-        config: LLM connection and model configuration.
+        model: Ollama model name.
+        host: Ollama host.
+        port: Ollama port.
+        temperature: Sampling temperature.
     """
 
-    def __init__(self, config: LLMConfig) -> None:
-        self.config = config
-        self._client = httpx.Client(base_url=config.base_url, timeout=120)
+    def __init__(self, model: str, host: str, port: int = 11434, *, temperature: float = 0.1) -> None:
+        self.model = model
+        self.temperature = temperature
+        self._client = httpx.Client(base_url=f"http://{host}:{port}", timeout=120)
 
     def chat(self, prompt: str, *, system: str = "") -> str:
         """Send a text prompt and return the response."""
@@ -51,12 +49,12 @@ class LLMClient:
     def _generate(self, messages: list[dict[str, Any]]) -> str:
         """Call the ollama chat API."""
         payload = {
-            "model": self.config.model,
+            "model": self.model,
             "messages": messages,
             "stream": False,
-            "options": {"temperature": self.config.temperature},
+            "options": {"temperature": self.temperature},
         }
-        logger.info(f"LLM request to {self.config.model}")
+        logger.info(f"LLM request to {self.model}")
         response = self._client.post("/api/chat", json=payload)
         response.raise_for_status()
         data = response.json()

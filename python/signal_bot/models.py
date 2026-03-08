@@ -62,20 +62,6 @@ class InventoryUpdate(BaseModel):
     source_type: str = ""  # "receipt_photo" or "text_list"
 
 
-class LLMConfig(BaseModel):
-    """Configuration for an LLM backend."""
-
-    model: str
-    host: str
-    port: int = 11434
-    temperature: float = 0.1
-
-    @property
-    def base_url(self) -> str:
-        """Ollama API base URL."""
-        return f"http://{self.host}:{self.port}"
-
-
 class BotConfig(BaseModel):
     """Top-level bot configuration."""
 
