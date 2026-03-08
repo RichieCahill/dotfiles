@@ -43,6 +43,7 @@
         tinytuya
         typer
         types-requests
+        websockets
       ]
     );
   };
