@@ -118,7 +118,6 @@ def main(
     config = BotConfig(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
-        llm=llm_config,
         inventory_file=inventory_file,
     )
 
