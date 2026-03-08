@@ -26,10 +26,15 @@
       "magistral:24b"
       "ministral-3:14b"
       "nemotron-3-nano:30b"
+      "glm-4.7-flash:q4_K_M"
       "qwen3-coder:30b"
       "qwen3-vl:32b"
       "qwen3:14b"
+      "qwen3.5:27b"
       "qwen3.5:35b"
+      "translategemma:12b"
+      "translategemma:27b"
+      "translategemma:4b"
     ];
     models = "/zfs/models";
     openFirewall = true;
