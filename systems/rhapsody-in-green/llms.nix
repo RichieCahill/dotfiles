@@ -12,7 +12,7 @@
       "gpt-oss:20b"
       "lfm2:24b"
       "qwen3:14b"
-      "qwen3.5:35b"
+      "qwen3.5:27b"
     ];
   };
   systemd.services = {
