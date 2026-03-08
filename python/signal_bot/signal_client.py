@@ -38,9 +38,7 @@ class SignalClient:
             if not data_message:
                 continue
 
-            attachment_ids = [
-                att["id"] for att in data_message.get("attachments", []) if "id" in att
-            ]
+            attachment_ids = [att["id"] for att in data_message.get("attachments", []) if "id" in att]
 
             group_info = data_message.get("groupInfo")
             group_id = group_info.get("groupId") if group_info else None
