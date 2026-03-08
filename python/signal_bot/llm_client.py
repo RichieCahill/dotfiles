@@ -1,0 +1,73 @@
+"""Flexible LLM client for ollama backends."""
+
+from __future__ import annotations
+
+import base64
+import logging
+from typing import TYPE_CHECKING, Any
+
+import httpx
+
+if TYPE_CHECKING:
+    from python.signal_bot.models import LLMConfig
+
+logger = logging.getLogger(__name__)
+
+
+class LLMClient:
+    """Talk to an ollama instance.
+
+    Designed to be swappable — change ``config.model`` to try a new LLM
+    without touching any calling code.
+
+    Args:
+        config: LLM connection and model configuration.
+    """
+
+    def __init__(self, config: LLMConfig) -> None:
+        self.config = config
+        self._client = httpx.Client(base_url=config.base_url, timeout=120)
+
+    def chat(self, prompt: str, *, system: str = "") -> str:
+        """Send a text prompt and return the response."""
+        messages: list[dict[str, Any]] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        return self._generate(messages)
+
+    def chat_with_image(self, prompt: str, image_data: bytes, *, system: str = "") -> str:
+        """Send a prompt with an image and return the response.
+
+        Requires a vision-capable model (e.g. qwen3-vl).
+        """
+        encoded = base64.b64encode(image_data).decode()
+        messages: list[dict[str, Any]] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt, "images": [encoded]})
+        return self._generate(messages)
+
+    def _generate(self, messages: list[dict[str, Any]]) -> str:
+        """Call the ollama chat API."""
+        payload = {
+            "model": self.config.model,
+            "messages": messages,
+            "stream": False,
+            "options": {"temperature": self.config.temperature},
+        }
+        logger.info(f"LLM request to {self.config.model}")
+        response = self._client.post("/api/chat", json=payload)
+        response.raise_for_status()
+        data = response.json()
+        return data["message"]["content"]
+
+    def list_models(self) -> list[str]:
+        """List available models on the ollama instance."""
+        response = self._client.get("/api/tags")
+        response.raise_for_status()
+        return [m["name"] for m in response.json().get("models", [])]
+
+    def close(self) -> None:
+        """Close the HTTP client."""
+        self._client.close()

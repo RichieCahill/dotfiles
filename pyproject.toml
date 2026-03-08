@@ -56,7 +56,10 @@ lint.ignore = [
 [tool.ruff.lint.per-file-ignores]
 
 "tests/**" = [
-    "S101", # (perm) pytest needs asserts
+    "ANN",     # (perm) type annotations not needed in tests
+    "D",       # (perm) docstrings not needed in tests
+    "PLR2004", # (perm) magic values are fine in test assertions
+    "S101",    # (perm) pytest needs asserts
 ]
 "python/stuff/**" = [
     "T201", # (perm) I don't care about print statements dir
@@ -81,6 +84,9 @@ lint.ignore = [
 ]
 "python/alembic/**" = [
     "INP001", # (perm) this creates LSP issues for alembic
+]
+"python/signal_bot/**" = [
+    "D107", # (perm) class docstrings cover __init__
 ]
 
 [tool.ruff.lint.pydocstyle]
