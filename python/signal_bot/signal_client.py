@@ -2,14 +2,39 @@
 
 from __future__ import annotations
 
+import json
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import httpx
+import websockets.sync.client
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 from python.signal_bot.models import SignalMessage
 
 logger = logging.getLogger(__name__)
+
+
+def _parse_envelope(envelope: dict[str, Any]) -> SignalMessage | None:
+    """Parse a signal-cli envelope into a SignalMessage, or None if not a data message."""
+    data_message = envelope.get("dataMessage")
+    if not data_message:
+        return None
+
+    attachment_ids = [att["id"] for att in data_message.get("attachments", []) if "id" in att]
+
+    group_info = data_message.get("groupInfo")
+    group_id = group_info.get("groupId") if group_info else None
+
+    return SignalMessage(
+        source=envelope.get("source", ""),
+        timestamp=envelope.get("timestamp", 0),
+        message=data_message.get("message", "") or "",
+        attachments=attachment_ids,
+        group_id=group_id,
+    )
 
 
 class SignalClient:
@@ -25,35 +50,26 @@ class SignalClient:
         self.phone_number = phone_number
         self._client = httpx.Client(base_url=self.base_url, timeout=30)
 
-    def receive(self) -> list[SignalMessage]:
-        """Poll for new messages."""
-        response = self._client.get(f"/v1/receive/{self.phone_number}")
-        response.raise_for_status()
-        envelopes: list[dict[str, Any]] = response.json()
+    def _ws_url(self) -> str:
+        """Build the WebSocket URL from the base HTTP URL."""
+        url = self.base_url.replace("http://", "ws://").replace("https://", "wss://")
+        return f"{url}/v1/receive/{self.phone_number}"
 
-        messages: list[SignalMessage] = []
-        for raw in envelopes:
-            envelope = raw.get("envelope", {})
-            data_message = envelope.get("dataMessage")
-            if not data_message:
-                continue
+    def listen(self) -> Generator[SignalMessage]:
+        """Connect via WebSocket and yield messages as they arrive."""
+        ws_url = self._ws_url()
+        logger.info(f"Connecting to WebSocket: {ws_url}")
 
-            attachment_ids = [att["id"] for att in data_message.get("attachments", []) if "id" in att]
-
-            group_info = data_message.get("groupInfo")
-            group_id = group_info.get("groupId") if group_info else None
-
-            messages.append(
-                SignalMessage(
-                    source=envelope.get("source", ""),
-                    timestamp=envelope.get("timestamp", 0),
-                    message=data_message.get("message", "") or "",
-                    attachments=attachment_ids,
-                    group_id=group_id,
-                ),
-            )
-
-        return messages
+        with websockets.sync.client.connect(ws_url) as ws:
+            for raw in ws:
+                try:
+                    data = json.loads(raw)
+                    envelope = data.get("envelope", {})
+                    message = _parse_envelope(envelope)
+                    if message:
+                        yield message
+                except json.JSONDecodeError:
+                    logger.warning(f"Non-JSON WebSocket frame: {raw[:200]}")
 
     def send(self, recipient: str, message: str) -> None:
         """Send a text message."""

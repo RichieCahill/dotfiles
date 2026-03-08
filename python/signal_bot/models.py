@@ -82,5 +82,4 @@ class BotConfig(BaseModel):
     signal_api_url: str
     phone_number: str
     llm: LLMConfig
-    poll_interval: int = 2
     inventory_file: str = "van_inventory.json"

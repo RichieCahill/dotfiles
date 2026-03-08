@@ -21,6 +21,7 @@ dependencies = [
     "requests",
     "sqlalchemy",
     "typer",
+    "websockets",
 ]
 
 [project.scripts]

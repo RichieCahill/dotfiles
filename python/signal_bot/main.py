@@ -31,6 +31,8 @@ Available commands:
 Send a receipt photo with the message "!inventory" to scan it.\
 """
 
+RECONNECT_DELAY = 5
+
 
 def dispatch(
     message: SignalMessage,
@@ -84,20 +86,19 @@ def run_loop(
     llm: LLMClient,
     registry: DeviceRegistry,
 ) -> None:
-    """Main polling loop."""
+    """Listen for messages via WebSocket, reconnecting on failure."""
     inventory_path = Path(config.inventory_file)
-    logger.info(f"Bot started — polling every {config.poll_interval}s")
+    logger.info("Bot started — listening via WebSocket")
 
     while True:
         try:
-            messages = signal.receive()
-            for message in messages:
+            for message in signal.listen():
                 logger.info(f"Message from {message.source}: {message.message[:80]}")
                 registry.record_contact(message.source, "")
                 dispatch(message, signal, llm, registry, inventory_path)
         except Exception:
-            logger.exception("Error in message loop")
-        time.sleep(config.poll_interval)
+            logger.exception(f"WebSocket error, reconnecting in {RECONNECT_DELAY}s")
+            time.sleep(RECONNECT_DELAY)
 
 
 def main(
@@ -106,7 +107,6 @@ def main(
     llm_host: Annotated[str, typer.Option(envvar="LLM_HOST")],
     llm_model: Annotated[str, typer.Option(envvar="LLM_MODEL")] = "qwen3-vl:32b",
     llm_port: Annotated[int, typer.Option(envvar="LLM_PORT")] = 11434,
-    poll_interval: Annotated[int, typer.Option(help="Seconds between polls")] = 2,
     inventory_file: Annotated[str, typer.Option(envvar="INVENTORY_FILE")] = "/var/lib/signal-bot/van_inventory.json",
     registry_file: Annotated[str, typer.Option(envvar="REGISTRY_FILE")] = "/var/lib/signal-bot/device_registry.json",
     log_level: Annotated[str, typer.Option()] = "INFO",
@@ -119,7 +119,6 @@ def main(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
         llm=llm_config,
-        poll_interval=poll_interval,
         inventory_file=inventory_file,
     )
 
