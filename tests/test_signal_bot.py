@@ -19,7 +19,6 @@ from python.signal_bot.llm_client import LLMClient
 from python.signal_bot.main import dispatch
 from python.signal_bot.models import (
     InventoryItem,
-    LLMConfig,
     SignalMessage,
     TrustLevel,
 )
@@ -27,10 +26,6 @@ from python.signal_bot.signal_client import SignalClient
 
 
 class TestModels:
-    def test_llm_config_base_url(self):
-        config = LLMConfig(model="test:7b", host="bob.local", port=11434)
-        assert config.base_url == "http://bob.local:11434"
-
     def test_trust_level_values(self):
         assert TrustLevel.VERIFIED == "verified"
         assert TrustLevel.UNVERIFIED == "unverified"
@@ -201,7 +196,7 @@ class TestDispatch:
 
     def test_status_command(self, signal_mock, llm_mock, registry_mock, tmp_path):
         llm_mock.list_models.return_value = ["model1", "model2"]
-        llm_mock.config = LLMConfig(model="test:7b", host="bob")
+        llm_mock.model = "test:7b"
         registry_mock.list_devices.return_value = []
         msg = SignalMessage(source="+1234", timestamp=0, message="!status")
         dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")

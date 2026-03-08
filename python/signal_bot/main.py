@@ -13,7 +13,7 @@ from python.common import configure_logger
 from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
-from python.signal_bot.models import BotConfig, LLMConfig, SignalMessage
+from python.signal_bot.models import BotConfig, SignalMessage
 from python.signal_bot.signal_client import SignalClient
 
 logger = logging.getLogger(__name__)
@@ -70,7 +70,7 @@ def dispatch(
         device_count = len(registry.list_devices())
         signal.reply(
             message,
-            f"Bot online.\nLLM: {llm.config.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
+            f"Bot online.\nLLM: {llm.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
         )
 
     elif cmd == "inventory" or (message.attachments and not text.startswith(CMD_PREFIX)):
@@ -114,7 +114,6 @@ def main(
     """Run the Signal command and control bot."""
     configure_logger(log_level)
 
-    llm_config = LLMConfig(model=llm_model, host=llm_host, port=llm_port)
     config = BotConfig(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
@@ -122,7 +121,7 @@ def main(
     )
 
     signal = SignalClient(config.signal_api_url, config.phone_number)
-    llm = LLMClient(llm_config)
+    llm = LLMClient(model=llm_model, host=llm_host, port=llm_port)
     registry = DeviceRegistry(signal, Path(registry_file))
 
     try:
