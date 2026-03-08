@@ -11,18 +11,16 @@
     authentication = pkgs.lib.mkOverride 10 ''
 
       # admins
-      local all  postgres   trust
-      host  all  postgres   127.0.0.1/32    trust
-      host  all  postgres   ::1/128         trust 
-
-      local all  richie   trust
+      local all  richie   peer
       host  all  richie   127.0.0.1/32    trust
       host  all  richie   ::1/128         trust
       host  all  richie   192.168.90.1/24 trust
       host  all  richie   192.168.99.1/24 trust
 
+      local van_inventory van_inventory peer
+
       #type database DBuser origin-address auth-method
-      local hass     hass     trust
+      local hass     hass     peer
 
       # ipv4
       host  hass     hass     192.168.90.1/24 trust
@@ -60,6 +58,13 @@
           createrole = true;
           createdb = true;
           replication = true;
+        };
+      }
+      {
+        name = "van_inventory";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
         };
       }
       {
