@@ -82,9 +82,7 @@ def htmx_delete_item(request: Request, item_id: int, db: DbSession) -> HTMLRespo
 def _load_meals(db: DbSession) -> list[Meal]:
     return list(
         db.scalars(
-            select(Meal)
-            .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
-            .order_by(Meal.name)
+            select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item)).order_by(Meal.name)
         ).all()
     )
 
@@ -126,9 +124,7 @@ def htmx_delete_meal(request: Request, meal_id: int, db: DbSession) -> HTMLRespo
 
 def _load_meal(db: DbSession, meal_id: int) -> Meal | None:
     return db.scalar(
-        select(Meal)
-        .where(Meal.id == meal_id)
-        .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
+        select(Meal).where(Meal.id == meal_id).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
     )
 
 
@@ -163,9 +159,7 @@ def htmx_remove_ingredient(
     db: DbSession,
 ) -> HTMLResponse:
     """Remove an ingredient from a meal and return updated ingredient rows."""
-    mi = db.scalar(
-        select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == item_id)
-    )
+    mi = db.scalar(select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == item_id))
     if mi:
         db.delete(mi)
         db.commit()
@@ -180,9 +174,7 @@ def htmx_remove_ingredient(
 def availability_page(request: Request, db: DbSession) -> HTMLResponse:
     """Render the meal availability page."""
     meals = list(
-        db.scalars(
-            select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
-        ).all()
+        db.scalars(select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))).all()
     )
     availability = [_check_meal(m) for m in meals]
     return templates.TemplateResponse(request, "availability.html", {"availability": availability})
