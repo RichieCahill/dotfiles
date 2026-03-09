@@ -6,7 +6,9 @@ import json
 from unittest.mock import MagicMock
 
 import pytest
+from sqlalchemy import create_engine
 
+from python.orm.richie.base import RichieBase
 from python.signal_bot.commands.inventory import (
     _format_summary,
     parse_llm_response,
@@ -75,8 +77,14 @@ class TestDeviceRegistry:
         return MagicMock(spec=SignalClient)
 
     @pytest.fixture
-    def registry(self, tmp_path, signal_mock):
-        return DeviceRegistry(signal_mock, tmp_path / "devices.json")
+    def engine(self):
+        engine = create_engine("sqlite://")
+        RichieBase.metadata.create_all(engine)
+        return engine
+
+    @pytest.fixture
+    def registry(self, signal_mock, engine):
+        return DeviceRegistry(signal_mock, engine)
 
     def test_new_device_is_unverified(self, registry):
         registry.record_contact("+1234", "abc123")
@@ -92,8 +100,8 @@ class TestDeviceRegistry:
 
     def test_block_device(self, registry):
         registry.record_contact("+1234", "abc123")
-        registry.block("+1234")
-        assert registry.is_blocked("+1234")
+        assert registry.block("+1234")
+        assert not registry.is_verified("+1234")
 
     def test_safety_number_change_resets_trust(self, registry):
         registry.record_contact("+1234", "abc123")
@@ -102,13 +110,12 @@ class TestDeviceRegistry:
         registry.record_contact("+1234", "different_safety_number")
         assert not registry.is_verified("+1234")
 
-    def test_persistence(self, tmp_path, signal_mock):
-        path = tmp_path / "devices.json"
-        reg1 = DeviceRegistry(signal_mock, path)
+    def test_persistence(self, signal_mock, engine):
+        reg1 = DeviceRegistry(signal_mock, engine)
         reg1.record_contact("+1234", "abc123")
         reg1.verify("+1234")
 
-        reg2 = DeviceRegistry(signal_mock, path)
+        reg2 = DeviceRegistry(signal_mock, engine)
         assert reg2.is_verified("+1234")
 
     def test_list_devices(self, registry):
@@ -138,6 +145,7 @@ class TestDispatch:
         return BotConfig(
             signal_api_url="http://localhost:8080",
             phone_number="+1234567890",
+            inventory_api_url="http://localhost:9090",
         )
 
     def test_unverified_device_ignored(self, signal_mock, llm_mock, registry_mock, config):
