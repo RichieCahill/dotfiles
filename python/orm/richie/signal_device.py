@@ -18,7 +18,7 @@ class SignalDevice(TableBase):
     __tablename__ = "signal_device"
 
     phone_number: Mapped[str] = mapped_column(String(50), unique=True)
-    safety_number: Mapped[str]
+    safety_number: Mapped[str | None]
     trust_level: Mapped[TrustLevel] = mapped_column(
         ENUM(TrustLevel, name="trust_level", create_type=True, schema="main"),
         default=TrustLevel.UNVERIFIED,

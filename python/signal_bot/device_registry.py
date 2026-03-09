@@ -39,7 +39,7 @@ class DeviceRegistry:
         device = self._get(phone_number)
         return device is not None and device.trust_level == TrustLevel.VERIFIED
 
-    def record_contact(self, phone_number: str, safety_number: str) -> SignalDevice:
+    def record_contact(self, phone_number: str, safety_number: str | None = None) -> SignalDevice:
         """Record seeing a device. Creates entry if new, updates last_seen."""
         now = utcnow()
         with Session(self.engine) as session:
@@ -66,6 +66,11 @@ class DeviceRegistry:
             session.commit()
             session.refresh(device)
             return device
+
+    def has_safety_number(self, phone_number: str) -> bool:
+        """Check if a device has a safety number on file."""
+        device = self._get(phone_number)
+        return device is not None and device.safety_number is not None
 
     def verify(self, phone_number: str) -> bool:
         """Mark a device as verified. Called by admin over SSH.
