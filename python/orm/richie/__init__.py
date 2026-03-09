@@ -11,6 +11,7 @@ from python.orm.richie.contact import (
     Need,
     RelationshipType,
 )
+from python.orm.richie.signal_device import SignalDevice
 
 __all__ = [
     "Bill",
@@ -21,6 +22,7 @@ __all__ = [
     "Need",
     "RelationshipType",
     "RichieBase",
+    "SignalDevice",
     "TableBase",
     "Vote",
     "VoteRecord",

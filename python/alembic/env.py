@@ -45,6 +45,18 @@ def dynamic_schema(filename: str, _options: dict[Any, Any]) -> None:
     Path(filename).write_text(dynamic_schema_file)
 
 
+@write_hooks.register("import_postgresql")
+def import_postgresql(filename: str, _options: dict[Any, Any]) -> None:
+    """Add postgresql dialect import when postgresql types are used."""
+    content = Path(filename).read_text()
+    if "postgresql." in content and "from sqlalchemy.dialects import postgresql" not in content:
+        content = content.replace(
+            "import sqlalchemy as sa\n",
+            "import sqlalchemy as sa\nfrom sqlalchemy.dialects import postgresql\n",
+        )
+        Path(filename).write_text(content)
+
+
 @write_hooks.register("ruff")
 def ruff_check_and_format(filename: str, _options: dict[Any, Any]) -> None:
     """Docstring for ruff_check_and_format."""
