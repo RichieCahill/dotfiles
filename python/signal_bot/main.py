@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import logging
+from os import getenv
 import time
-from pathlib import Path
 from typing import Annotated
 
 import typer
@@ -35,9 +35,9 @@ def help_action(
     message: SignalMessage,
     _llm: LLMClient,
     _registry: DeviceRegistry,
-    _inventory_path: Path,
+    _config: BotConfig,
     _cmd: str,
-) -> str:
+) -> None:
     """Return the help text for the bot."""
     signal.reply(message, HELP_TEXT)
 
@@ -47,9 +47,9 @@ def status_action(
     message: SignalMessage,
     llm: LLMClient,
     registry: DeviceRegistry,
-    _inventory_path: Path,
+    _config: BotConfig,
     _cmd: str,
-) -> str:
+) -> None:
     """Return the status of the bot."""
     models = llm.list_models()
     model_list = ", ".join(models[:10])
@@ -65,9 +65,9 @@ def unknown_action(
     message: SignalMessage,
     _llm: LLMClient,
     _registry: DeviceRegistry,
-    _inventory_path: Path,
+    _config: BotConfig,
     cmd: str,
-) -> str:
+) -> None:
     """Return an error message for an unknown command."""
     signal.reply(message, f"Unknown command: {cmd}\n\n{HELP_TEXT}")
 
@@ -77,11 +77,11 @@ def inventory_action(
     message: SignalMessage,
     llm: LLMClient,
     _registry: DeviceRegistry,
-    inventory_path: Path,
+    config: BotConfig,
     _cmd: str,
-) -> str:
+) -> None:
     """Process an inventory update."""
-    handle_inventory_update(message, signal, llm, inventory_path)
+    handle_inventory_update(message, signal, llm, config.inventory_api_url)
 
 
 def dispatch(
@@ -89,7 +89,6 @@ def dispatch(
     signal: SignalClient,
     llm: LLMClient,
     registry: DeviceRegistry,
-    inventory_path: Path,
     config: BotConfig,
 ) -> None:
     """Route an incoming message to the right command handler."""
@@ -104,7 +103,6 @@ def dispatch(
     prefix = config.cmd_prefix
     if not text.startswith(prefix) and not message.attachments:
         return
-    text.startswith(prefix)
     cmd = text.lstrip(prefix).split()[0].lower() if text.startswith(prefix) else ""
 
     commands = {
@@ -114,7 +112,7 @@ def dispatch(
     }
 
     action = commands.get(cmd, unknown_action)
-    action(signal, message, llm, registry, inventory_path, cmd)
+    action(signal, message, llm, registry, config, cmd)
 
 
 def run_loop(
@@ -124,7 +122,6 @@ def run_loop(
     registry: DeviceRegistry,
 ) -> None:
     """Listen for messages via WebSocket, reconnecting on failure."""
-    inventory_path = Path(config.inventory_file)
     logger.info("Bot started — listening via WebSocket")
 
     retries = 0
@@ -136,7 +133,7 @@ def run_loop(
                 logger.info(f"Message from {message.source}: {message.message[:80]}")
                 safety_number = signal.get_safety_number(message.source)
                 registry.record_contact(message.source, safety_number)
-                dispatch(message, signal, llm, registry, inventory_path, config)
+                dispatch(message, signal, llm, registry, config)
                 retries = 0
                 delay = config.reconnect_delay
         except Exception:
@@ -148,25 +145,36 @@ def run_loop(
     logger.critical("Max retries exceeded, shutting down")
 
 
-def main(
-    signal_api_url: Annotated[str, typer.Option(envvar="SIGNAL_API_URL")],
-    phone_number: Annotated[str, typer.Option(envvar="SIGNAL_PHONE_NUMBER")],
-    llm_host: Annotated[str, typer.Option(envvar="LLM_HOST")],
-    llm_model: Annotated[str, typer.Option(envvar="LLM_MODEL")] = "qwen3-vl:32b",
-    llm_port: Annotated[int, typer.Option(envvar="LLM_PORT")] = 11434,
-    inventory_file: Annotated[str, typer.Option(envvar="INVENTORY_FILE")] = "/var/lib/signal-bot/van_inventory.json",
-    log_level: Annotated[str, typer.Option()] = "INFO",
-) -> None:
+def main(log_level: Annotated[str, typer.Option()] = "INFO") -> None:
     """Run the Signal command and control bot."""
     configure_logger(log_level)
+    signal_api_url = getenv("SIGNAL_API_URL")
+    phone_number = getenv("SIGNAL_PHONE_NUMBER")
+    inventory_api_url = getenv("INVENTORY_API_URL")
+
+    if signal_api_url is None:
+        error = "SIGNAL_API_URL environment variable not set"
+        raise ValueError(error)
+    if phone_number is None:
+        error = "SIGNAL_PHONE_NUMBER environment variable not set"
+        raise ValueError(error)
+    if inventory_api_url is None:
+        error = "INVENTORY_API_URL environment variable not set"
+        raise ValueError(error)
 
     config = BotConfig(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
-        inventory_file=inventory_file,
+        inventory_api_url=inventory_api_url,
     )
 
     engine = get_postgres_engine(name="RICHIE")
+    llm_host = getenv("LLM_HOST")
+    llm_model = getenv("LLM_MODEL", "qwen3-vl:32b")
+    llm_port = int(getenv("LLM_PORT", "11434"))
+    if llm_host is None:
+        error = "LLM_HOST environment variable not set"
+        raise ValueError(error)
 
     with (
         SignalClient(config.signal_api_url, config.phone_number) as signal,

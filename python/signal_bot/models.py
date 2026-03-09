@@ -49,7 +49,8 @@ class InventoryItem(BaseModel):
     """An item in the van inventory."""
 
     name: str
-    quantity: int = 1
+    quantity: float = 1
+    unit: str = "each"
     category: str = ""
     notes: str = ""
 
@@ -67,7 +68,7 @@ class BotConfig(BaseModel):
 
     signal_api_url: str
     phone_number: str
-    inventory_file: str = "van_inventory.json"
+    inventory_api_url: str
     cmd_prefix: str = "!"
     reconnect_delay: int = 5
     max_reconnect_delay: int = 300
