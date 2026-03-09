@@ -18,20 +18,69 @@ from python.signal_bot.signal_client import SignalClient
 
 logger = logging.getLogger(__name__)
 
-# Command prefix — messages must start with this to be treated as commands.
-CMD_PREFIX = "!"
 
-HELP_TEXT = """\
-Available commands:
-  !inventory <text list>  — update van inventory from a text list
-  !inventory (+ photo)    — update van inventory from a receipt photo
-  !status                 — show bot status
-  !help                   — show this help message
+HELP_TEXT = (
+    "Available commands:\n"
+    "  !inventory <text list>  — update van inventory from a text list\n"
+    "  !inventory (+ photo)    — update van inventory from a receipt photo\n"
+    "  !status                 — show bot status\n"
+    "  !help                   — show this help message\n"
+    "Send a receipt photo with the message '!inventory' to scan it.\n"
+)
 
-Send a receipt photo with the message "!inventory" to scan it.\
-"""
 
-RECONNECT_DELAY = 5
+def help_action(
+    signal: SignalClient,
+    message: SignalMessage,
+    _llm: LLMClient,
+    _registry: DeviceRegistry,
+    _inventory_path: Path,
+    _cmd: str,
+) -> str:
+    """Return the help text for the bot."""
+    signal.reply(message, HELP_TEXT)
+
+
+def status_action(
+    signal: SignalClient,
+    message: SignalMessage,
+    llm: LLMClient,
+    registry: DeviceRegistry,
+    _inventory_path: Path,
+    _cmd: str,
+) -> str:
+    """Return the status of the bot."""
+    models = llm.list_models()
+    model_list = ", ".join(models[:10])
+    device_count = len(registry.list_devices())
+    signal.reply(
+        message,
+        f"Bot online.\nLLM: {llm.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
+    )
+
+
+def unknown_action(
+    signal: SignalClient,
+    message: SignalMessage,
+    _llm: LLMClient,
+    _registry: DeviceRegistry,
+    _inventory_path: Path,
+    cmd: str,
+) -> str:
+    """Return an error message for an unknown command."""
+    signal.reply(message, f"Unknown command: {cmd}\n\n{HELP_TEXT}")
+
+
+def inventory_action(
+    signal: SignalClient,
+    message: SignalMessage,
+    llm: LLMClient,
+    _registry: DeviceRegistry,
+    inventory_path: Path,
+    _cmd: str,
+) -> str:
+    """Process an inventory update."""
+    handle_inventory_update(message, signal, llm, inventory_path)
 
 
 def dispatch(
@@ -40,44 +89,31 @@ def dispatch(
     llm: LLMClient,
     registry: DeviceRegistry,
     inventory_path: Path,
+    config: BotConfig,
 ) -> None:
     """Route an incoming message to the right command handler."""
     source = message.source
-
-    if registry.is_blocked(source):
-        return
+    prefix = config.cmd_prefix
 
     if not registry.is_verified(source):
-        signal.reply(
-            message,
-            "Your device is not verified. Ask the admin to verify your safety number over SSH.",
-        )
+        logger.info(f"Device {source} not verified, ignoring message")
         return
 
     text = message.message.strip()
 
-    if not text.startswith(CMD_PREFIX) and not message.attachments:
+    if not text.startswith(prefix) and not message.attachments:
         return
 
-    cmd = text.lstrip(CMD_PREFIX).split()[0].lower() if text.startswith(CMD_PREFIX) else ""
+    cmd = text.lstrip(prefix).split()[0].lower() if text.startswith(prefix) else ""
 
-    if cmd == "help":
-        signal.reply(message, HELP_TEXT)
+    commands = {
+        "help": help_action,
+        "status": status_action,
+        "inventory": inventory_action,
+    }
 
-    elif cmd == "status":
-        models = llm.list_models()
-        model_list = ", ".join(models[:10])
-        device_count = len(registry.list_devices())
-        signal.reply(
-            message,
-            f"Bot online.\nLLM: {llm.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
-        )
-
-    elif cmd == "inventory" or (message.attachments and not text.startswith(CMD_PREFIX)):
-        handle_inventory_update(message, signal, llm, inventory_path)
-
-    else:
-        signal.reply(message, f"Unknown command: {cmd}\n\n{HELP_TEXT}")
+    action = commands.get(cmd, unknown_action)
+    action(signal, message, llm, registry, inventory_path, cmd)
 
 
 def run_loop(
