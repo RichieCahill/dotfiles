@@ -11,16 +11,21 @@
     authentication = pkgs.lib.mkOverride 10 ''
 
       # admins
-      local all  richie   peer
+      # These are required for the nixos postgresql setup
+      local all  postgres   trust
+      host  all  postgres   127.0.0.1/32    trust
+      host  all  postgres   ::1/128         trust
+
+      local all  richie   trust
       host  all  richie   127.0.0.1/32    trust
       host  all  richie   ::1/128         trust
       host  all  richie   192.168.90.1/24 trust
       host  all  richie   192.168.99.1/24 trust
 
-      local van_inventory van_inventory peer
+      local vaninventory vaninventory trust
 
       #type database DBuser origin-address auth-method
-      local hass     hass     peer
+      local hass     hass     trust
 
       # ipv4
       host  hass     hass     192.168.90.1/24 trust
@@ -61,7 +66,7 @@
         };
       }
       {
-        name = "van_inventory";
+        name = "vaninventory";
         ensureDBOwnership = true;
         ensureClauses = {
           login = true;
@@ -81,7 +86,7 @@
     ensureDatabases = [
       "hass"
       "richie"
-      "van_inventory"
+      "vaninventory"
     ];
     # Thank you NotAShelf
     # https://github.com/NotAShelf/nyx/blob/d407b4d6e5ab7f60350af61a3d73a62a5e9ac660/modules/core/roles/server/system/services/databases/postgresql.nix#L74
