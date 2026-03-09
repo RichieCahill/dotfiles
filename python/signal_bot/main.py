@@ -94,17 +94,17 @@ def dispatch(
 ) -> None:
     """Route an incoming message to the right command handler."""
     source = message.source
-    prefix = config.cmd_prefix
 
-    if not registry.is_verified(source):
+    if not registry.is_verified(source) or not registry.has_safety_number(source):
         logger.info(f"Device {source} not verified, ignoring message")
         return
 
     text = message.message.strip()
 
+    prefix = config.cmd_prefix
     if not text.startswith(prefix) and not message.attachments:
         return
-
+    text.startswith(prefix)
     cmd = text.lstrip(prefix).split()[0].lower() if text.startswith(prefix) else ""
 
     commands = {
@@ -134,7 +134,8 @@ def run_loop(
         try:
             for message in signal.listen():
                 logger.info(f"Message from {message.source}: {message.message[:80]}")
-                registry.record_contact(message.source, "")
+                safety_number = signal.get_safety_number(message.source)
+                registry.record_contact(message.source, safety_number)
                 dispatch(message, signal, llm, registry, inventory_path, config)
                 retries = 0
                 delay = config.reconnect_delay

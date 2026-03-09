@@ -103,6 +103,13 @@ class SignalClient:
         response.raise_for_status()
         return response.json()
 
+    def get_safety_number(self, phone_number: str) -> str | None:
+        """Look up the safety number for a contact from signal-cli's local store."""
+        for identity in self.get_identities():
+            if identity.get("number") == phone_number:
+                return identity.get("safety_number", identity.get("fingerprint", ""))
+        return None
+
     def trust_identity(self, number_to_trust: str, *, trust_all_known_keys: bool = False) -> None:
         """Trust an identity (verify safety number)."""
         payload: dict[str, Any] = {}
