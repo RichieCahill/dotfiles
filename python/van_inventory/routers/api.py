@@ -211,9 +211,7 @@ def list_meals(db: DbSession) -> list[MealResponse]:
     """List all meals with ingredients."""
     meals = list(
         db.scalars(
-            select(Meal)
-            .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
-            .order_by(Meal.name)
+            select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item)).order_by(Meal.name)
         ).all()
     )
     return [MealResponse.from_meal(m) for m in meals]
@@ -223,9 +221,7 @@ def list_meals(db: DbSession) -> list[MealResponse]:
 def get_meal(meal_id: int, db: DbSession) -> MealResponse:
     """Get a meal by ID with ingredients."""
     meal = db.scalar(
-        select(Meal)
-        .where(Meal.id == meal_id)
-        .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
+        select(Meal).where(Meal.id == meal_id).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
     )
     if not meal:
         raise HTTPException(status_code=404, detail="Meal not found")
@@ -252,9 +248,7 @@ def add_ingredient(meal_id: int, ingredient: IngredientCreate, db: DbSession) ->
     db.add(MealIngredient(meal_id=meal_id, item_id=ingredient.item_id, quantity_needed=ingredient.quantity_needed))
     db.commit()
     meal = db.scalar(
-        select(Meal)
-        .where(Meal.id == meal_id)
-        .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
+        select(Meal).where(Meal.id == meal_id).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
     )
     return MealResponse.from_meal(meal)
 
@@ -262,9 +256,7 @@ def add_ingredient(meal_id: int, ingredient: IngredientCreate, db: DbSession) ->
 @router.delete("/meals/{meal_id}/ingredients/{item_id}")
 def remove_ingredient(meal_id: int, item_id: int, db: DbSession) -> dict[str, bool]:
     """Remove an ingredient from a meal."""
-    mi = db.scalar(
-        select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == item_id)
-    )
+    mi = db.scalar(select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == item_id))
     if not mi:
         raise HTTPException(status_code=404, detail="Ingredient not found")
     db.delete(mi)
@@ -279,9 +271,7 @@ def remove_ingredient(meal_id: int, item_id: int, db: DbSession) -> dict[str, bo
 def check_all_meals(db: DbSession) -> list[MealAvailability]:
     """Check which meals can be made with current inventory."""
     meals = list(
-        db.scalars(
-            select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
-        ).all()
+        db.scalars(select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))).all()
     )
     return [_check_meal(m) for m in meals]
 
@@ -290,9 +280,7 @@ def check_all_meals(db: DbSession) -> list[MealAvailability]:
 def check_meal(meal_id: int, db: DbSession) -> MealAvailability:
     """Check if a specific meal can be made and what's missing."""
     meal = db.scalar(
-        select(Meal)
-        .where(Meal.id == meal_id)
-        .options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
+        select(Meal).where(Meal.id == meal_id).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))
     )
     if not meal:
         raise HTTPException(status_code=404, detail="Meal not found")
