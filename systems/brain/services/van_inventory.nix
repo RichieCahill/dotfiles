@@ -6,11 +6,11 @@
 {
   networking.firewall.allowedTCPPorts = [ 8001 ];
 
-  users.users.van_inventory = {
-    isSystemAccount = true;
-    group = "van_inventory";
+  users.users.vaninventory = {
+    isSystemUser = true;
+    group = "vaninventory";
   };
-  users.groups.van_inventory = { };
+  users.groups.vaninventory = { };
 
   systemd.services.van_inventory = {
     description = "Van Inventory API";
@@ -23,14 +23,16 @@
 
     environment = {
       PYTHONPATH = "${inputs.self}/";
-      VAN_INVENTORY_DB = "van_inventory";
-      VAN_INVENTORY_USER = "van_inventory";
+      VAN_INVENTORY_DB = "vaninventory";
+      VAN_INVENTORY_USER = "vaninventory";
+      VAN_INVENTORY_HOST = "/run/postgresql";
+      VAN_INVENTORY_PORT = "5432";
     };
 
     serviceConfig = {
       Type = "simple";
-      User = "van_inventory";
-      Group = "van_inventory";
+      User = "van-inventory";
+      Group = "van-inventory";
       ExecStart = "${pkgs.my_python}/bin/python -m python.van_inventory.main --host 0.0.0.0 --port 8001";
       Restart = "on-failure";
       RestartSec = "5s";
