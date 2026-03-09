@@ -3,9 +3,9 @@
 {% block content %}
 <h1>Van Inventory</h1>
 
-<form hx-post="/items" hx-target="#item-list" hx-swap="innerHTML" hx-on::after-request="this.reset()">
+<form hx-post="/items" hx-target="#item-list" hx-swap="innerHTML" hx-on::after-request="if(event.detail.successful) this.reset()">
     <label>Name <input type="text" name="name" required></label>
-    <label>Qty <input type="number" name="quantity" step="any" value="0" required></label>
+    <label>Qty <input type="number" name="quantity" step="any" value="0" min="0" required></label>
     <label>Unit <input type="text" name="unit" required placeholder="lbs, cans, etc"></label>
     <label>Category <input type="text" name="category" placeholder="optional"></label>
     <button type="submit">Add Item</button>
