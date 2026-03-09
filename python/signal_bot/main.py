@@ -10,6 +10,7 @@ from typing import Annotated
 import typer
 
 from python.common import configure_logger
+from python.orm.common import get_postgres_engine
 from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
@@ -153,7 +154,6 @@ def main(
     llm_model: Annotated[str, typer.Option(envvar="LLM_MODEL")] = "qwen3-vl:32b",
     llm_port: Annotated[int, typer.Option(envvar="LLM_PORT")] = 11434,
     inventory_file: Annotated[str, typer.Option(envvar="INVENTORY_FILE")] = "/var/lib/signal-bot/van_inventory.json",
-    registry_file: Annotated[str, typer.Option(envvar="REGISTRY_FILE")] = "/var/lib/signal-bot/device_registry.json",
     log_level: Annotated[str, typer.Option()] = "INFO",
 ) -> None:
     """Run the Signal command and control bot."""
@@ -165,12 +165,13 @@ def main(
         inventory_file=inventory_file,
     )
 
+    engine = get_postgres_engine(name="RICHIE")
 
     with (
         SignalClient(config.signal_api_url, config.phone_number) as signal,
         LLMClient(model=llm_model, host=llm_host, port=llm_port) as llm,
     ):
-        registry = DeviceRegistry(signal, Path(registry_file))
+        registry = DeviceRegistry(signal, engine)
         run_loop(config, signal, llm, registry)
 
 

@@ -58,8 +58,9 @@ class DatabaseConfig:
         cfg.set_main_option("version_path_separator", "os")
         cfg.set_main_option("version_locations", self.version_location)
         cfg.set_main_option("revision_environment", "true")
-        cfg.set_section_option("post_write_hooks", "hooks", "dynamic_schema,ruff")
+        cfg.set_section_option("post_write_hooks", "hooks", "dynamic_schema,import_postgresql,ruff")
         cfg.set_section_option("post_write_hooks", "dynamic_schema.type", "dynamic_schema")
+        cfg.set_section_option("post_write_hooks", "import_postgresql.type", "import_postgresql")
         cfg.set_section_option("post_write_hooks", "ruff.type", "ruff")
         cfg.attributes["base"] = self.get_base()
         cfg.attributes["env_prefix"] = self.env_prefix
@@ -73,7 +74,7 @@ DATABASES: dict[str, DatabaseConfig] = {
         version_location="python/alembic/richie/versions",
         base_module="python.orm.richie.base",
         base_class_name="RichieBase",
-        models_module="python.orm.richie.contact",
+        models_module="python.orm.richie",
     ),
     "van_inventory": DatabaseConfig(
         env_prefix="VAN_INVENTORY",
