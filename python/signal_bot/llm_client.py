@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import logging
-from typing import Any
+from typing import Any, Self
 
 import httpx
 
@@ -65,6 +65,14 @@ class LLMClient:
         response = self._client.get("/api/tags")
         response.raise_for_status()
         return [m["name"] for m in response.json().get("models", [])]
+
+    def __enter__(self) -> Self:
+        """Enter the context manager."""
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        """Close the HTTP client on exit."""
+        self.close()
 
     def close(self) -> None:
         """Close the HTTP client."""

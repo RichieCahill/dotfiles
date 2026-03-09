@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 import httpx
 import websockets.sync.client
@@ -120,6 +120,14 @@ class SignalClient:
             self.send_to_group(message.group_id, text)
         else:
             self.send(message.source, text)
+
+    def __enter__(self) -> Self:
+        """Enter the context manager."""
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        """Close the HTTP client on exit."""
+        self.close()
 
     def close(self) -> None:
         """Close the HTTP client."""

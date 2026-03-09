@@ -165,15 +165,13 @@ def main(
         inventory_file=inventory_file,
     )
 
-    signal = SignalClient(config.signal_api_url, config.phone_number)
-    llm = LLMClient(model=llm_model, host=llm_host, port=llm_port)
-    registry = DeviceRegistry(signal, Path(registry_file))
 
-    try:
+    with (
+        SignalClient(config.signal_api_url, config.phone_number) as signal,
+        LLMClient(model=llm_model, host=llm_host, port=llm_port) as llm,
+    ):
+        registry = DeviceRegistry(signal, Path(registry_file))
         run_loop(config, signal, llm, registry)
-    finally:
-        signal.close()
-        llm.close()
 
 
 if __name__ == "__main__":
