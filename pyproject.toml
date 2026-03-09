@@ -48,9 +48,8 @@ lint.ignore = [
     "ERA001", # (perm) I don't care about print statements dir
 ]
 "python/splendor/**" = [
-    "S311",    # (perm) there is no security issue here
-    "T201",    # (perm) I don't care about print statements dir
-    "PLR2004", # (temps) need to think about this
+    "S311", # (perm) there is no security issue here
+    "T201", # (perm) I don't care about print statements dir
 ]
 "python/orm/**" = [
     "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
