@@ -126,15 +126,24 @@ def run_loop(
     inventory_path = Path(config.inventory_file)
     logger.info("Bot started — listening via WebSocket")
 
-    while True:
+    retries = 0
+    delay = config.reconnect_delay
+
+    while retries < config.max_retries:
         try:
             for message in signal.listen():
                 logger.info(f"Message from {message.source}: {message.message[:80]}")
                 registry.record_contact(message.source, "")
-                dispatch(message, signal, llm, registry, inventory_path)
+                dispatch(message, signal, llm, registry, inventory_path, config)
+                retries = 0
+                delay = config.reconnect_delay
         except Exception:
-            logger.exception(f"WebSocket error, reconnecting in {RECONNECT_DELAY}s")
-            time.sleep(RECONNECT_DELAY)
+            retries += 1
+            logger.exception(f"WebSocket error ({retries}/{config.max_retries}), reconnecting in {delay}s")
+            time.sleep(delay)
+            delay = min(delay * 2, config.max_reconnect_delay)
+
+    logger.critical("Max retries exceeded, shutting down")
 
 
 def main(
