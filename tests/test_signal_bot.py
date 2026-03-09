@@ -9,15 +9,13 @@ import pytest
 
 from python.signal_bot.commands.inventory import (
     _format_summary,
-    _merge_items,
-    load_inventory,
     parse_llm_response,
-    save_inventory,
 )
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
 from python.signal_bot.main import dispatch
 from python.signal_bot.models import (
+    BotConfig,
     InventoryItem,
     SignalMessage,
     TrustLevel,
@@ -40,19 +38,21 @@ class TestModels:
     def test_inventory_item_defaults(self):
         item = InventoryItem(name="wrench")
         assert item.quantity == 1
+        assert item.unit == "each"
         assert item.category == ""
 
 
 class TestInventoryParsing:
     def test_parse_llm_response_basic(self):
-        raw = '[{"name": "water", "quantity": 6, "category": "supplies", "notes": ""}]'
+        raw = '[{"name": "water", "quantity": 6, "unit": "gallon", "category": "supplies", "notes": ""}]'
         items = parse_llm_response(raw)
         assert len(items) == 1
         assert items[0].name == "water"
         assert items[0].quantity == 6
+        assert items[0].unit == "gallon"
 
     def test_parse_llm_response_with_code_fence(self):
-        raw = '```json\n[{"name": "tape", "quantity": 1, "category": "tools", "notes": ""}]\n```'
+        raw = '```json\n[{"name": "tape", "quantity": 1, "unit": "each", "category": "tools", "notes": ""}]\n```'
         items = parse_llm_response(raw)
         assert len(items) == 1
         assert items[0].name == "tape"
@@ -61,43 +61,12 @@ class TestInventoryParsing:
         with pytest.raises(json.JSONDecodeError):
             parse_llm_response("not json at all")
 
-    def test_merge_items_new(self):
-        existing = [InventoryItem(name="tape", quantity=2, category="tools")]
-        new = [InventoryItem(name="rope", quantity=1, category="supplies")]
-        merged = _merge_items(existing, new)
-        assert len(merged) == 2
-
-    def test_merge_items_duplicate_sums_quantity(self):
-        existing = [InventoryItem(name="tape", quantity=2, category="tools")]
-        new = [InventoryItem(name="tape", quantity=3, category="tools")]
-        merged = _merge_items(existing, new)
-        assert len(merged) == 1
-        assert merged[0].quantity == 5
-
-    def test_merge_items_case_insensitive(self):
-        existing = [InventoryItem(name="Tape", quantity=1)]
-        new = [InventoryItem(name="tape", quantity=2)]
-        merged = _merge_items(existing, new)
-        assert len(merged) == 1
-        assert merged[0].quantity == 3
-
     def test_format_summary(self):
-        items = [InventoryItem(name="water", quantity=6, category="supplies")]
+        items = [InventoryItem(name="water", quantity=6, unit="gallon", category="supplies")]
         summary = _format_summary(items)
         assert "water" in summary
         assert "x6" in summary
-
-    def test_save_and_load_inventory(self, tmp_path):
-        path = tmp_path / "inventory.json"
-        items = [InventoryItem(name="wrench", quantity=1, category="tools")]
-        save_inventory(path, items)
-        loaded = load_inventory(path)
-        assert len(loaded) == 1
-        assert loaded[0].name == "wrench"
-
-    def test_load_inventory_missing_file(self, tmp_path):
-        path = tmp_path / "does_not_exist.json"
-        assert load_inventory(path) == []
+        assert "gallon" in summary
 
 
 class TestDeviceRegistry:
@@ -160,45 +129,45 @@ class TestDispatch:
     @pytest.fixture
     def registry_mock(self):
         mock = MagicMock(spec=DeviceRegistry)
-        mock.is_blocked.return_value = False
         mock.is_verified.return_value = True
+        mock.has_safety_number.return_value = True
         return mock
 
-    def test_blocked_device_ignored(self, signal_mock, llm_mock, registry_mock, tmp_path):
-        registry_mock.is_blocked.return_value = True
-        msg = SignalMessage(source="+1234", timestamp=0, message="!help")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
-        signal_mock.reply.assert_not_called()
+    @pytest.fixture
+    def config(self):
+        return BotConfig(
+            signal_api_url="http://localhost:8080",
+            phone_number="+1234567890",
+        )
 
-    def test_unverified_device_gets_warning(self, signal_mock, llm_mock, registry_mock, tmp_path):
+    def test_unverified_device_ignored(self, signal_mock, llm_mock, registry_mock, config):
         registry_mock.is_verified.return_value = False
         msg = SignalMessage(source="+1234", timestamp=0, message="!help")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
-        signal_mock.reply.assert_called_once()
-        assert "not verified" in signal_mock.reply.call_args[0][1]
+        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        signal_mock.reply.assert_not_called()
 
-    def test_help_command(self, signal_mock, llm_mock, registry_mock, tmp_path):
+    def test_help_command(self, signal_mock, llm_mock, registry_mock, config):
         msg = SignalMessage(source="+1234", timestamp=0, message="!help")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
+        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
         signal_mock.reply.assert_called_once()
         assert "Available commands" in signal_mock.reply.call_args[0][1]
 
-    def test_unknown_command(self, signal_mock, llm_mock, registry_mock, tmp_path):
+    def test_unknown_command(self, signal_mock, llm_mock, registry_mock, config):
         msg = SignalMessage(source="+1234", timestamp=0, message="!foobar")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
+        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
         signal_mock.reply.assert_called_once()
         assert "Unknown command" in signal_mock.reply.call_args[0][1]
 
-    def test_non_command_message_ignored(self, signal_mock, llm_mock, registry_mock, tmp_path):
+    def test_non_command_message_ignored(self, signal_mock, llm_mock, registry_mock, config):
         msg = SignalMessage(source="+1234", timestamp=0, message="hello there")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
+        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
         signal_mock.reply.assert_not_called()
 
-    def test_status_command(self, signal_mock, llm_mock, registry_mock, tmp_path):
+    def test_status_command(self, signal_mock, llm_mock, registry_mock, config):
         llm_mock.list_models.return_value = ["model1", "model2"]
         llm_mock.model = "test:7b"
         registry_mock.list_devices.return_value = []
         msg = SignalMessage(source="+1234", timestamp=0, message="!status")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, tmp_path / "inv.json")
+        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
         signal_mock.reply.assert_called_once()
         assert "Bot online" in signal_mock.reply.call_args[0][1]
