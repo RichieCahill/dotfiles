@@ -31,8 +31,8 @@
 
     serviceConfig = {
       Type = "simple";
-      User = "van-inventory";
-      Group = "van-inventory";
+      User = "vaninventory";
+      Group = "vaninventory";
       ExecStart = "${pkgs.my_python}/bin/python -m python.van_inventory.main --host 0.0.0.0 --port 8001";
       Restart = "on-failure";
       RestartSec = "5s";
