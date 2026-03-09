@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from python.orm.richie.base import RichieBase, TableBase
 
 
-class RelationshipType(str, Enum):
+class RelationshipType(StrEnum):
     """Relationship types with default closeness weights.
 
     Default weight is an integer 1-10 where 10 = closest relationship.

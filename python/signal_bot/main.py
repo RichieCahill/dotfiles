@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import logging
-from os import getenv
 import time
+from os import getenv
 from typing import Annotated
 
 import typer
