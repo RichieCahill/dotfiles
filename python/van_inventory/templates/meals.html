@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Meals</h1>
 
-<form hx-post="/meals" hx-target="#meal-list" hx-swap="innerHTML" hx-on::after-request="this.reset()">
+<form hx-post="/meals" hx-target="#meal-list" hx-swap="innerHTML" hx-on::after-request="if(event.detail.successful) this.reset()">
     <label>Name <input type="text" name="name" required></label>
     <label>Instructions <input type="text" name="instructions" placeholder="optional"></label>
     <button type="submit">Add Meal</button>

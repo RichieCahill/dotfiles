@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -22,7 +22,7 @@ class ItemCreate(BaseModel):
     """Schema for creating an item."""
 
     name: str
-    quantity: float = 0
+    quantity: float = Field(default=0, ge=0)
     unit: str
     category: str | None = None
 
@@ -31,7 +31,7 @@ class ItemUpdate(BaseModel):
     """Schema for updating an item."""
 
     name: str | None = None
-    quantity: float | None = None
+    quantity: float | None = Field(default=None, ge=0)
     unit: str | None = None
     category: str | None = None
 
@@ -52,7 +52,7 @@ class IngredientCreate(BaseModel):
     """Schema for adding an ingredient to a meal."""
 
     item_id: int
-    quantity_needed: float
+    quantity_needed: float = Field(gt=0)
 
 
 class MealCreate(BaseModel):
@@ -192,6 +192,9 @@ def delete_item(item_id: int, db: DbSession) -> dict[str, bool]:
 @router.post("/meals", response_model=MealResponse)
 def create_meal(meal: MealCreate, db: DbSession) -> MealResponse:
     """Create a new meal with optional ingredients."""
+    for ing in meal.ingredients:
+        if not db.get(Item, ing.item_id):
+            raise HTTPException(status_code=422, detail=f"Item {ing.item_id} not found")
     db_meal = Meal(name=meal.name, instructions=meal.instructions)
     db.add(db_meal)
     db.flush()
@@ -215,6 +218,15 @@ def list_meals(db: DbSession) -> list[MealResponse]:
         ).all()
     )
     return [MealResponse.from_meal(m) for m in meals]
+
+
+@router.get("/meals/availability", response_model=list[MealAvailability])
+def check_all_meals(db: DbSession) -> list[MealAvailability]:
+    """Check which meals can be made with current inventory."""
+    meals = list(
+        db.scalars(select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))).all()
+    )
+    return [_check_meal(m) for m in meals]
 
 
 @router.get("/meals/{meal_id}", response_model=MealResponse)
@@ -245,6 +257,13 @@ def add_ingredient(meal_id: int, ingredient: IngredientCreate, db: DbSession) ->
     meal = db.get(Meal, meal_id)
     if not meal:
         raise HTTPException(status_code=404, detail="Meal not found")
+    if not db.get(Item, ingredient.item_id):
+        raise HTTPException(status_code=422, detail="Item not found")
+    existing = db.scalar(
+        select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == ingredient.item_id)
+    )
+    if existing:
+        raise HTTPException(status_code=409, detail="Ingredient already exists for this meal")
     db.add(MealIngredient(meal_id=meal_id, item_id=ingredient.item_id, quantity_needed=ingredient.quantity_needed))
     db.commit()
     meal = db.scalar(
@@ -262,18 +281,6 @@ def remove_ingredient(meal_id: int, item_id: int, db: DbSession) -> dict[str, bo
     db.delete(mi)
     db.commit()
     return {"deleted": True}
-
-
-# What can I make / what do I need
-
-
-@router.get("/meals/availability", response_model=list[MealAvailability])
-def check_all_meals(db: DbSession) -> list[MealAvailability]:
-    """Check which meals can be made with current inventory."""
-    meals = list(
-        db.scalars(select(Meal).options(selectinload(Meal.ingredients).selectinload(MealIngredient.item))).all()
-    )
-    return [_check_meal(m) for m in meals]
 
 
 @router.get("/meals/{meal_id}/availability", response_model=MealAvailability)

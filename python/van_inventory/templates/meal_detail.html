@@ -5,7 +5,7 @@
 {% if meal.instructions %}<p>{{ meal.instructions }}</p>{% endif %}
 
 <h2>Ingredients</h2>
-<form hx-post="/meals/{{ meal.id }}/ingredients" hx-target="#ingredient-list" hx-swap="innerHTML" hx-on::after-request="this.reset()">
+<form hx-post="/meals/{{ meal.id }}/ingredients" hx-target="#ingredient-list" hx-swap="innerHTML" hx-on::after-request="if(event.detail.successful) this.reset()">
     <label>Item
         <select name="item_id" required>
             <option value="">--</option>
@@ -14,7 +14,7 @@
             {% endfor %}
         </select>
     </label>
-    <label>Qty needed <input type="number" name="quantity_needed" step="any" required></label>
+    <label>Qty needed <input type="number" name="quantity_needed" step="any" min="0.01" required></label>
     <button type="submit">Add</button>
 </form>
 

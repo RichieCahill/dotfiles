@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
@@ -43,6 +43,8 @@ def htmx_create_item(
     category: Annotated[str | None, Form()] = None,
 ) -> HTMLResponse:
     """Create an item and return updated item rows."""
+    if quantity < 0:
+        raise HTTPException(status_code=422, detail="Quantity must not be negative")
     db.add(Item(name=name, quantity=quantity, unit=unit, category=category or None))
     db.commit()
     items = list(db.scalars(select(Item).order_by(Item.name)).all())
@@ -57,6 +59,8 @@ def htmx_update_item(
     quantity: Annotated[float, Form()],
 ) -> HTMLResponse:
     """Update an item's quantity and return updated item rows."""
+    if quantity < 0:
+        raise HTTPException(status_code=422, detail="Quantity must not be negative")
     item = db.get(Item, item_id)
     if item:
         item.quantity = quantity
@@ -132,6 +136,8 @@ def _load_meal(db: DbSession, meal_id: int) -> Meal | None:
 def meal_detail_page(request: Request, meal_id: int, db: DbSession) -> HTMLResponse:
     """Render the meal detail page."""
     meal = _load_meal(db, meal_id)
+    if not meal:
+        raise HTTPException(status_code=404, detail="Meal not found")
     items = list(db.scalars(select(Item).order_by(Item.name)).all())
     return templates.TemplateResponse(request, "meal_detail.html", {"meal": meal, "items": items})
 
@@ -145,6 +151,18 @@ def htmx_add_ingredient(
     quantity_needed: Annotated[float, Form()],
 ) -> HTMLResponse:
     """Add an ingredient to a meal and return updated ingredient rows."""
+    if quantity_needed <= 0:
+        raise HTTPException(status_code=422, detail="Quantity must be positive")
+    meal = db.get(Meal, meal_id)
+    if not meal:
+        raise HTTPException(status_code=404, detail="Meal not found")
+    if not db.get(Item, item_id):
+        raise HTTPException(status_code=422, detail="Item not found")
+    existing = db.scalar(
+        select(MealIngredient).where(MealIngredient.meal_id == meal_id, MealIngredient.item_id == item_id)
+    )
+    if existing:
+        raise HTTPException(status_code=409, detail="Ingredient already exists for this meal")
     db.add(MealIngredient(meal_id=meal_id, item_id=item_id, quantity_needed=quantity_needed))
     db.commit()
     meal = _load_meal(db, meal_id)
