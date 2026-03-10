@@ -3,18 +3,20 @@
 from __future__ import annotations
 
 import logging
-import time
 from os import getenv
 from typing import Annotated
 
 import typer
+from sqlalchemy.orm import Session
+from tenacity import before_sleep_log, retry, stop_after_attempt, wait_exponential
 
-from python.common import configure_logger
+from python.common import configure_logger, utcnow
 from python.orm.common import get_postgres_engine
+from python.orm.richie.dead_letter_message import DeadLetterMessage
 from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
-from python.signal_bot.models import BotConfig, SignalMessage
+from python.signal_bot.models import BotConfig, MessageStatus, SignalMessage
 from python.signal_bot.signal_client import SignalClient
 
 logger = logging.getLogger(__name__)
@@ -115,6 +117,38 @@ def dispatch(
     action(signal, message, llm, registry, config, cmd)
 
 
+def _process_message(
+    message: SignalMessage,
+    signal: SignalClient,
+    llm: LLMClient,
+    registry: DeviceRegistry,
+    config: BotConfig,
+) -> None:
+    """Process a single message, sending it to the dead letter queue after repeated failures."""
+    max_attempts = config.max_message_attempts
+    for attempt in range(1, max_attempts + 1):
+        try:
+            safety_number = signal.get_safety_number(message.source)
+            registry.record_contact(message.source, safety_number)
+            dispatch(message, signal, llm, registry, config)
+        except Exception:
+            logger.exception(f"Failed to process message (attempt {attempt}/{max_attempts})")
+        else:
+            return
+
+    logger.error(f"Message from {message.source} failed {max_attempts} times, sending to dead letter queue")
+    with Session(config.engine) as session:
+        session.add(
+            DeadLetterMessage(
+                source=message.source,
+                message=message.message,
+                received_at=utcnow(),
+                status=MessageStatus.UNPROCESSED,
+            )
+        )
+        session.commit()
+
+
 def run_loop(
     config: BotConfig,
     signal: SignalClient,
@@ -124,25 +158,22 @@ def run_loop(
     """Listen for messages via WebSocket, reconnecting on failure."""
     logger.info("Bot started — listening via WebSocket")
 
-    retries = 0
-    delay = config.reconnect_delay
+    @retry(
+        stop=stop_after_attempt(config.max_retries),
+        wait=wait_exponential(multiplier=config.reconnect_delay, max=config.max_reconnect_delay),
+        before_sleep=before_sleep_log(logger, logging.WARNING),
+        reraise=True,
+    )
+    def _listen() -> None:
+        for message in signal.listen():
+            logger.info(f"Message from {message.source}: {message.message[:80]}")
+            _process_message(message, signal, llm, registry, config)
 
-    while retries < config.max_retries:
-        try:
-            for message in signal.listen():
-                logger.info(f"Message from {message.source}: {message.message[:80]}")
-                safety_number = signal.get_safety_number(message.source)
-                registry.record_contact(message.source, safety_number)
-                dispatch(message, signal, llm, registry, config)
-                retries = 0
-                delay = config.reconnect_delay
-        except Exception:
-            retries += 1
-            logger.exception(f"WebSocket error ({retries}/{config.max_retries}), reconnecting in {delay}s")
-            time.sleep(delay)
-            delay = min(delay * 2, config.max_reconnect_delay)
-
-    logger.critical("Max retries exceeded, shutting down")
+    try:
+        _listen()
+    except Exception:
+        logger.critical("Max retries exceeded, shutting down")
+        raise
 
 
 def main(log_level: Annotated[str, typer.Option()] = "INFO") -> None:
@@ -162,13 +193,14 @@ def main(log_level: Annotated[str, typer.Option()] = "INFO") -> None:
         error = "INVENTORY_API_URL environment variable not set"
         raise ValueError(error)
 
+    engine = get_postgres_engine(name="SIGNALBOT")
     config = BotConfig(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
         inventory_api_url=inventory_api_url,
+        engine=engine,
     )
 
-    engine = get_postgres_engine(name="RICHIE")
     llm_host = getenv("LLM_HOST")
     llm_model = getenv("LLM_MODEL", "qwen3-vl:32b")
     llm_port = int(getenv("LLM_PORT", "11434"))

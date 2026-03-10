@@ -6,7 +6,8 @@ from datetime import datetime  # noqa: TC003 - pydantic needs this at runtime
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from sqlalchemy.engine import Engine  # noqa: TC002 - pydantic needs this at runtime
 
 
 class TrustLevel(StrEnum):
@@ -15,6 +16,13 @@ class TrustLevel(StrEnum):
     VERIFIED = "verified"
     UNVERIFIED = "unverified"
     BLOCKED = "blocked"
+
+
+class MessageStatus(StrEnum):
+    """Dead letter queue message status."""
+
+    UNPROCESSED = "unprocessed"
+    PROCESSED = "processed"
 
 
 class Device(BaseModel):
@@ -66,10 +74,14 @@ class InventoryUpdate(BaseModel):
 class BotConfig(BaseModel):
     """Top-level bot configuration."""
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     signal_api_url: str
     phone_number: str
     inventory_api_url: str
+    engine: Engine
     cmd_prefix: str = "!"
     reconnect_delay: int = 5
     max_reconnect_delay: int = 300
     max_retries: int = 10
+    max_message_attempts: int = 3
