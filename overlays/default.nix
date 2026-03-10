@@ -24,7 +24,6 @@
         fastapi
         fastapi-cli
         httpx
-        python-multipart
         mypy
         polars
         psycopg
@@ -34,11 +33,13 @@
         pytest-cov
         pytest-mock
         pytest-xdist
+        python-multipart
         requests
         ruff
         scalene
         sqlalchemy
         sqlalchemy
+        tenacity
         textual
         tinytuya
         typer
