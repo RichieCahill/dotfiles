@@ -142,10 +142,12 @@ class TestDispatch:
 
     @pytest.fixture
     def config(self):
+        engine = create_engine("sqlite://")
         return BotConfig(
             signal_api_url="http://localhost:8080",
             phone_number="+1234567890",
             inventory_api_url="http://localhost:9090",
+            engine=engine,
         )
 
     def test_unverified_device_ignored(self, signal_mock, llm_mock, registry_mock, config):

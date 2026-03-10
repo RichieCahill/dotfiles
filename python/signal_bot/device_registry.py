@@ -39,7 +39,7 @@ class DeviceRegistry:
         device = self._get(phone_number)
         return device is not None and device.trust_level == TrustLevel.VERIFIED
 
-    def record_contact(self, phone_number: str, safety_number: str | None = None) -> SignalDevice:
+    def record_contact(self, phone_number: str, safety_number: str | None = None) -> None:
         """Record seeing a device. Creates entry if new, updates last_seen."""
         now = utcnow()
         with Session(self.engine) as session:
@@ -48,7 +48,7 @@ class DeviceRegistry:
             ).scalar_one_or_none()
 
             if device:
-                if device.safety_number != safety_number:
+                if device.safety_number != safety_number and device.trust_level != TrustLevel.BLOCKED:
                     logger.warning(f"Safety number changed for {phone_number}, resetting to UNVERIFIED")
                     device.safety_number = safety_number
                     device.trust_level = TrustLevel.UNVERIFIED
@@ -64,8 +64,6 @@ class DeviceRegistry:
                 logger.info(f"New device registered: {phone_number}")
 
             session.commit()
-            session.refresh(device)
-            return device
 
     def has_safety_number(self, phone_number: str) -> bool:
         """Check if a device has a safety number on file."""
