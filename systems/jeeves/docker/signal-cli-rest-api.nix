@@ -6,7 +6,7 @@ in
     8989
   ];
   virtualisation.oci-containers.containers.signal_cli_rest_api = {
-    image = "bbernhard/signal-cli-rest-api:latest";
+    image = "bbernhard/signal-cli-rest-api:0.199-dev";
     ports = [
       "8989:8080"
     ];
