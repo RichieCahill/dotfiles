@@ -80,7 +80,6 @@ class BotConfig(BaseModel):
     phone_number: str
     inventory_api_url: str
     engine: Engine
-    cmd_prefix: str = "!"
     reconnect_delay: int = 5
     max_reconnect_delay: int = 300
     max_retries: int = 10
