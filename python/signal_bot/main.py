@@ -24,11 +24,11 @@ logger = logging.getLogger(__name__)
 
 HELP_TEXT = (
     "Available commands:\n"
-    "  !inventory <text list>  — update van inventory from a text list\n"
-    "  !inventory (+ photo)    — update van inventory from a receipt photo\n"
-    "  !status                 — show bot status\n"
-    "  !help                   — show this help message\n"
-    "Send a receipt photo with the message '!inventory' to scan it.\n"
+    "  inventory <text list>  — update van inventory from a text list\n"
+    "  inventory (+ photo)    — update van inventory from a receipt photo\n"
+    "  status                 — show bot status\n"
+    "  help                   — show this help message\n"
+    "Send a receipt photo with the message 'inventory' to scan it.\n"
 )
 
 
@@ -101,11 +101,12 @@ def dispatch(
         return
 
     text = message.message.strip()
+    parts = text.split()
 
-    prefix = config.cmd_prefix
-    if not text.startswith(prefix) and not message.attachments:
+    if not parts and not message.attachments:
         return
-    cmd = text.lstrip(prefix).split()[0].lower() if text.startswith(prefix) else ""
+
+    cmd = parts[0].lower() if parts else ""
 
     commands = {
         "help": help_action,
@@ -113,7 +114,14 @@ def dispatch(
         "inventory": inventory_action,
     }
 
-    action = commands.get(cmd, unknown_action)
+    action = commands.get(cmd)
+    if action is None:
+        if message.attachments:
+            action = inventory_action
+            cmd = "inventory"
+        else:
+            return
+
     action(signal, message, llm, registry, config, cmd)
 
 
