@@ -7,6 +7,14 @@ let
   vars = import ../vars.nix;
 in
 {
+  users = {
+    users.signalbot = {
+      isSystemUser = true;
+      group = "signalbot";
+    };
+    groups.signalbot = { };
+  };
+
   systemd.services.signal-bot = {
     description = "Signal command and control bot";
     after = [
@@ -22,6 +30,8 @@ in
 
     serviceConfig = {
       Type = "simple";
+      User = "signalbot";
+      Group = "signalbot";
       EnvironmentFile = "${vars.secrets}/services/signal-bot";
       ExecStart = "${pkgs.my_python}/bin/python -m python.signal_bot.main";
       StateDirectory = "signal-bot";

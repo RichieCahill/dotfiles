@@ -6,11 +6,13 @@
 {
   networking.firewall.allowedTCPPorts = [ 8001 ];
 
-  users.users.vaninventory = {
-    isSystemUser = true;
-    group = "vaninventory";
+  users = {
+    users.vaninventory = {
+      isSystemUser = true;
+      group = "vaninventory";
+    };
+    groups.vaninventory = { };
   };
-  users.groups.vaninventory = { };
 
   systemd.services.van_inventory = {
     description = "Van Inventory API";

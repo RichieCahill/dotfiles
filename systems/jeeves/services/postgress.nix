@@ -30,11 +30,14 @@ in
       local hass     hass     trust
       local gitea    gitea    trust
 
+      # signalbot
+      local richie  signalbot   trust
+
       # math
       local postgres  math   trust
       host  postgres  math   127.0.0.1/32    trust
-      host  postgres  math   ::1/128         trust  
-      host  postgres  math   192.168.90.1/24 trust 
+      host  postgres  math   ::1/128         trust
+      host  postgres  math   192.168.90.1/24 trust
 
     '';
 
@@ -96,6 +99,12 @@ in
           createrole = true;
           createdb = true;
           replication = true;
+        };
+      }
+      {
+        name = "signalbot";
+        ensureClauses = {
+          login = true;
         };
       }
     ];
