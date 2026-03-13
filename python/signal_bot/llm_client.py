@@ -26,24 +26,17 @@ class LLMClient:
         self.temperature = temperature
         self._client = httpx.Client(base_url=f"http://{host}:{port}", timeout=120)
 
-    def chat(self, prompt: str, *, system: str = "") -> str:
+    def chat(self, prompt: str, image_data: bytes | None = None, system: str | None = None) -> str:
         """Send a text prompt and return the response."""
         messages: list[dict[str, Any]] = []
         if system:
             messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-        return self._generate(messages)
 
-    def chat_with_image(self, prompt: str, image_data: bytes, *, system: str = "") -> str:
-        """Send a prompt with an image and return the response.
+        user_msg = {"role": "user", "content": prompt}
+        if image_data:
+            user_msg["images"] = [base64.b64encode(image_data).decode()]
 
-        Requires a vision-capable model (e.g. qwen3-vl).
-        """
-        encoded = base64.b64encode(image_data).decode()
-        messages: list[dict[str, Any]] = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt, "images": [encoded]})
+        messages.append(user_msg)
         return self._generate(messages)
 
     def _generate(self, messages: list[dict[str, Any]]) -> str:
