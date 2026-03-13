@@ -113,7 +113,7 @@ def dispatch(
         "status": status_action,
         "inventory": inventory_action,
     }
-
+    logger.info(f"f{source=} running {cmd=} with {message=}")
     action = commands.get(cmd)
     if action is None:
         if message.attachments:
@@ -184,7 +184,10 @@ def run_loop(
         raise
 
 
-def main(log_level: Annotated[str, typer.Option()] = "INFO") -> None:
+def main(
+    log_level: Annotated[str, typer.Option()] = "INFO",
+    llm_timeout: Annotated[int, typer.Option()] = 600,
+) -> None:
     """Run the Signal command and control bot."""
     configure_logger(log_level)
     signal_api_url = getenv("SIGNAL_API_URL")
@@ -218,7 +221,7 @@ def main(log_level: Annotated[str, typer.Option()] = "INFO") -> None:
 
     with (
         SignalClient(config.signal_api_url, config.phone_number) as signal,
-        LLMClient(model=llm_model, host=llm_host, port=llm_port) as llm,
+        LLMClient(model=llm_model, host=llm_host, port=llm_port, timeout=llm_timeout) as llm,
     ):
         registry = DeviceRegistry(signal, engine)
         run_loop(config, signal, llm, registry)

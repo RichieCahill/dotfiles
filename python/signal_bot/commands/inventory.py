@@ -92,6 +92,7 @@ def handle_inventory_update(
     Uses the LLM to extract structured items, then pushes to the van_inventory API.
     """
     try:
+        logger.info(f"Processing inventory update from {message.source}")
         if message.attachments:
             image_data = signal.get_attachment(message.attachments[0])
             raw_response = llm.chat_with_image(
@@ -110,7 +111,11 @@ def handle_inventory_update(
             signal.reply(message, "Send a photo of a receipt or a text list of items to update inventory.")
             return InventoryUpdate()
 
+        logger.info(f"{raw_response=}")
+
         new_items = parse_llm_response(raw_response)
+
+        logger.info(f"{new_items=}")
 
         for item in new_items:
             _upsert_item(api_url, item)
