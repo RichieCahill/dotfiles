@@ -95,9 +95,9 @@ def handle_inventory_update(
         logger.info(f"Processing inventory update from {message.source}")
         if message.attachments:
             image_data = signal.get_attachment(message.attachments[0])
-            raw_response = llm.chat_with_image(
+            raw_response = llm.chat(
                 IMAGE_PROMPT,
-                image_data,
+                image_data=image_data,
                 system=SYSTEM_PROMPT,
             )
             source_type = "receipt_photo"

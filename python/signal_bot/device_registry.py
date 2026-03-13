@@ -48,8 +48,8 @@ class DeviceRegistry:
 
     def is_verified(self, phone_number: str) -> bool:
         """Check if a phone number is verified."""
-        # if entry := self._cached(phone_number):
-        #     return entry.trust_level == TrustLevel.VERIFIED
+        if entry := self._cached(phone_number):
+            return entry.trust_level == TrustLevel.VERIFIED
         device = self.get_device(phone_number)
         return device is not None and device.trust_level == TrustLevel.VERIFIED
 
@@ -57,9 +57,9 @@ class DeviceRegistry:
         """Record seeing a device. Creates entry if new, updates last_seen."""
         now = utcnow()
 
-        # entry = self._cached(phone_number)
-        # if entry and entry.safety_number == safety_number:
-        #     return
+        entry = self._cached(phone_number)
+        if entry and entry.safety_number == safety_number:
+            return
 
         with Session(self.engine) as session:
             device = session.execute(
@@ -94,8 +94,8 @@ class DeviceRegistry:
 
     def has_safety_number(self, phone_number: str) -> bool:
         """Check if a device has a safety number on file."""
-        # if entry := self._cached(phone_number):
-        #     return entry.has_safety_number
+        if entry := self._cached(phone_number):
+            return entry.has_safety_number
         device = self.get_device(phone_number)
         return device is not None and device.safety_number is not None
 
