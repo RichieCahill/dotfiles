@@ -12,6 +12,7 @@
     obs-studio
     obsidian
     vlc
+    qalculate-gtk
     # graphics tools
     gimp3
     xcursorgen
