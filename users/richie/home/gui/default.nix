@@ -16,6 +16,7 @@
     obsidian
     prismlauncher
     prusa-slicer
+    qalculate-gtk
     vlc
     # browser
     chromium

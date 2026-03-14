@@ -232,6 +232,7 @@
     "pyopenweathermap",
     "pyownet",
     "pytest",
+    "qalculate",
     "quicksuggest",
     "radarr",
     "readahead",
