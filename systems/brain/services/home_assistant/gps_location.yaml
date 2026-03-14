@@ -57,6 +57,30 @@ automation:
 
 template:
   - sensor:
+      - name: Van Last Known Latitude
+        unique_id: van_last_known_latitude
+        unit_of_measurement: "°"
+        state: >-
+          {% set lat = states('sensor.gps_latitude')|float(none) %}
+          {% set fix = states('sensor.gps_fix')|int(0) %}
+          {% if lat is not none and fix > 0 %}
+            {{ lat }}
+          {% else %}
+            {{ this.state | default('unavailable', true) }}
+          {% endif %}
+
+      - name: Van Last Known Longitude
+        unique_id: van_last_known_longitude
+        unit_of_measurement: "°"
+        state: >-
+          {% set lon = states('sensor.gps_longitude')|float(none) %}
+          {% set fix = states('sensor.gps_fix')|int(0) %}
+          {% if lon is not none and fix > 0 %}
+            {{ lon }}
+          {% else %}
+            {{ this.state | default('unavailable', true) }}
+          {% endif %}
+
       - name: GPS Location
         unique_id: gps_location
         state: >-
