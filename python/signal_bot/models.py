@@ -79,6 +79,9 @@ class BotConfig(BaseModel):
     signal_api_url: str
     phone_number: str
     inventory_api_url: str
+    ha_url: str | None = None
+    ha_token: str | None = None
+    ha_location_entity: str = "sensor.gps_location"
     engine: Engine
     reconnect_delay: int = 5
     max_reconnect_delay: int = 300

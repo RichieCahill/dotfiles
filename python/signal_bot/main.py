@@ -14,6 +14,7 @@ from python.common import configure_logger, utcnow
 from python.orm.common import get_postgres_engine
 from python.orm.richie.dead_letter_message import DeadLetterMessage
 from python.signal_bot.commands.inventory import handle_inventory_update
+from python.signal_bot.commands.location import handle_location_request
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
 from python.signal_bot.models import BotConfig, MessageStatus, SignalMessage
@@ -27,6 +28,7 @@ HELP_TEXT = (
     "  inventory <text list>  — update van inventory from a text list\n"
     "  inventory (+ photo)    — update van inventory from a receipt photo\n"
     "  status                 — show bot status\n"
+    "  location               — get current van location\n"
     "  help                   — show this help message\n"
     "Send a receipt photo with the message 'inventory' to scan it.\n"
 )
@@ -86,6 +88,18 @@ def inventory_action(
     handle_inventory_update(message, signal, llm, config.inventory_api_url)
 
 
+def location_action(
+    signal: SignalClient,
+    message: SignalMessage,
+    _llm: LLMClient,
+    _registry: DeviceRegistry,
+    config: BotConfig,
+    _cmd: str,
+) -> None:
+    """Reply with current van location."""
+    handle_location_request(message, signal, config.ha_url, config.ha_token, config.ha_location_entity)
+
+
 def dispatch(
     message: SignalMessage,
     signal: SignalClient,
@@ -112,6 +126,7 @@ def dispatch(
         "help": help_action,
         "status": status_action,
         "inventory": inventory_action,
+        "location": location_action,
     }
     logger.info(f"f{source=} running {cmd=} with {message=}")
     action = commands.get(cmd)
@@ -209,6 +224,9 @@ def main(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
         inventory_api_url=inventory_api_url,
+        ha_url=getenv("HA_URL"),
+        ha_token=getenv("HA_TOKEN"),
+        ha_location_entity=getenv("HA_LOCATION_ENTITY", "sensor.gps_location"),
         engine=engine,
     )
 

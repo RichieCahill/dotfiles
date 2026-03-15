@@ -14,6 +14,7 @@ from python.signal_bot.commands.inventory import (
     _format_summary,
     parse_llm_response,
 )
+from python.signal_bot.commands.location import _format_location, handle_location_request
 from python.signal_bot.device_registry import _BLOCKED_TTL, _DEFAULT_TTL, DeviceRegistry, _CacheEntry
 from python.signal_bot.llm_client import LLMClient
 from python.signal_bot.main import dispatch
@@ -227,6 +228,30 @@ class TestContactCache:
             mock_session.execute.assert_called_once()
 
 
+class TestLocationCommand:
+    def test_format_location_from_attributes(self):
+        payload = {
+            "state": "whatever",
+            "attributes": {
+                "latitude": 12.34,
+                "longitude": 56.78,
+                "speed": "45 mph",
+                "last_updated": "2024-01-01T00:00:00+00:00",
+            },
+        }
+        response = _format_location(payload)
+        assert "12.34, 56.78" in response
+        assert "maps.google.com" in response
+        assert "Speed: 45 mph" in response
+
+    def test_handle_location_request_without_config(self):
+        signal = MagicMock(spec=SignalClient)
+        message = SignalMessage(source="+1234", timestamp=0, message="location")
+        handle_location_request(message, signal, None, None, "sensor.gps_location")
+        signal.reply.assert_called_once()
+        assert "not configured" in signal.reply.call_args[0][1]
+
+
 class TestDispatch:
     @pytest.fixture
     def signal_mock(self):
@@ -283,3 +308,16 @@ class TestDispatch:
         dispatch(msg, signal_mock, llm_mock, registry_mock, config)
         signal_mock.reply.assert_called_once()
         assert "Bot online" in signal_mock.reply.call_args[0][1]
+
+    def test_location_command(self, signal_mock, llm_mock, registry_mock, config):
+        msg = SignalMessage(source="+1234", timestamp=0, message="location")
+        with patch("python.signal_bot.main.handle_location_request") as mock_location:
+            dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+
+        mock_location.assert_called_once_with(
+            msg,
+            signal_mock,
+            config.ha_url,
+            config.ha_token,
+            config.ha_location_entity,
+        )
