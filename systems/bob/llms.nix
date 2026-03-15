@@ -4,7 +4,7 @@
     host = "0.0.0.0";
     enable = true;
 
-    syncModels = true;
+    syncModels = false;
     loadModels = [
       "codellama:7b"
       "deepscaler:1.5b"
