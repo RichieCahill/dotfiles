@@ -1,13 +1,13 @@
 """Van weather service - fetches weather with masked GPS for privacy."""
 
 import logging
-import time
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
 import requests
 import typer
 from apscheduler.schedulers.blocking import BlockingScheduler
+from tenacity import before_sleep_log, retry, stop_after_attempt, wait_fixed
 
 from python.common import configure_logger
 from python.van_weather.models import Config, DailyForecast, HourlyForecast, Weather
@@ -29,15 +29,25 @@ CONDITION_MAP = {
 logger = logging.getLogger(__name__)
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_fixed(5),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+    reraise=True,
+)
 def get_ha_state(url: str, token: str, entity_id: str) -> float:
-    """Get numeric state from Home Assistant entity."""
+    """Get numeric state from Home Asasistant entity."""
     response = requests.get(
         f"{url}/api/states/{entity_id}",
         headers={"Authorization": f"Bearer {token}"},
         timeout=30,
     )
     response.raise_for_status()
-    return float(response.json()["state"])
+    state = response.json()["state"]
+    if state in ("unavailable", "unknown"):
+        error = f"{entity_id} is {state}"
+        raise ValueError(error)
+    return float(state)
 
 
 def parse_daily_forecast(data: dict[str, dict[str, Any]]) -> list[DailyForecast]:
@@ -55,6 +65,9 @@ def parse_daily_forecast(data: dict[str, dict[str, Any]]) -> list[DailyForecast]
                     temperature=day.get("temperatureHigh"),
                     templow=day.get("temperatureLow"),
                     precipitation_probability=day.get("precipProbability"),
+                    moon_phase=day.get("moonPhase"),
+                    wind_gust=day.get("windGust"),
+                    cloud_cover=day.get("cloudCover"),
                 )
             )
 
@@ -80,6 +93,12 @@ def parse_hourly_forecast(data: dict[str, dict[str, Any]]) -> list[HourlyForecas
     return hourly_forecasts
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_fixed(5),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+    reraise=True,
+)
 def fetch_weather(api_key: str, lat: float, lon: float) -> Weather:
     """Fetch weather from Pirate Weather API."""
     url = f"https://api.pirateweather.net/forecast/{api_key}/{lat},{lon}"
@@ -102,29 +121,25 @@ def fetch_weather(api_key: str, lat: float, lon: float) -> Weather:
         summary=current.get("summary"),
         pressure=current.get("pressure"),
         visibility=current.get("visibility"),
+        uv_index=current.get("uvIndex"),
+        ozone=current.get("ozone"),
+        nearest_storm_distance=current.get("nearestStormDistance"),
+        nearest_storm_bearing=current.get("nearestStormBearing"),
+        precip_probability=current.get("precipProbability"),
+        cloud_cover=current.get("cloudCover"),
         daily_forecasts=daily_forecasts,
         hourly_forecasts=hourly_forecasts,
     )
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_fixed(5),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+    reraise=True,
+)
 def post_to_ha(url: str, token: str, weather: Weather) -> None:
     """Post weather data to Home Assistant as sensor entities."""
-    max_retries = 6
-    retry_delay = 10
-
-    for attempt in range(1, max_retries + 1):
-        try:
-            _post_weather_data(url, token, weather)
-        except requests.RequestException:
-            if attempt == max_retries:
-                logger.exception(f"Failed to post weather to HA after {max_retries} attempts")
-                return
-            logger.warning(f"Post to HA failed (attempt {attempt}/{max_retries}), retrying in {retry_delay}s")
-            time.sleep(retry_delay)
-
-
-def _post_weather_data(url: str, token: str, weather: Weather) -> None:
-    """Post all weather data to Home Assistant. Raises on failure."""
     headers = {"Authorization": f"Bearer {token}"}
 
     # Post current weather as individual sensors
@@ -160,6 +175,30 @@ def _post_weather_data(url: str, token: str, weather: Weather) -> None:
         "sensor.van_weather_visibility": {
             "state": weather.visibility,
             "attributes": {"unit_of_measurement": "mi"},
+        },
+        "sensor.van_weather_uv_index": {
+            "state": weather.uv_index,
+            "attributes": {"friendly_name": "Van Weather UV Index", "icon": "mdi:sun-wireless"},
+        },
+        "sensor.van_weather_ozone": {
+            "state": weather.ozone,
+            "attributes": {"unit_of_measurement": "DU", "icon": "mdi:earth"},
+        },
+        "sensor.van_weather_nearest_storm_distance": {
+            "state": weather.nearest_storm_distance,
+            "attributes": {"unit_of_measurement": "mi", "icon": "mdi:weather-lightning"},
+        },
+        "sensor.van_weather_nearest_storm_bearing": {
+            "state": weather.nearest_storm_bearing,
+            "attributes": {"unit_of_measurement": "°", "icon": "mdi:weather-lightning"},
+        },
+        "sensor.van_weather_precip_probability": {
+            "state": int((weather.precip_probability or 0) * 100),
+            "attributes": {"unit_of_measurement": "%", "icon": "mdi:weather-rainy"},
+        },
+        "sensor.van_weather_cloud_cover": {
+            "state": int((weather.cloud_cover or 0) * 100),
+            "attributes": {"unit_of_measurement": "%", "icon": "mdi:weather-cloudy"},
         },
     }
 
@@ -209,7 +248,7 @@ def _post_weather_data(url: str, token: str, weather: Weather) -> None:
 
 
 def update_weather(config: Config) -> None:
-    """Fetch GPS, mask it, get weather, post to HA."""
+    """Fetch weather using last-known location, post to HA."""
     lat = get_ha_state(config.ha_url, config.ha_token, config.lat_entity)
     lon = get_ha_state(config.ha_url, config.ha_token, config.lon_entity)
 
@@ -218,7 +257,7 @@ def update_weather(config: Config) -> None:
 
     logger.info(f"Masked location: {masked_lat}, {masked_lon}")
 
-    weather = fetch_weather(config.pirate_weather_api_key, masked_lat, masked_lon)
+    weather = fetch_weather(config.pirate_weather_api_key, lat, lon)
     logger.info(f"Weather: {weather.temperature}°F, {weather.condition}")
 
     post_to_ha(config.ha_url, config.ha_token, weather)

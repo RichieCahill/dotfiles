@@ -11,8 +11,8 @@ class Config(BaseModel):
     ha_url: str
     ha_token: str
     pirate_weather_api_key: str
-    lat_entity: str = "sensor.gps_latitude"
-    lon_entity: str = "sensor.gps_longitude"
+    lat_entity: str = "sensor.van_last_known_latitude"
+    lon_entity: str = "sensor.van_last_known_longitude"
     mask_decimals: int = 1  # ~11km accuracy
 
 
@@ -24,6 +24,9 @@ class DailyForecast(BaseModel):
     temperature: float | None = None  # High
     templow: float | None = None  # Low
     precipitation_probability: float | None = None
+    moon_phase: float | None = None
+    wind_gust: float | None = None
+    cloud_cover: float | None = None
 
     @field_serializer("date_time")
     def serialize_date_time(self, date_time: datetime) -> str:
@@ -57,5 +60,11 @@ class Weather(BaseModel):
     summary: str | None = None
     pressure: float | None = None
     visibility: float | None = None
+    uv_index: float | None = None
+    ozone: float | None = None
+    nearest_storm_distance: float | None = None
+    nearest_storm_bearing: float | None = None
+    precip_probability: float | None = None
+    cloud_cover: float | None = None
     daily_forecasts: list[DailyForecast] = []
     hourly_forecasts: list[HourlyForecast] = []
