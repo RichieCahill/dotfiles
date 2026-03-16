@@ -18,6 +18,15 @@ class TrustLevel(StrEnum):
     BLOCKED = "blocked"
 
 
+class Role(StrEnum):
+    """RBAC roles — one per command, plus admin which grants all."""
+
+    ADMIN = "admin"
+    STATUS = "status"
+    INVENTORY = "inventory"
+    LOCATION = "location"
+
+
 class MessageStatus(StrEnum):
     """Dead letter queue message status."""
 
