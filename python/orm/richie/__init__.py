@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from python.orm.richie.base import RichieBase, TableBase
+from python.orm.richie.base import RichieBase, TableBase, TableBaseBig, TableBaseSmall
 from python.orm.richie.congress import Bill, Legislator, Vote, VoteRecord
 from python.orm.richie.contact import (
     Contact,
@@ -12,7 +12,7 @@ from python.orm.richie.contact import (
     RelationshipType,
 )
 from python.orm.richie.dead_letter_message import DeadLetterMessage
-from python.orm.richie.signal_device import SignalDevice
+from python.orm.richie.signal_device import DeviceRole, RoleRecord, SignalDevice
 
 __all__ = [
     "Bill",
@@ -20,12 +20,16 @@ __all__ = [
     "ContactNeed",
     "ContactRelationship",
     "DeadLetterMessage",
+    "DeviceRole",
+    "RoleRecord",
     "Legislator",
     "Need",
     "RelationshipType",
     "RichieBase",
     "SignalDevice",
     "TableBase",
+    "TableBaseBig",
+    "TableBaseSmall",
     "Vote",
     "VoteRecord",
 ]

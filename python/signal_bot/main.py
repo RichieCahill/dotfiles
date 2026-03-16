@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 from os import getenv
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 import typer
 from sqlalchemy.orm import Session
@@ -17,186 +21,165 @@ from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.commands.location import handle_location_request
 from python.signal_bot.device_registry import DeviceRegistry
 from python.signal_bot.llm_client import LLMClient
-from python.signal_bot.models import BotConfig, MessageStatus, SignalMessage
+from python.signal_bot.models import BotConfig, MessageStatus, Role, SignalMessage
 from python.signal_bot.signal_client import SignalClient
 
 logger = logging.getLogger(__name__)
 
 
-HELP_TEXT = (
-    "Available commands:\n"
-    "  inventory <text list>  — update van inventory from a text list\n"
-    "  inventory (+ photo)    — update van inventory from a receipt photo\n"
-    "  status                 — show bot status\n"
-    "  location               — get current van location\n"
-    "  help                   — show this help message\n"
-    "Send a receipt photo with the message 'inventory' to scan it.\n"
-)
+@dataclass(frozen=True, slots=True)
+class Command:
+    """A registered bot command."""
+
+    action: Callable[[SignalMessage, str], None]
+    help_text: str
+    role: Role | None  # None = no role required (always allowed)
 
 
-def help_action(
-    signal: SignalClient,
-    message: SignalMessage,
-    _llm: LLMClient,
-    _registry: DeviceRegistry,
-    _config: BotConfig,
-    _cmd: str,
-) -> None:
-    """Return the help text for the bot."""
-    signal.reply(message, HELP_TEXT)
+class Bot:
+    """Holds shared resources and dispatches incoming messages to command handlers."""
 
+    def __init__(
+        self,
+        signal: SignalClient,
+        llm: LLMClient,
+        registry: DeviceRegistry,
+        config: BotConfig,
+    ) -> None:
+        self.signal = signal
+        self.llm = llm
+        self.registry = registry
+        self.config = config
+        self.commands: dict[str, Command] = {
+            "help": Command(action=self._help, help_text="show this help message", role=None),
+            "status": Command(action=self._status, help_text="show bot status", role=Role.STATUS),
+            "inventory": Command(
+                action=self._inventory,
+                help_text="update van inventory from a text list or receipt photo",
+                role=Role.INVENTORY,
+            ),
+            "location": Command(
+                action=self._location,
+                help_text="get current van location",
+                role=Role.LOCATION,
+            ),
+        }
 
-def status_action(
-    signal: SignalClient,
-    message: SignalMessage,
-    llm: LLMClient,
-    registry: DeviceRegistry,
-    _config: BotConfig,
-    _cmd: str,
-) -> None:
-    """Return the status of the bot."""
-    models = llm.list_models()
-    model_list = ", ".join(models[:10])
-    device_count = len(registry.list_devices())
-    signal.reply(
-        message,
-        f"Bot online.\nLLM: {llm.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
-    )
+    # -- actions --------------------------------------------------------------
 
+    def _help(self, message: SignalMessage, _cmd: str) -> None:
+        """Return help text filtered to the sender's roles."""
+        self.signal.reply(message, self._build_help(self.registry.get_roles(message.source)))
 
-def unknown_action(
-    signal: SignalClient,
-    message: SignalMessage,
-    _llm: LLMClient,
-    _registry: DeviceRegistry,
-    _config: BotConfig,
-    cmd: str,
-) -> None:
-    """Return an error message for an unknown command."""
-    signal.reply(message, f"Unknown command: {cmd}\n\n{HELP_TEXT}")
-
-
-def inventory_action(
-    signal: SignalClient,
-    message: SignalMessage,
-    llm: LLMClient,
-    _registry: DeviceRegistry,
-    config: BotConfig,
-    _cmd: str,
-) -> None:
-    """Process an inventory update."""
-    handle_inventory_update(message, signal, llm, config.inventory_api_url)
-
-
-def location_action(
-    signal: SignalClient,
-    message: SignalMessage,
-    _llm: LLMClient,
-    _registry: DeviceRegistry,
-    config: BotConfig,
-    _cmd: str,
-) -> None:
-    """Reply with current van location."""
-    handle_location_request(message, signal, config.ha_url, config.ha_token, config.ha_location_entity)
-
-
-def dispatch(
-    message: SignalMessage,
-    signal: SignalClient,
-    llm: LLMClient,
-    registry: DeviceRegistry,
-    config: BotConfig,
-) -> None:
-    """Route an incoming message to the right command handler."""
-    source = message.source
-
-    if not registry.is_verified(source) or not registry.has_safety_number(source):
-        logger.info(f"Device {source} not verified, ignoring message")
-        return
-
-    text = message.message.strip()
-    parts = text.split()
-
-    if not parts and not message.attachments:
-        return
-
-    cmd = parts[0].lower() if parts else ""
-
-    commands = {
-        "help": help_action,
-        "status": status_action,
-        "inventory": inventory_action,
-        "location": location_action,
-    }
-    logger.info(f"f{source=} running {cmd=} with {message=}")
-    action = commands.get(cmd)
-    if action is None:
-        if message.attachments:
-            action = inventory_action
-            cmd = "inventory"
-        else:
-            return
-
-    action(signal, message, llm, registry, config, cmd)
-
-
-def _process_message(
-    message: SignalMessage,
-    signal: SignalClient,
-    llm: LLMClient,
-    registry: DeviceRegistry,
-    config: BotConfig,
-) -> None:
-    """Process a single message, sending it to the dead letter queue after repeated failures."""
-    max_attempts = config.max_message_attempts
-    for attempt in range(1, max_attempts + 1):
-        try:
-            safety_number = signal.get_safety_number(message.source)
-            registry.record_contact(message.source, safety_number)
-            dispatch(message, signal, llm, registry, config)
-        except Exception:
-            logger.exception(f"Failed to process message (attempt {attempt}/{max_attempts})")
-        else:
-            return
-
-    logger.error(f"Message from {message.source} failed {max_attempts} times, sending to dead letter queue")
-    with Session(config.engine) as session:
-        session.add(
-            DeadLetterMessage(
-                source=message.source,
-                message=message.message,
-                received_at=utcnow(),
-                status=MessageStatus.UNPROCESSED,
-            )
+    def _status(self, message: SignalMessage, _cmd: str) -> None:
+        """Return the status of the bot."""
+        models = self.llm.list_models()
+        model_list = ", ".join(models[:10])
+        device_count = len(self.registry.list_devices())
+        self.signal.reply(
+            message,
+            f"Bot online.\nLLM: {self.llm.model}\nAvailable models: {model_list}\nKnown devices: {device_count}",
         )
-        session.commit()
 
+    def _inventory(self, message: SignalMessage, _cmd: str) -> None:
+        """Process an inventory update."""
+        handle_inventory_update(message, self.signal, self.llm, self.config.inventory_api_url)
 
-def run_loop(
-    config: BotConfig,
-    signal: SignalClient,
-    llm: LLMClient,
-    registry: DeviceRegistry,
-) -> None:
-    """Listen for messages via WebSocket, reconnecting on failure."""
-    logger.info("Bot started — listening via WebSocket")
+    def _location(self, message: SignalMessage, _cmd: str) -> None:
+        """Reply with current van location."""
+        handle_location_request(
+            message, self.signal, self.config.ha_url, self.config.ha_token, self.config.ha_location_entity
+        )
 
-    @retry(
-        stop=stop_after_attempt(config.max_retries),
-        wait=wait_exponential(multiplier=config.reconnect_delay, max=config.max_reconnect_delay),
-        before_sleep=before_sleep_log(logger, logging.WARNING),
-        reraise=True,
-    )
-    def _listen() -> None:
-        for message in signal.listen():
-            logger.info(f"Message from {message.source}: {message.message[:80]}")
-            _process_message(message, signal, llm, registry, config)
+    # -- dispatch -------------------------------------------------------------
 
-    try:
-        _listen()
-    except Exception:
-        logger.critical("Max retries exceeded, shutting down")
-        raise
+    def _build_help(self, roles: list[Role]) -> str:
+        """Build help text showing only the commands the user can access."""
+        is_admin = Role.ADMIN in roles
+        lines = ["Available commands:"]
+        for name, cmd in self.commands.items():
+            if cmd.role is None or is_admin or cmd.role in roles:
+                lines.append(f"  {name:20s} — {cmd.help_text}")
+        return "\n".join(lines)
+
+    def dispatch(self, message: SignalMessage) -> None:
+        """Route an incoming message to the right command handler."""
+        source = message.source
+
+        if not self.registry.is_verified(source) or not self.registry.has_safety_number(source):
+            logger.info(f"Device {source} not verified, ignoring message")
+            return
+
+        text = message.message.strip()
+        parts = text.split()
+
+        if not parts and not message.attachments:
+            return
+
+        cmd = parts[0].lower() if parts else ""
+
+        logger.info(f"f{source=} running {cmd=} with {message=}")
+
+        command = self.commands.get(cmd)
+        if command is None:
+            if message.attachments:
+                command = self.commands["inventory"]
+                cmd = "inventory"
+            else:
+                return
+
+        if command.role is not None and not self.registry.has_role(source, command.role):
+            logger.warning(f"Device {source} denied access to {cmd!r}")
+            self.signal.reply(message, f"Permission denied: you do not have the '{command.role}' role.")
+            return
+
+        command.action(message, cmd)
+
+    def process_message(self, message: SignalMessage) -> None:
+        """Process a single message, sending it to the dead letter queue after repeated failures."""
+        max_attempts = self.config.max_message_attempts
+        for attempt in range(1, max_attempts + 1):
+            try:
+                safety_number = self.signal.get_safety_number(message.source)
+                self.registry.record_contact(message.source, safety_number)
+                self.dispatch(message)
+            except Exception:
+                logger.exception(f"Failed to process message (attempt {attempt}/{max_attempts})")
+            else:
+                return
+
+        logger.error(f"Message from {message.source} failed {max_attempts} times, sending to dead letter queue")
+        with Session(self.config.engine) as session:
+            session.add(
+                DeadLetterMessage(
+                    source=message.source,
+                    message=message.message,
+                    received_at=utcnow(),
+                    status=MessageStatus.UNPROCESSED,
+                )
+            )
+            session.commit()
+
+    def run(self) -> None:
+        """Listen for messages via WebSocket, reconnecting on failure."""
+        logger.info("Bot started — listening via WebSocket")
+
+        @retry(
+            stop=stop_after_attempt(self.config.max_retries),
+            wait=wait_exponential(multiplier=self.config.reconnect_delay, max=self.config.max_reconnect_delay),
+            before_sleep=before_sleep_log(logger, logging.WARNING),
+            reraise=True,
+        )
+        def _listen() -> None:
+            for message in self.signal.listen():
+                logger.info(f"Message from {message.source}: {message.message[:80]}")
+                self.process_message(message)
+
+        try:
+            _listen()
+        except Exception:
+            logger.critical("Max retries exceeded, shutting down")
+            raise
 
 
 def main(
@@ -242,7 +225,8 @@ def main(
         LLMClient(model=llm_model, host=llm_host, port=llm_port, timeout=llm_timeout) as llm,
     ):
         registry = DeviceRegistry(signal, engine)
-        run_loop(config, signal, llm, registry)
+        bot = Bot(signal, llm, registry, config)
+        bot.run()
 
 
 if __name__ == "__main__":
