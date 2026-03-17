@@ -19,7 +19,7 @@ from python.orm.common import get_postgres_engine
 from python.orm.richie.dead_letter_message import DeadLetterMessage
 from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.commands.location import handle_location_request
-from python.signal_bot.device_registry import DeviceRegistry
+from python.signal_bot.device_registry import DeviceRegistry, sync_roles
 from python.signal_bot.llm_client import LLMClient
 from python.signal_bot.models import BotConfig, MessageStatus, Role, SignalMessage
 from python.signal_bot.signal_client import SignalClient
@@ -203,6 +203,7 @@ def main(
         raise ValueError(error)
 
     engine = get_postgres_engine(name="SIGNALBOT")
+    sync_roles(engine)
     config = BotConfig(
         signal_api_url=signal_api_url,
         phone_number=phone_number,
