@@ -1,11 +1,13 @@
 import zipfile
 from unittest.mock import patch
 
+import httpx
 import pytest
 from typer.testing import CliRunner
 
 from python.sheet_music_ocr.audiveris import AudiverisError, find_audiveris, run_audiveris
 from python.sheet_music_ocr.main import SUPPORTED_EXTENSIONS, app, extract_mxml_from_mxl
+from python.sheet_music_ocr.review import LLMProvider, ReviewError, review_mxml
 
 runner = CliRunner()
 
@@ -105,14 +107,14 @@ class TestRunAudiveris:
 
 class TestCli:
     def test_missing_input_file(self, tmp_path):
-        result = runner.invoke(app, [str(tmp_path / "nonexistent.pdf")])
+        result = runner.invoke(app, ["convert", str(tmp_path / "nonexistent.pdf")])
         assert result.exit_code == 1
         assert "does not exist" in result.output
 
     def test_unsupported_format(self, tmp_path):
         bad_file = tmp_path / "music.bmp"
         bad_file.touch()
-        result = runner.invoke(app, [str(bad_file)])
+        result = runner.invoke(app, ["convert", str(bad_file)])
         assert result.exit_code == 1
         assert "Unsupported format" in result.output
 
@@ -133,7 +135,7 @@ class TestCli:
         make_mxl(mxl_path, b"<score-partwise/>")
 
         with patch("python.sheet_music_ocr.main.run_audiveris", return_value=mxl_path):
-            result = runner.invoke(app, [str(input_file), "-o", str(output_file)])
+            result = runner.invoke(app, ["convert", str(input_file), "-o", str(output_file)])
 
         assert result.exit_code == 0
         assert output_file.exists()
@@ -148,7 +150,145 @@ class TestCli:
         make_mxl(mxl_path)
 
         with patch("python.sheet_music_ocr.main.run_audiveris", return_value=mxl_path):
-            result = runner.invoke(app, [str(input_file)])
+            result = runner.invoke(app, ["convert", str(input_file)])
 
         assert result.exit_code == 0
         assert (tmp_path / "score.mxml").exists()
+
+
+class TestReviewMxml:
+    def test_raises_when_no_api_key(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+
+        with pytest.raises(ReviewError, match="ANTHROPIC_API_KEY"):
+            review_mxml(mxml, LLMProvider.CLAUDE)
+
+    def test_raises_when_no_openai_key(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+
+        with pytest.raises(ReviewError, match="OPENAI_API_KEY"):
+            review_mxml(mxml, LLMProvider.OPENAI)
+
+    def test_claude_success(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+        corrected = "<score-partwise><part/></score-partwise>"
+        mock_response = httpx.Response(
+            200,
+            json={"content": [{"text": corrected}]},
+            request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+        )
+
+        with patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response):
+            result = review_mxml(mxml, LLMProvider.CLAUDE)
+
+        assert result == corrected
+
+    def test_openai_success(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+        corrected = "<score-partwise><part/></score-partwise>"
+        mock_response = httpx.Response(
+            200,
+            json={"choices": [{"message": {"content": corrected}}]},
+            request=httpx.Request("POST", "https://api.openai.com/v1/chat/completions"),
+        )
+
+        with patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response):
+            result = review_mxml(mxml, LLMProvider.OPENAI)
+
+        assert result == corrected
+
+    def test_claude_api_error(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+        mock_response = httpx.Response(
+            500,
+            text="Internal Server Error",
+            request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+        )
+
+        with (
+            patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response),
+            pytest.raises(ReviewError, match="Claude API error"),
+        ):
+            review_mxml(mxml, LLMProvider.CLAUDE)
+
+    def test_openai_api_error(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+        mock_response = httpx.Response(
+            429,
+            text="Rate limited",
+            request=httpx.Request("POST", "https://api.openai.com/v1/chat/completions"),
+        )
+
+        with (
+            patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response),
+            pytest.raises(ReviewError, match="OpenAI API error"),
+        ):
+            review_mxml(mxml, LLMProvider.OPENAI)
+
+
+class TestReviewCli:
+    def test_missing_input_file(self, tmp_path):
+        result = runner.invoke(app, ["review", str(tmp_path / "nonexistent.mxml")])
+        assert result.exit_code == 1
+        assert "does not exist" in result.output
+
+    def test_wrong_extension(self, tmp_path):
+        bad_file = tmp_path / "score.pdf"
+        bad_file.touch()
+        result = runner.invoke(app, ["review", str(bad_file)])
+        assert result.exit_code == 1
+        assert ".mxml" in result.output
+
+    def test_successful_review(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        output = tmp_path / "corrected.mxml"
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+        corrected = "<score-partwise><part/></score-partwise>"
+        mock_response = httpx.Response(
+            200,
+            json={"content": [{"text": corrected}]},
+            request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+        )
+
+        with patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response):
+            result = runner.invoke(app, ["review", str(mxml), "-o", str(output)])
+
+        assert result.exit_code == 0
+        assert "Reviewed" in result.output
+        assert output.read_text() == corrected
+
+    def test_overwrites_input_by_default(self, tmp_path, monkeypatch):
+        mxml = tmp_path / "score.mxml"
+        mxml.write_text("<score-partwise/>")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+        corrected = "<score-partwise><part/></score-partwise>"
+        mock_response = httpx.Response(
+            200,
+            json={"content": [{"text": corrected}]},
+            request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+        )
+
+        with patch("python.sheet_music_ocr.review.httpx.post", return_value=mock_response):
+            result = runner.invoke(app, ["review", str(mxml)])
+
+        assert result.exit_code == 0
+        assert mxml.read_text() == corrected

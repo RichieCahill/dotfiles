@@ -1,8 +1,9 @@
 """CLI tool for converting scanned sheet music to MusicXML.
 
 Usage:
-    sheet-music-ocr scan.pdf
-    sheet-music-ocr scan.png -o output.mxml
+    sheet-music-ocr convert scan.pdf
+    sheet-music-ocr convert scan.png -o output.mxml
+    sheet-music-ocr review output.mxml --provider claude
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ from typing import Annotated
 import typer
 
 from python.sheet_music_ocr.audiveris import AudiverisError, run_audiveris
+from python.sheet_music_ocr.review import LLMProvider, ReviewError, review_mxml
 
 SUPPORTED_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg", ".tiff", ".tif"}
 
@@ -82,6 +84,39 @@ def convert(
             raise typer.Exit(code=1) from e
 
     typer.echo(f"Written: {output_path}")
+
+
+@app.command()
+def review(
+    input_file: Annotated[Path, typer.Argument(help="Path to MusicXML (.mxml) file to review.")],
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Output path for corrected .mxml. Defaults to overwriting input."),
+    ] = None,
+    provider: Annotated[
+        LLMProvider,
+        typer.Option("--provider", "-p", help="LLM provider to use."),
+    ] = LLMProvider.CLAUDE,
+) -> None:
+    """Review and fix a MusicXML file using an LLM."""
+    if not input_file.exists():
+        typer.echo(f"Error: {input_file} does not exist.", err=True)
+        raise typer.Exit(code=1)
+
+    if input_file.suffix.lower() != ".mxml":
+        typer.echo("Error: Input file must be a .mxml file.", err=True)
+        raise typer.Exit(code=1)
+
+    output_path = output or input_file
+
+    try:
+        corrected = review_mxml(input_file, provider)
+    except ReviewError as e:
+        typer.echo(f"Error: {e}", err=True)
+        raise typer.Exit(code=1) from e
+
+    output_path.write_text(corrected, encoding="utf-8")
+    typer.echo(f"Reviewed: {output_path}")
 
 
 if __name__ == "__main__":
