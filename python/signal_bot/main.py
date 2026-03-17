@@ -87,9 +87,7 @@ class Bot:
 
     def _location(self, message: SignalMessage, _cmd: str) -> None:
         """Reply with current van location."""
-        handle_location_request(
-            message, self.signal, self.config.ha_url, self.config.ha_token, self.config.ha_location_entity
-        )
+        handle_location_request(message, self.signal, self.config.ha_url, self.config.ha_token)
 
     # -- dispatch -------------------------------------------------------------
 
@@ -210,7 +208,6 @@ def main(
         inventory_api_url=inventory_api_url,
         ha_url=getenv("HA_URL"),
         ha_token=getenv("HA_TOKEN"),
-        ha_location_entity=getenv("HA_LOCATION_ENTITY", "sensor.gps_location"),
         engine=engine,
     )
 
