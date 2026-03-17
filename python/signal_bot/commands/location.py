@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from python.signal_bot.signal_client import SignalClient
 
 
-def _get_location_payload(ha_url: str, ha_token: str, entity_id: str) -> dict[str, Any]:
-    """Fetch location entity state from Home Assistant."""
+def _get_entity_state(ha_url: str, ha_token: str, entity_id: str) -> dict[str, Any]:
+    """Fetch an entity's state from Home Assistant."""
     response = requests.get(
         f"{ha_url}/api/states/{entity_id}",
         headers={"Authorization": f"Bearer {ha_token}"},
@@ -22,35 +22,12 @@ def _get_location_payload(ha_url: str, ha_token: str, entity_id: str) -> dict[st
     return response.json()
 
 
-def _format_location(payload: dict[str, Any]) -> str:
+def _format_location(latitude: str, longitude: str) -> str:
     """Render a friendly location response."""
-    attributes = payload.get("attributes", {})
-    latitude = attributes.get("latitude")
-    longitude = attributes.get("longitude")
-
-    if latitude is None or longitude is None:
-        state = payload.get("state", "unknown")
-        if "," not in state:
-            return "Van location is unavailable in Home Assistant right now."
-        latitude_text, longitude_text = [part.strip() for part in state.split(",", maxsplit=1)]
-    else:
-        latitude_text = str(latitude)
-        longitude_text = str(longitude)
-
-    lines = [
-        f"Van location: {latitude_text}, {longitude_text}",
-        f"https://maps.google.com/?q={latitude_text},{longitude_text}",
-    ]
-
-    speed = attributes.get("speed")
-    if speed not in (None, "", "unknown", "unavailable"):
-        lines.append(f"Speed: {speed}")
-
-    last_updated = attributes.get("last_updated")
-    if last_updated:
-        lines.append(f"Updated: {last_updated}")
-
-    return "\n".join(lines)
+    return (
+        f"Van location: {latitude}, {longitude}\n"
+        f"https://maps.google.com/?q={latitude},{longitude}"
+    )
 
 
 def handle_location_request(
@@ -58,7 +35,6 @@ def handle_location_request(
     signal: SignalClient,
     ha_url: str | None,
     ha_token: str | None,
-    ha_location_entity: str,
 ) -> None:
     """Reply with van location from Home Assistant."""
     if ha_url is None or ha_token is None:
@@ -66,9 +42,17 @@ def handle_location_request(
         return
 
     try:
-        payload = _get_location_payload(ha_url, ha_token, ha_location_entity)
+        lat_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_latitude")
+        lon_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_longitude")
     except requests.RequestException:
         signal.reply(message, "Couldn't fetch van location from Home Assistant right now.")
         return
 
-    signal.reply(message, _format_location(payload))
+    latitude = lat_payload.get("state", "")
+    longitude = lon_payload.get("state", "")
+
+    if not latitude or not longitude or latitude == "unavailable" or longitude == "unavailable":
+        signal.reply(message, "Van location is unavailable in Home Assistant right now.")
+        return
+
+    signal.reply(message, _format_location(latitude, longitude))
