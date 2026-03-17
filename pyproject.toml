@@ -27,6 +27,7 @@ dependencies = [
 [project.scripts]
 database = "python.database_cli:app"
 van-inventory = "python.van_inventory.main:serve"
+sheet-music-ocr = "python.sheet_music_ocr.main:app"
 
 [dependency-groups]
 dev = [
