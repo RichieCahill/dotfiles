@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, SmallInteger, String, Text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy import DateTime, Enum, ForeignKey, SmallInteger, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from python.orm.signal_bot.base import SignalBotTableBase, SignalBotTableBaseSmall
@@ -41,7 +40,7 @@ class SignalDevice(SignalBotTableBase):
     phone_number: Mapped[str] = mapped_column(String(50), unique=True)
     safety_number: Mapped[str | None]
     trust_level: Mapped[TrustLevel] = mapped_column(
-        ENUM(TrustLevel, name="trust_level", create_type=True, schema="main"),
+        Enum(TrustLevel, name="trust_level", create_constraint=False, native_enum=False),
         default=TrustLevel.UNVERIFIED,
     )
     last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -58,6 +57,6 @@ class DeadLetterMessage(SignalBotTableBase):
     message: Mapped[str] = mapped_column(Text)
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     status: Mapped[MessageStatus] = mapped_column(
-        ENUM(MessageStatus, name="message_status", create_type=True, schema="main"),
+        Enum(MessageStatus, name="message_status", create_constraint=False, native_enum=False),
         default=MessageStatus.UNPROCESSED,
     )

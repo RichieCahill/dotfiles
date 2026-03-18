@@ -11,6 +11,7 @@ from python.orm.richie.contact import (
     Need,
     RelationshipType,
 )
+
 __all__ = [
     "Bill",
     "Contact",

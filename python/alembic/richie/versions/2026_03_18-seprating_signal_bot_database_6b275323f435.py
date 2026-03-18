@@ -76,7 +76,7 @@ def downgrade() -> None:
         sa.Column(
             "id",
             sa.SMALLINT(),
-            server_default=sa.text("nextval(f'{schema}.role_id_seq'::regclass)"),
+            server_default=sa.text(f"nextval('{schema}.role_id_seq'::regclass)"),
             autoincrement=True,
             nullable=False,
         ),
