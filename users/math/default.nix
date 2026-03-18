@@ -22,7 +22,7 @@ in
       shell = pkgs.zsh;
       group = "math";
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEa0Jjp5qEvrYXQbN2EV+1+9ZwtXQfIpjklsceZRZJdl matthew.michal11@gmail.com" # cspell:disable-line
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJH03VzDbUhzfhvwD+OsYh6GobODYaI9jdNdzWQoqFsp matth@Jove" # cspell:disable-line
       ];
       extraGroups = [
         "audio"
