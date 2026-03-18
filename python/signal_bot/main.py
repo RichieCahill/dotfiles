@@ -11,12 +11,14 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 import typer
+from alembic.command import upgrade
 from sqlalchemy.orm import Session
 from tenacity import before_sleep_log, retry, stop_after_attempt, wait_exponential
 
 from python.common import configure_logger, utcnow
+from python.database_cli import DATABASES
 from python.orm.common import get_postgres_engine
-from python.orm.richie.dead_letter_message import DeadLetterMessage
+from python.orm.signal_bot.models import DeadLetterMessage
 from python.signal_bot.commands.inventory import handle_inventory_update
 from python.signal_bot.commands.location import handle_location_request
 from python.signal_bot.device_registry import DeviceRegistry, sync_roles
@@ -181,7 +183,7 @@ class Bot:
 
 
 def main(
-    log_level: Annotated[str, typer.Option()] = "INFO",
+    log_level: Annotated[str, typer.Option()] = "DEBUG",
     llm_timeout: Annotated[int, typer.Option()] = 600,
 ) -> None:
     """Run the Signal command and control bot."""
@@ -200,6 +202,8 @@ def main(
         error = "INVENTORY_API_URL environment variable not set"
         raise ValueError(error)
 
+    signal_bot_config = DATABASES["signal_bot"].alembic_config()
+    upgrade(signal_bot_config, "head")
     engine = get_postgres_engine(name="SIGNALBOT")
     sync_roles(engine)
     config = BotConfig(

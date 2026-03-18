@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import requests
@@ -10,11 +11,15 @@ if TYPE_CHECKING:
     from python.signal_bot.models import SignalMessage
     from python.signal_bot.signal_client import SignalClient
 
+logger = logging.getLogger(__name__)
+
 
 def _get_entity_state(ha_url: str, ha_token: str, entity_id: str) -> dict[str, Any]:
     """Fetch an entity's state from Home Assistant."""
+    entity_url = f"{ha_url}/api/states/{entity_id}"
+    logger.debug(f"Fetching {entity_url=}")
     response = requests.get(
-        f"{ha_url}/api/states/{entity_id}",
+        entity_url,
         headers={"Authorization": f"Bearer {ha_token}"},
         timeout=30,
     )
@@ -24,10 +29,7 @@ def _get_entity_state(ha_url: str, ha_token: str, entity_id: str) -> dict[str, A
 
 def _format_location(latitude: str, longitude: str) -> str:
     """Render a friendly location response."""
-    return (
-        f"Van location: {latitude}, {longitude}\n"
-        f"https://maps.google.com/?q={latitude},{longitude}"
-    )
+    return f"Van location: {latitude}, {longitude}\nhttps://maps.google.com/?q={latitude},{longitude}"
 
 
 def handle_location_request(
@@ -41,10 +43,14 @@ def handle_location_request(
         signal.reply(message, "Location command is not configured (missing HA_URL or HA_TOKEN).")
         return
 
+    lat_payload = None
+    lon_payload = None
     try:
         lat_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_latitude")
         lon_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_longitude")
     except requests.RequestException:
+        logger.exception("Couldn't fetch van location from Home Assistant right now.")
+        logger.debug(f"{ha_url=} {lat_payload=} {lon_payload=}")
         signal.reply(message, "Couldn't fetch van location from Home Assistant right now.")
         return
 

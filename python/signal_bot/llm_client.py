@@ -21,10 +21,18 @@ class LLMClient:
         temperature: Sampling temperature.
     """
 
-    def __init__(self, model: str, host: str, port: int = 11434, *, temperature: float = 0.1) -> None:
+    def __init__(
+        self,
+        *,
+        model: str,
+        host: str,
+        port: int = 11434,
+        temperature: float = 0.1,
+        timeout: int = 300,
+    ) -> None:
         self.model = model
         self.temperature = temperature
-        self._client = httpx.Client(base_url=f"http://{host}:{port}", timeout=120)
+        self._client = httpx.Client(base_url=f"http://{host}:{port}", timeout=timeout)
 
     def chat(self, prompt: str, image_data: bytes | None = None, system: str | None = None) -> str:
         """Send a text prompt and return the response."""

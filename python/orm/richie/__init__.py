@@ -11,22 +11,15 @@ from python.orm.richie.contact import (
     Need,
     RelationshipType,
 )
-from python.orm.richie.dead_letter_message import DeadLetterMessage
-from python.orm.richie.signal_device import DeviceRole, RoleRecord, SignalDevice
-
 __all__ = [
     "Bill",
     "Contact",
     "ContactNeed",
     "ContactRelationship",
-    "DeadLetterMessage",
-    "DeviceRole",
-    "RoleRecord",
     "Legislator",
     "Need",
     "RelationshipType",
     "RichieBase",
-    "SignalDevice",
     "TableBase",
     "TableBaseBig",
     "TableBaseSmall",
