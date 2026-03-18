@@ -7,9 +7,7 @@ from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
 import pytest
-from sqlalchemy import create_engine
 
-from python.orm.richie.base import RichieBase
 from python.signal_bot.commands.inventory import (
     _format_summary,
     parse_llm_response,
@@ -17,7 +15,7 @@ from python.signal_bot.commands.inventory import (
 from python.signal_bot.commands.location import _format_location, handle_location_request
 from python.signal_bot.device_registry import _BLOCKED_TTL, _DEFAULT_TTL, DeviceRegistry, _CacheEntry
 from python.signal_bot.llm_client import LLMClient
-from python.signal_bot.main import dispatch
+from python.signal_bot.main import Bot
 from python.signal_bot.models import (
     BotConfig,
     InventoryItem,
@@ -79,12 +77,6 @@ class TestDeviceRegistry:
         return MagicMock(spec=SignalClient)
 
     @pytest.fixture
-    def engine(self):
-        engine = create_engine("sqlite://")
-        RichieBase.metadata.create_all(engine)
-        return engine
-
-    @pytest.fixture
     def registry(self, signal_mock, engine):
         return DeviceRegistry(signal_mock, engine)
 
@@ -130,12 +122,6 @@ class TestContactCache:
     @pytest.fixture
     def signal_mock(self):
         return MagicMock(spec=SignalClient)
-
-    @pytest.fixture
-    def engine(self):
-        engine = create_engine("sqlite://")
-        RichieBase.metadata.create_all(engine)
-        return engine
 
     @pytest.fixture
     def registry(self, signal_mock, engine):
@@ -215,6 +201,7 @@ class TestContactCache:
             trust_level=old.trust_level,
             has_safety_number=old.has_safety_number,
             safety_number=old.safety_number,
+            roles=old.roles,
         )
 
         with patch("python.signal_bot.device_registry.Session") as mock_session_cls:
@@ -229,25 +216,15 @@ class TestContactCache:
 
 
 class TestLocationCommand:
-    def test_format_location_from_attributes(self):
-        payload = {
-            "state": "whatever",
-            "attributes": {
-                "latitude": 12.34,
-                "longitude": 56.78,
-                "speed": "45 mph",
-                "last_updated": "2024-01-01T00:00:00+00:00",
-            },
-        }
-        response = _format_location(payload)
+    def test_format_location(self):
+        response = _format_location("12.34", "56.78")
         assert "12.34, 56.78" in response
         assert "maps.google.com" in response
-        assert "Speed: 45 mph" in response
 
     def test_handle_location_request_without_config(self):
         signal = MagicMock(spec=SignalClient)
         message = SignalMessage(source="+1234", timestamp=0, message="location")
-        handle_location_request(message, signal, None, None, "sensor.gps_location")
+        handle_location_request(message, signal, None, None)
         signal.reply.assert_called_once()
         assert "not configured" in signal.reply.call_args[0][1]
 
@@ -266,11 +243,12 @@ class TestDispatch:
         mock = MagicMock(spec=DeviceRegistry)
         mock.is_verified.return_value = True
         mock.has_safety_number.return_value = True
+        mock.has_role.return_value = False
+        mock.get_roles.return_value = []
         return mock
 
     @pytest.fixture
-    def config(self):
-        engine = create_engine("sqlite://")
+    def config(self, engine):
         return BotConfig(
             signal_api_url="http://localhost:8080",
             phone_number="+1234567890",
@@ -278,46 +256,66 @@ class TestDispatch:
             engine=engine,
         )
 
-    def test_unverified_device_ignored(self, signal_mock, llm_mock, registry_mock, config):
+    @pytest.fixture
+    def bot(self, signal_mock, llm_mock, registry_mock, config):
+        return Bot(signal_mock, llm_mock, registry_mock, config)
+
+    def test_unverified_device_ignored(self, bot, signal_mock, registry_mock):
         registry_mock.is_verified.return_value = False
         msg = SignalMessage(source="+1234", timestamp=0, message="help")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        bot.dispatch(msg)
         signal_mock.reply.assert_not_called()
 
-    def test_help_command(self, signal_mock, llm_mock, registry_mock, config):
+    def test_admin_without_safety_number_ignored(self, bot, signal_mock, registry_mock):
+        registry_mock.has_safety_number.return_value = False
+        registry_mock.has_role.return_value = True
         msg = SignalMessage(source="+1234", timestamp=0, message="help")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        bot.dispatch(msg)
+        signal_mock.reply.assert_not_called()
+
+    def test_non_admin_without_safety_number_allowed(self, bot, signal_mock, registry_mock):
+        registry_mock.has_safety_number.return_value = False
+        registry_mock.has_role.return_value = False
+        registry_mock.get_roles.return_value = []
+        msg = SignalMessage(source="+1234", timestamp=0, message="help")
+        bot.dispatch(msg)
+        signal_mock.reply.assert_called_once()
+
+    def test_help_command(self, bot, signal_mock, registry_mock):
+        msg = SignalMessage(source="+1234", timestamp=0, message="help")
+        bot.dispatch(msg)
         signal_mock.reply.assert_called_once()
         assert "Available commands" in signal_mock.reply.call_args[0][1]
 
-    def test_unknown_command_ignored(self, signal_mock, llm_mock, registry_mock, config):
+    def test_unknown_command_ignored(self, bot, signal_mock):
         msg = SignalMessage(source="+1234", timestamp=0, message="foobar")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        bot.dispatch(msg)
         signal_mock.reply.assert_not_called()
 
-    def test_non_command_message_ignored(self, signal_mock, llm_mock, registry_mock, config):
+    def test_non_command_message_ignored(self, bot, signal_mock):
         msg = SignalMessage(source="+1234", timestamp=0, message="hello there")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        bot.dispatch(msg)
         signal_mock.reply.assert_not_called()
 
-    def test_status_command(self, signal_mock, llm_mock, registry_mock, config):
+    def test_status_command(self, bot, signal_mock, llm_mock, registry_mock):
         llm_mock.list_models.return_value = ["model1", "model2"]
         llm_mock.model = "test:7b"
         registry_mock.list_devices.return_value = []
+        registry_mock.has_role.return_value = True
         msg = SignalMessage(source="+1234", timestamp=0, message="status")
-        dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+        bot.dispatch(msg)
         signal_mock.reply.assert_called_once()
         assert "Bot online" in signal_mock.reply.call_args[0][1]
 
-    def test_location_command(self, signal_mock, llm_mock, registry_mock, config):
+    def test_location_command(self, bot, signal_mock, registry_mock, config):
+        registry_mock.has_role.return_value = True
         msg = SignalMessage(source="+1234", timestamp=0, message="location")
         with patch("python.signal_bot.main.handle_location_request") as mock_location:
-            dispatch(msg, signal_mock, llm_mock, registry_mock, config)
+            bot.dispatch(msg)
 
         mock_location.assert_called_once_with(
             msg,
             signal_mock,
             config.ha_url,
             config.ha_token,
-            config.ha_location_entity,
         )

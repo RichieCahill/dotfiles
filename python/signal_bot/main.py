@@ -106,8 +106,12 @@ class Bot:
         """Route an incoming message to the right command handler."""
         source = message.source
 
-        if not self.registry.is_verified(source) or not self.registry.has_safety_number(source):
+        if not self.registry.is_verified(source):
             logger.info(f"Device {source} not verified, ignoring message")
+            return
+
+        if not self.registry.has_safety_number(source) and self.registry.has_role(source, Role.ADMIN):
+            logger.warning(f"Admin device {source} missing safety number, ignoring message")
             return
 
         text = message.message.strip()
