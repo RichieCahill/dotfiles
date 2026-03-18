@@ -31,7 +31,7 @@ in
       local gitea    gitea    trust
 
       # signalbot
-      local richie  signalbot   trust
+      local signalbot  signalbot   trust
 
       # math
       local postgres  math   trust
@@ -103,6 +103,7 @@ in
       }
       {
         name = "signalbot";
+        ensureDBOwnership = true;
         ensureClauses = {
           login = true;
         };
@@ -114,6 +115,7 @@ in
       "math"
       "n8n"
       "richie"
+      "signalbot"
     ];
     # Thank you NotAShelf
     # https://github.com/NotAShelf/nyx/blob/d407b4d6e5ab7f60350af61a3d73a62a5e9ac660/modules/core/roles/server/system/services/databases/postgresql.nix#L74

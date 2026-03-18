@@ -10,7 +10,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from python.common import utcnow
-from python.orm.richie.signal_device import RoleRecord, SignalDevice
+from python.orm.signal_bot.models import RoleRecord, SignalDevice
 from python.signal_bot.models import Role, TrustLevel
 
 if TYPE_CHECKING:

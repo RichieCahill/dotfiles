@@ -1,18 +1,18 @@
-"""Signal bot device and role ORM models."""
+"""Signal bot device, role, and dead letter ORM models."""
 
 from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, SmallInteger, String, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, SmallInteger, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from python.orm.richie.base import TableBase, TableBaseSmall
-from python.signal_bot.models import TrustLevel
+from python.orm.signal_bot.base import SignalBotTableBase, SignalBotTableBaseSmall
+from python.signal_bot.models import MessageStatus, TrustLevel
 
 
-class RoleRecord(TableBaseSmall):
+class RoleRecord(SignalBotTableBaseSmall):
     """Lookup table for RBAC roles, keyed by smallint."""
 
     __tablename__ = "role"
@@ -20,7 +20,7 @@ class RoleRecord(TableBaseSmall):
     name: Mapped[str] = mapped_column(String(50), unique=True)
 
 
-class DeviceRole(TableBase):
+class DeviceRole(SignalBotTableBase):
     """Association between a device and a role."""
 
     __tablename__ = "device_role"
@@ -33,7 +33,7 @@ class DeviceRole(TableBase):
     role_id: Mapped[int] = mapped_column(SmallInteger, ForeignKey("main.role.id"))
 
 
-class SignalDevice(TableBase):
+class SignalDevice(SignalBotTableBase):
     """A Signal device tracked by phone number and safety number."""
 
     __tablename__ = "signal_device"
@@ -47,3 +47,17 @@ class SignalDevice(TableBase):
     last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
     roles: Mapped[list[RoleRecord]] = relationship(secondary=DeviceRole.__table__)
+
+
+class DeadLetterMessage(SignalBotTableBase):
+    """A Signal message that failed processing and was sent to the dead letter queue."""
+
+    __tablename__ = "dead_letter_message"
+
+    source: Mapped[str]
+    message: Mapped[str] = mapped_column(Text)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    status: Mapped[MessageStatus] = mapped_column(
+        ENUM(MessageStatus, name="message_status", create_type=True, schema="main"),
+        default=MessageStatus.UNPROCESSED,
+    )

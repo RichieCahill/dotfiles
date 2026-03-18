@@ -26,7 +26,7 @@ in
 
     environment = {
       PYTHONPATH = "${inputs.self}";
-      SIGNALBOT_DB = "richie";
+      SIGNALBOT_DB = "signalbot";
       SIGNALBOT_USER = "signalbot";
       SIGNALBOT_HOST = "/run/postgresql";
       SIGNALBOT_PORT = "5432";
@@ -34,6 +34,7 @@ in
 
     serviceConfig = {
       Type = "simple";
+      WorkingDirectory = "${inputs.self}";
       User = "signalbot";
       Group = "signalbot";
       EnvironmentFile = "${vars.secrets}/services/signal-bot";

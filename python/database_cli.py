@@ -83,6 +83,13 @@ DATABASES: dict[str, DatabaseConfig] = {
         base_class_name="VanInventoryBase",
         models_module="python.orm.van_inventory.models",
     ),
+    "signal_bot": DatabaseConfig(
+        env_prefix="SIGNALBOT",
+        version_location="python/alembic/signal_bot/versions",
+        base_module="python.orm.signal_bot.base",
+        base_class_name="SignalBotBase",
+        models_module="python.orm.signal_bot.models",
+    ),
 }
 
 
