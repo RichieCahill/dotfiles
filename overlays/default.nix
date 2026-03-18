@@ -34,7 +34,6 @@
         pytest-mock
         pytest-xdist
         python-multipart
-        requests
         ruff
         scalene
         sqlalchemy
@@ -43,7 +42,6 @@
         textual
         tinytuya
         typer
-        types-requests
         websockets
       ]
     );
