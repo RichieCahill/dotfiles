@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import requests
+import httpx
 
 if TYPE_CHECKING:
     from python.signal_bot.models import SignalMessage
@@ -18,7 +18,7 @@ def _get_entity_state(ha_url: str, ha_token: str, entity_id: str) -> dict[str, A
     """Fetch an entity's state from Home Assistant."""
     entity_url = f"{ha_url}/api/states/{entity_id}"
     logger.debug(f"Fetching {entity_url=}")
-    response = requests.get(
+    response = httpx.get(
         entity_url,
         headers={"Authorization": f"Bearer {ha_token}"},
         timeout=30,
@@ -48,7 +48,7 @@ def handle_location_request(
     try:
         lat_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_latitude")
         lon_payload = _get_entity_state(ha_url, ha_token, "sensor.van_last_known_longitude")
-    except requests.RequestException:
+    except httpx.HTTPError:
         logger.exception("Couldn't fetch van location from Home Assistant right now.")
         logger.debug(f"{ha_url=} {lat_payload=} {lon_payload=}")
         signal.reply(message, "Couldn't fetch van location from Home Assistant right now.")

@@ -4,7 +4,7 @@ import logging
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
-import requests
+import httpx
 import typer
 from apscheduler.schedulers.blocking import BlockingScheduler
 from tenacity import before_sleep_log, retry, stop_after_attempt, wait_fixed
@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 )
 def get_ha_state(url: str, token: str, entity_id: str) -> float:
     """Get numeric state from Home Asasistant entity."""
-    response = requests.get(
+    response = httpx.get(
         f"{url}/api/states/{entity_id}",
         headers={"Authorization": f"Bearer {token}"},
         timeout=30,
@@ -102,7 +102,7 @@ def parse_hourly_forecast(data: dict[str, dict[str, Any]]) -> list[HourlyForecas
 def fetch_weather(api_key: str, lat: float, lon: float) -> Weather:
     """Fetch weather from Pirate Weather API."""
     url = f"https://api.pirateweather.net/forecast/{api_key}/{lat},{lon}"
-    response = requests.get(url, params={"units": "us"}, timeout=30)
+    response = httpx.get(url, params={"units": "us"}, timeout=30)
     response.raise_for_status()
     data = response.json()
 
@@ -204,7 +204,7 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
 
     for entity_id, data in sensors.items():
         if data["state"] is not None:
-            response = requests.post(f"{url}/api/states/{entity_id}", headers=headers, json=data, timeout=30)
+            response = httpx.post(f"{url}/api/states/{entity_id}", headers=headers, json=data, timeout=30)
             response.raise_for_status()
 
     # Post daily forecast as JSON attribute sensor
@@ -219,7 +219,7 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
         for daily_forecast in weather.daily_forecasts
     ]
 
-    response = requests.post(
+    response = httpx.post(
         f"{url}/api/states/sensor.van_weather_forecast_daily",
         headers=headers,
         json={"state": len(daily_forecast), "attributes": {"forecast": daily_forecast}},
@@ -238,7 +238,7 @@ def post_to_ha(url: str, token: str, weather: Weather) -> None:
         for hourly_forecast in weather.hourly_forecasts
     ]
 
-    response = requests.post(
+    response = httpx.post(
         f"{url}/api/states/sensor.van_weather_forecast_hourly",
         headers=headers,
         json={"state": len(hourly_forecast), "attributes": {"forecast": hourly_forecast}},
