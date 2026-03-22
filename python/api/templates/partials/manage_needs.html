@@ -1,0 +1,14 @@
+<ul class="manage-needs-list">
+    {% for need in contact.needs %}
+    <li id="contact-need-{{ need.id }}">
+        <strong>{{ need.name }}</strong>
+        {% if need.description %}<span> - {{ need.description }}</span>{% endif %}
+        <button class="btn btn-small btn-danger"
+                hx-delete="/api/contacts/{{ contact.id }}/needs/{{ need.id }}"
+                hx-target="#contact-need-{{ need.id }}"
+                hx-swap="outerHTML">
+            Remove
+        </button>
+    </li>
+    {% endfor %}
+</ul>

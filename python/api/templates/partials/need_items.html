@@ -1,0 +1,21 @@
+{% if needs %}
+<ul class="need-items">
+    {% for need in needs %}
+    <li id="need-item-{{ need.id }}">
+        <div class="need-info">
+            <strong>{{ need.name }}</strong>
+            {% if need.description %}<p>{{ need.description }}</p>{% endif %}
+        </div>
+        <button class="btn btn-danger"
+                hx-delete="/api/needs/{{ need.id }}"
+                hx-target="#need-item-{{ need.id }}"
+                hx-swap="outerHTML"
+                hx-confirm="Delete this need?">
+            Delete
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No needs defined yet.</p>
+{% endif %}

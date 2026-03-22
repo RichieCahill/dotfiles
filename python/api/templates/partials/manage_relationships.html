@@ -1,0 +1,23 @@
+{% for rel in contact.related_to %}
+<div class="manage-rel-item" id="rel-{{ contact.id }}-{{ rel.related_contact_id }}">
+    <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a>
+    <span class="tag">{{ rel.relationship_type|replace("_", " ")|title }}</span>
+    <label class="weight-control">
+        <span>Closeness:</span>
+        <input type="range" min="1" max="10" value="{{ rel.closeness_weight }}"
+               hx-post="/htmx/contacts/{{ contact.id }}/relationships/{{ rel.related_contact_id }}/weight"
+               hx-trigger="change"
+               hx-include="this"
+               name="closeness_weight"
+               hx-swap="none"
+               oninput="this.nextElementSibling.textContent = this.value">
+        <span class="weight-value">{{ rel.closeness_weight }}</span>
+    </label>
+    <button class="btn btn-small btn-danger"
+            hx-delete="/api/contacts/{{ contact.id }}/relationships/{{ rel.related_contact_id }}"
+            hx-target="#rel-{{ contact.id }}-{{ rel.related_contact_id }}"
+            hx-swap="outerHTML">
+        Remove
+    </button>
+</div>
+{% endfor %}
