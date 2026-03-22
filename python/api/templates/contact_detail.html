@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}{{ contact.name }}{% endblock %}
+{% block content %}
+<div class="id-card">
+    <div class="id-card-inner">
+        <div class="id-card-header">
+            <div class="id-card-header-left">
+                <h1 class="id-card-title">I.D.: {{ contact.name }}</h1>
+            </div>
+            <div class="id-card-header-right">
+                {% if contact.profile_pic %}
+                <img src="{{ contact.profile_pic }}" alt="{{ contact.name }}'s profile" class="id-profile-pic">
+                {% else %}
+                <div class="id-profile-placeholder">
+                    <span>{{ contact.name[0]|upper }}</span>
+                </div>
+                {% endif %}
+                <div class="id-card-actions">
+                    <a href="/contacts/{{ contact.id }}/edit" class="btn btn-small">Edit</a>
+                    <a href="/contacts" class="btn btn-small">Back</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="id-card-body">
+            <div class="id-card-left">
+                {% if contact.legal_name %}
+                <div class="id-field">Legal name: {{ contact.legal_name }}</div>
+                {% endif %}
+                {% if contact.suffix %}
+                <div class="id-field">Suffix: {{ contact.suffix }}</div>
+                {% endif %}
+                {% if contact.gender %}
+                <div class="id-field">Gender: {{ contact.gender }}</div>
+                {% endif %}
+                {% if contact.age %}
+                <div class="id-field">Age: {{ contact.age }}</div>
+                {% endif %}
+                {% if contact.current_job %}
+                <div class="id-field">Job: {{ contact.current_job }}</div>
+                {% endif %}
+                {% if contact.social_structure_style %}
+                <div class="id-field">Social style: {{ contact.social_structure_style }}</div>
+                {% endif %}
+                {% if contact.self_sufficiency_score is not none %}
+                <div class="id-field">Self-Sufficiency: {{ contact.self_sufficiency_score }}</div>
+                {% endif %}
+                {% if contact.timezone %}
+                <div class="id-field">Timezone: {{ contact.timezone }}</div>
+                {% endif %}
+                {% if contact.safe_conversation_starters %}
+                <div class="id-field-block">
+                    <span class="id-label">Safe con starters:</span> {{ contact.safe_conversation_starters }}
+                </div>
+                {% endif %}
+                {% if contact.topics_to_avoid %}
+                <div class="id-field-block">
+                    <span class="id-label">Topics to avoid:</span> {{ contact.topics_to_avoid }}
+                </div>
+                {% endif %}
+                {% if contact.goals %}
+                <div class="id-field-block">
+                    <span class="id-label">Goals:</span> {{ contact.goals }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="id-card-right">
+                {% if contact.bio %}
+                <div class="id-bio">
+                    <span class="id-label">Bio:</span> {{ contact.bio }}
+                </div>
+                {% endif %}
+
+                <div class="id-relationships">
+                    <h2 class="id-section-title">Relationships</h2>
+
+                    {% if grouped_relationships.familial %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Familial:</span>
+                        {% for rel in grouped_relationships.familial %}
+                        <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a><span class="id-rel-type">({{ rel.relationship_type|replace("_", " ")|title }})</span>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if grouped_relationships.partners %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Partners:</span>
+                        {% for rel in grouped_relationships.partners %}
+                        <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if grouped_relationships.friends %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Friends:</span>
+                        {% for rel in grouped_relationships.friends %}
+                        <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if grouped_relationships.professional %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Professional:</span>
+                        {% for rel in grouped_relationships.professional %}
+                        <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a><span class="id-rel-type">({{ rel.relationship_type|replace("_", " ")|title }})</span>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if grouped_relationships.other %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Other:</span>
+                        {% for rel in grouped_relationships.other %}
+                        <a href="/contacts/{{ rel.related_contact_id }}">{{ contact_names[rel.related_contact_id] }}</a><span class="id-rel-type">({{ rel.relationship_type|replace("_", " ")|title }})</span>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if contact.related_from %}
+                    <div class="id-rel-group">
+                        <span class="id-rel-label">Known by:</span>
+                        {% for rel in contact.related_from %}
+                        <a href="/contacts/{{ rel.contact_id }}">{{ contact_names[rel.contact_id] }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if contact.needs %}
+        <div class="id-card-warnings">
+            {% for need in contact.needs %}
+            <div class="id-warning">
+                <span class="warning-dot"></span>
+                Warning: {{ need.name }}
+                {% if need.description %}<span class="warning-desc"> - {{ need.description }}</span>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <details class="id-card-manage">
+        <summary>Manage Contact</summary>
+
+        <div class="manage-section">
+            <h3>Manage Relationships</h3>
+            <div id="manage-relationships" class="manage-relationships">
+                {% include "partials/manage_relationships.html" %}
+            </div>
+
+            {% if all_contacts %}
+            <form hx-post="/htmx/contacts/{{ contact.id }}/add-relationship"
+                  hx-target="#manage-relationships"
+                  hx-swap="innerHTML"
+                  class="add-form">
+                <select name="related_contact_id" required>
+                    <option value="">Select contact...</option>
+                    {% for other in all_contacts %}
+                    {% if other.id != contact.id %}
+                    <option value="{{ other.id }}">{{ other.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <select name="relationship_type" required>
+                    <option value="">Select relationship type...</option>
+                    {% for rel_type in relationship_types %}
+                    <option value="{{ rel_type.value }}">{{ rel_type.display_name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Add Relationship</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="manage-section">
+            <h3>Manage Needs/Warnings</h3>
+            <div id="manage-needs">
+                {% include "partials/manage_needs.html" %}
+            </div>
+
+            {% if available_needs %}
+            <form hx-post="/htmx/contacts/{{ contact.id }}/add-need"
+                  hx-target="#manage-needs"
+                  hx-swap="innerHTML"
+                  class="add-form">
+                <select name="need_id" required>
+                    <option value="">Select a need...</option>
+                    {% for need in available_needs %}
+                    <option value="{{ need.id }}">{{ need.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Add Need</button>
+            </form>
+            {% endif %}
+        </div>
+    </details>
+</div>
+{% endblock %}

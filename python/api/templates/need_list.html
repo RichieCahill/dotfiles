@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Needs{% endblock %}
+{% block content %}
+<div class="need-list">
+    <div class="header">
+        <h1>Needs / Accommodations</h1>
+        <button class="btn btn-primary" onclick="document.getElementById('need-form').toggleAttribute('hidden')">Add Need</button>
+    </div>
+
+    <form id="need-form" hidden
+          hx-post="/htmx/needs"
+          hx-target="#need-items"
+          hx-swap="innerHTML"
+          hx-on::after-request="if(event.detail.successful) this.reset()"
+          class="need-form">
+        <div class="form-group">
+            <label for="name">Name *</label>
+            <input id="name" name="name" type="text" placeholder="e.g., Light Sensitive, ADHD" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Optional description..." rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+
+    <div id="need-items">
+        {% include "partials/need_items.html" %}
+    </div>
+</div>
+{% endblock %}

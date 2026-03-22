@@ -1,0 +1,33 @@
+{% if contacts %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Job</th>
+            <th>Timezone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr id="contact-row-{{ contact.id }}">
+            <td><a href="/contacts/{{ contact.id }}">{{ contact.name }}</a></td>
+            <td>{{ contact.current_job or "-" }}</td>
+            <td>{{ contact.timezone or "-" }}</td>
+            <td>
+                <a href="/contacts/{{ contact.id }}/edit" class="btn">Edit</a>
+                <button class="btn btn-danger"
+                        hx-delete="/api/contacts/{{ contact.id }}"
+                        hx-target="#contact-row-{{ contact.id }}"
+                        hx-swap="outerHTML"
+                        hx-confirm="Delete this contact?">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No contacts yet.</p>
+{% endif %}

@@ -1,12 +1,24 @@
 """Contact API router."""
 
-from fastapi import APIRouter, HTTPException
+from pathlib import Path
+
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from python.api.dependencies import DbSession
 from python.orm.richie.contact import Contact, ContactRelationship, Need, RelationshipType
+
+TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
+
+
+def _is_htmx(request: Request) -> bool:
+    """Check if the request is from HTMX."""
+    return request.headers.get("HX-Request") == "true"
 
 
 class NeedBase(BaseModel):
@@ -180,14 +192,16 @@ def get_need(need_id: int, db: DbSession) -> Need:
     return need
 
 
-@router.delete("/needs/{need_id}")
-def delete_need(need_id: int, db: DbSession) -> dict[str, bool]:
+@router.delete("/needs/{need_id}", response_model=None)
+def delete_need(need_id: int, request: Request, db: DbSession) -> dict[str, bool] | HTMLResponse:
     """Delete a need by ID."""
     need = db.get(Need, need_id)
     if not need:
         raise HTTPException(status_code=404, detail="Need not found")
     db.delete(need)
     db.commit()
+    if _is_htmx(request):
+        return HTMLResponse("")
     return {"deleted": True}
 
 
@@ -261,14 +275,16 @@ def update_contact(
     return db_contact
 
 
-@router.delete("/contacts/{contact_id}")
-def delete_contact(contact_id: int, db: DbSession) -> dict[str, bool]:
+@router.delete("/contacts/{contact_id}", response_model=None)
+def delete_contact(contact_id: int, request: Request, db: DbSession) -> dict[str, bool] | HTMLResponse:
     """Delete a contact by ID."""
     contact = db.get(Contact, contact_id)
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
     db.delete(contact)
     db.commit()
+    if _is_htmx(request):
+        return HTMLResponse("")
     return {"deleted": True}
 
 
@@ -294,12 +310,13 @@ def add_need_to_contact(
     return {"added": True}
 
 
-@router.delete("/contacts/{contact_id}/needs/{need_id}")
+@router.delete("/contacts/{contact_id}/needs/{need_id}", response_model=None)
 def remove_need_from_contact(
     contact_id: int,
     need_id: int,
+    request: Request,
     db: DbSession,
-) -> dict[str, bool]:
+) -> dict[str, bool] | HTMLResponse:
     """Remove a need from a contact."""
     contact = db.get(Contact, contact_id)
     if not contact:
@@ -313,6 +330,8 @@ def remove_need_from_contact(
         contact.needs.remove(need)
         db.commit()
 
+    if _is_htmx(request):
+        return HTMLResponse("")
     return {"removed": True}
 
 
@@ -404,12 +423,13 @@ def update_contact_relationship(
     return relationship
 
 
-@router.delete("/contacts/{contact_id}/relationships/{related_contact_id}")
+@router.delete("/contacts/{contact_id}/relationships/{related_contact_id}", response_model=None)
 def remove_contact_relationship(
     contact_id: int,
     related_contact_id: int,
+    request: Request,
     db: DbSession,
-) -> dict[str, bool]:
+) -> dict[str, bool] | HTMLResponse:
     """Remove a relationship between two contacts."""
     relationship = db.scalar(
         select(ContactRelationship).where(
@@ -422,6 +442,8 @@ def remove_contact_relationship(
 
     db.delete(relationship)
     db.commit()
+    if _is_htmx(request):
+        return HTMLResponse("")
     return {"deleted": True}
 
 

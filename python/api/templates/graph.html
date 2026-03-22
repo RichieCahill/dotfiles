@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}Relationship Graph{% endblock %}
+{% block content %}
+<div class="graph-container">
+    <div class="header">
+        <h1>Relationship Graph</h1>
+    </div>
+    <p class="graph-hint">Drag nodes to reposition. Closer relationships have shorter, darker edges.</p>
+    <canvas id="graph-canvas" width="900" height="600"
+            style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg); cursor: grab;">
+    </canvas>
+    <div id="selected-info"></div>
+    <div class="legend">
+        <h4>Relationship Closeness (1-10)</h4>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="legend-line" style="background: hsl(220, 70%, 40%); height: 4px; display: inline-block;"></span>
+                <span>10 - Very Close (Spouse, Partner)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-line" style="background: hsl(220, 70%, 52%); height: 3px; display: inline-block;"></span>
+                <span>7 - Close (Family, Best Friend)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-line" style="background: hsl(220, 70%, 64%); height: 2px; display: inline-block;"></span>
+                <span>4 - Moderate (Friend, Colleague)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-line" style="background: hsl(220, 70%, 72%); height: 1px; display: inline-block;"></span>
+                <span>2 - Distant (Acquaintance)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const RELATIONSHIP_DISPLAY = {{ relationship_type_display|tojson }};
+    const graphData = {{ graph_data|tojson }};
+
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const nodes = graphData.nodes.map(function(node) {
+        return Object.assign({}, node, {
+            x: centerX + (Math.random() - 0.5) * 300,
+            y: centerY + (Math.random() - 0.5) * 300,
+            vx: 0,
+            vy: 0
+        });
+    });
+
+    const nodeMap = new Map(nodes.map(function(node) { return [node.id, node]; }));
+
+    const edges = graphData.edges.map(function(edge) {
+        const sourceNode = nodeMap.get(edge.source);
+        const targetNode = nodeMap.get(edge.target);
+        if (!sourceNode || !targetNode) return null;
+        return Object.assign({}, edge, { sourceNode: sourceNode, targetNode: targetNode });
+    }).filter(function(edge) { return edge !== null; });
+
+    let dragNode = null;
+    let selectedNode = null;
+
+    const repulsion = 5000;
+    const springStrength = 0.05;
+    const baseSpringLength = 150;
+    const damping = 0.9;
+    const centerPull = 0.01;
+
+    function simulate() {
+        for (const node of nodes) { node.vx = 0; node.vy = 0; }
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[j].x - nodes[i].x;
+                const dy = nodes[j].y - nodes[i].y;
+                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                const force = repulsion / (dist * dist);
+                const fx = (dx / dist) * force;
+                const fy = (dy / dist) * force;
+                nodes[i].vx -= fx; nodes[i].vy -= fy;
+                nodes[j].vx += fx; nodes[j].vy += fy;
+            }
+        }
+        for (const edge of edges) {
+            const dx = edge.targetNode.x - edge.sourceNode.x;
+            const dy = edge.targetNode.y - edge.sourceNode.y;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const normalizedWeight = edge.closeness_weight / 10;
+            const idealLength = baseSpringLength * (1.5 - normalizedWeight);
+            const displacement = dist - idealLength;
+            const force = springStrength * displacement;
+            const fx = (dx / dist) * force;
+            const fy = (dy / dist) * force;
+            edge.sourceNode.vx += fx; edge.sourceNode.vy += fy;
+            edge.targetNode.vx -= fx; edge.targetNode.vy -= fy;
+        }
+        for (const node of nodes) {
+            node.vx += (centerX - node.x) * centerPull;
+            node.vy += (centerY - node.y) * centerPull;
+        }
+        for (const node of nodes) {
+            if (node === dragNode) continue;
+            node.x += node.vx * damping;
+            node.y += node.vy * damping;
+            node.x = Math.max(30, Math.min(width - 30, node.x));
+            node.y = Math.max(30, Math.min(height - 30, node.y));
+        }
+    }
+
+    function getEdgeColor(weight) {
+        const normalized = weight / 10;
+        return 'hsl(220, 70%, ' + (80 - normalized * 40) + '%)';
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        for (const edge of edges) {
+            const lineWidth = 1 + (edge.closeness_weight / 10) * 3;
+            ctx.strokeStyle = getEdgeColor(edge.closeness_weight);
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.moveTo(edge.sourceNode.x, edge.sourceNode.y);
+            ctx.lineTo(edge.targetNode.x, edge.targetNode.y);
+            ctx.stroke();
+            const midX = (edge.sourceNode.x + edge.targetNode.x) / 2;
+            const midY = (edge.sourceNode.y + edge.targetNode.y) / 2;
+            ctx.fillStyle = '#666';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            const label = RELATIONSHIP_DISPLAY[edge.relationship_type] || edge.relationship_type;
+            ctx.fillText(label, midX, midY - 5);
+        }
+        for (const node of nodes) {
+            const isSelected = node === selectedNode;
+            const radius = isSelected ? 25 : 20;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = isSelected ? '#0066cc' : '#fff';
+            ctx.fill();
+            ctx.strokeStyle = '#0066cc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = isSelected ? '#fff' : '#333';
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const name = node.name.length > 10 ? node.name.slice(0, 9) + '\u2026' : node.name;
+            ctx.fillText(name, node.x, node.y);
+        }
+    }
+
+    function animate() {
+        simulate();
+        draw();
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    function getNodeAt(x, y) {
+        for (const node of nodes) {
+            const dx = x - node.x;
+            const dy = y - node.y;
+            if (dx * dx + dy * dy < 400) return node;
+        }
+        return null;
+    }
+
+    canvas.addEventListener('mousedown', function(event) {
+        const rect = canvas.getBoundingClientRect();
+        const node = getNodeAt(event.clientX - rect.left, event.clientY - rect.top);
+        if (node) {
+            dragNode = node;
+            selectedNode = node;
+            const infoDiv = document.getElementById('selected-info');
+            let html = '<div class="selected-info"><h3>' + node.name + '</h3>';
+            if (node.current_job) html += '<p>Job: ' + node.current_job + '</p>';
+            html += '<a href="/contacts/' + node.id + '">View details</a></div>';
+            infoDiv.innerHTML = html;
+        }
+    });
+
+    canvas.addEventListener('mousemove', function(event) {
+        if (!dragNode) return;
+        const rect = canvas.getBoundingClientRect();
+        dragNode.x = event.clientX - rect.left;
+        dragNode.y = event.clientY - rect.top;
+    });
+
+    canvas.addEventListener('mouseup', function() { dragNode = null; });
+    canvas.addEventListener('mouseleave', function() { dragNode = null; });
+})();
+</script>
+{% endblock %}

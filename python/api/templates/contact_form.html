@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit " + contact.name if contact else "New Contact" }}{% endblock %}
+{% block content %}
+<div class="contact-form">
+    <h1>{{ "Edit Contact" if contact else "New Contact" }}</h1>
+
+    {% if contact %}
+    <form method="post" action="/htmx/contacts/{{ contact.id }}/edit">
+    {% else %}
+    <form method="post" action="/htmx/contacts/new">
+    {% endif %}
+
+        <div class="form-group">
+            <label for="name">Name *</label>
+            <input id="name" name="name" type="text" value="{{ contact.name if contact else '' }}" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="legal_name">Legal Name</label>
+                <input id="legal_name" name="legal_name" type="text" value="{{ contact.legal_name or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="suffix">Suffix</label>
+                <input id="suffix" name="suffix" type="text" value="{{ contact.suffix or '' }}">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input id="age" name="age" type="number" value="{{ contact.age if contact and contact.age is not none else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <input id="gender" name="gender" type="text" value="{{ contact.gender or '' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="current_job">Current Job</label>
+            <input id="current_job" name="current_job" type="text" value="{{ contact.current_job or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="timezone">Timezone</label>
+            <input id="timezone" name="timezone" type="text" value="{{ contact.timezone or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="profile_pic">Profile Picture URL</label>
+            <input id="profile_pic" name="profile_pic" type="url" placeholder="https://example.com/photo.jpg" value="{{ contact.profile_pic or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" rows="3">{{ contact.bio or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="goals">Goals</label>
+            <textarea id="goals" name="goals" rows="3">{{ contact.goals or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="social_structure_style">Social Structure Style</label>
+            <input id="social_structure_style" name="social_structure_style" type="text" value="{{ contact.social_structure_style or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="self_sufficiency_score">Self-Sufficiency Score (1-10)</label>
+            <input id="self_sufficiency_score" name="self_sufficiency_score" type="number" min="1" max="10" value="{{ contact.self_sufficiency_score if contact and contact.self_sufficiency_score is not none else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="safe_conversation_starters">Safe Conversation Starters</label>
+            <textarea id="safe_conversation_starters" name="safe_conversation_starters" rows="2">{{ contact.safe_conversation_starters or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="topics_to_avoid">Topics to Avoid</label>
+            <textarea id="topics_to_avoid" name="topics_to_avoid" rows="2">{{ contact.topics_to_avoid or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="ssn">SSN</label>
+            <input id="ssn" name="ssn" type="text" value="{{ contact.ssn or '' }}">
+        </div>
+
+        {% if all_needs %}
+        <div class="form-group">
+            <label>Needs/Accommodations</label>
+            <div class="checkbox-group">
+                {% for need in all_needs %}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="need_ids" value="{{ need.id }}"
+                           {% if contact and need in contact.needs %}checked{% endif %}>
+                    {{ need.name }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            {% if contact %}
+            <a href="/contacts/{{ contact.id }}" class="btn">Cancel</a>
+            {% else %}
+            <a href="/contacts" class="btn">Cancel</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

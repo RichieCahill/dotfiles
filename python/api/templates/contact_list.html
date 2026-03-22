@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Contacts{% endblock %}
+{% block content %}
+<div class="contact-list">
+    <div class="header">
+        <h1>Contacts</h1>
+        <a href="/contacts/new" class="btn btn-primary">Add Contact</a>
+    </div>
+
+    <div id="contact-table">
+        {% include "partials/contact_table.html" %}
+    </div>
+</div>
+{% endblock %}
