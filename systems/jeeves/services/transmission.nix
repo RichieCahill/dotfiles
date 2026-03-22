@@ -5,7 +5,7 @@ in
 {
   services.transmission = {
     enable = true;
-    package = pkgs.transmission_4;
+    package = pkgs.stable.transmission_4;
     webHome = pkgs.flood-for-transmission;
     home = "${vars.services}/transmission";
     openPeerPorts = true;
