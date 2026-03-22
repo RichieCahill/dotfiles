@@ -60,25 +60,33 @@ template:
       - name: Van Last Known Latitude
         unique_id: van_last_known_latitude
         unit_of_measurement: "°"
+        availability: >-
+          {{ this.state | float(none) is not none
+             or (states('sensor.gps_latitude') | float(none) is not none
+                 and states('sensor.gps_fix') | int(0) > 0) }}
         state: >-
-          {% set lat = states('sensor.gps_latitude')|float(none) %}
-          {% set fix = states('sensor.gps_fix')|int(0) %}
+          {% set lat = states('sensor.gps_latitude') | float(none) %}
+          {% set fix = states('sensor.gps_fix') | int(0) %}
           {% if lat is not none and fix > 0 %}
             {{ lat }}
           {% else %}
-            {{ this.state | default('unavailable', true) }}
+            {{ this.state }}
           {% endif %}
 
       - name: Van Last Known Longitude
         unique_id: van_last_known_longitude
         unit_of_measurement: "°"
+        availability: >-
+          {{ this.state | float(none) is not none
+             or (states('sensor.gps_longitude') | float(none) is not none
+                 and states('sensor.gps_fix') | int(0) > 0) }}
         state: >-
-          {% set lon = states('sensor.gps_longitude')|float(none) %}
-          {% set fix = states('sensor.gps_fix')|int(0) %}
+          {% set lon = states('sensor.gps_longitude') | float(none) %}
+          {% set fix = states('sensor.gps_fix') | int(0) %}
           {% if lon is not none and fix > 0 %}
             {{ lon }}
           {% else %}
-            {{ this.state | default('unavailable', true) }}
+            {{ this.state }}
           {% endif %}
 
       - name: GPS Location

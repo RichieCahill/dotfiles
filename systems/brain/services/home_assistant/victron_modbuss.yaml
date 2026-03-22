@@ -76,8 +76,80 @@ modbus:
         state_class: measurement
         unique_id: dc_wattage
 
-      # GPS
-      - name: GPS Latitude
+      # GPS (Slave ID 100)
+      - name: GPS Latitude ID 100
+        slave: 100
+        address: 2800
+        input_type: holding
+        data_type: int32
+        scale: 0.0000001
+        precision: 7
+        state_class: measurement
+        unique_id: gps_latitude_id_100
+
+      - name: GPS Longitude ID 100
+        slave: 100
+        address: 2802
+        input_type: holding
+        data_type: int32
+        scale: 0.0000001
+        precision: 7
+        state_class: measurement
+        unique_id: gps_longitude_id_100
+
+      - name: GPS Course ID 100
+        slave: 100
+        address: 2804
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "°"
+        state_class: measurement
+        unique_id: gps_course_id_100
+
+      - name: GPS Speed ID 100
+        slave: 100
+        address: 2805
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "m/s"
+        state_class: measurement
+        unique_id: gps_speed_id_100
+
+      - name: GPS Fix ID 100
+        slave: 100
+        address: 2806
+        input_type: holding
+        data_type: uint16
+        scale: 1
+        state_class: measurement
+        unique_id: gps_fix_id_100
+
+      - name: GPS Satellites ID 100
+        slave: 100
+        address: 2807
+        input_type: holding
+        data_type: uint16
+        scale: 1
+        state_class: measurement
+        unique_id: gps_satellites_id_100
+
+      - name: GPS Altitude ID 100
+        slave: 100
+        address: 2808
+        input_type: holding
+        data_type: int32
+        scale: 0.16
+        precision: 1
+        unit_of_measurement: "m"
+        state_class: measurement
+        unique_id: gps_altitude_id_100
+
+      # GPS (Unit ID 1)
+      - name: GPS Latitude ID 1
         slave: 1
         address: 2800
         input_type: holding
@@ -85,9 +157,9 @@ modbus:
         scale: 0.0000001
         precision: 7
         state_class: measurement
-        unique_id: gps_latitude
+        unique_id: gps_latitude_id_1
 
-      - name: GPS Longitude
+      - name: GPS Longitude ID 1
         slave: 1
         address: 2802
         input_type: holding
@@ -95,9 +167,9 @@ modbus:
         scale: 0.0000001
         precision: 7
         state_class: measurement
-        unique_id: gps_longitude
+        unique_id: gps_longitude_id_1
 
-      - name: GPS Course
+      - name: GPS Course ID 1
         slave: 1
         address: 2804
         input_type: holding
@@ -106,9 +178,9 @@ modbus:
         precision: 2
         unit_of_measurement: "°"
         state_class: measurement
-        unique_id: gps_course
+        unique_id: gps_course_id_1
 
-      - name: GPS Speed
+      - name: GPS Speed ID 1
         slave: 1
         address: 2805
         input_type: holding
@@ -117,27 +189,27 @@ modbus:
         precision: 2
         unit_of_measurement: "m/s"
         state_class: measurement
-        unique_id: gps_speed
+        unique_id: gps_speed_id_1
 
-      - name: GPS Fix
+      - name: GPS Fix ID 1
         slave: 1
         address: 2806
         input_type: holding
         data_type: uint16
         scale: 1
         state_class: measurement
-        unique_id: gps_fix
+        unique_id: gps_fix_id_1
 
-      - name: GPS Satellites
+      - name: GPS Satellites ID 1
         slave: 1
         address: 2807
         input_type: holding
         data_type: uint16
         scale: 1
         state_class: measurement
-        unique_id: gps_satellites
+        unique_id: gps_satellites_id_1
 
-      - name: GPS Altitude
+      - name: GPS Altitude ID 1
         slave: 1
         address: 2808
         input_type: holding
@@ -146,7 +218,7 @@ modbus:
         precision: 1
         unit_of_measurement: "m"
         state_class: measurement
-        unique_id: gps_altitude
+        unique_id: gps_altitude_id_1
 
       # ---- CHARGER (Unit ID 223) ----
       - name: Charger Output 1 Voltage
@@ -265,6 +337,108 @@ modbus:
 
 template:
   - sensor:
+      # GPS aggregation: prefer slave 100, fall back to slave 1
+      - name: GPS Latitude
+        unique_id: gps_latitude
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_latitude_id_100') %}
+          {% set v1 = states('sensor.gps_latitude_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] and v100 | float(0) != 0 %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] and v1 | float(0) != 0 %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Longitude
+        unique_id: gps_longitude
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_longitude_id_100') %}
+          {% set v1 = states('sensor.gps_longitude_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] and v100 | float(0) != 0 %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] and v1 | float(0) != 0 %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Course
+        unique_id: gps_course
+        unit_of_measurement: "°"
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_course_id_100') %}
+          {% set v1 = states('sensor.gps_course_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Speed
+        unique_id: gps_speed
+        unit_of_measurement: "m/s"
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_speed_id_100') %}
+          {% set v1 = states('sensor.gps_speed_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Fix
+        unique_id: gps_fix
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_fix_id_100') %}
+          {% set v1 = states('sensor.gps_fix_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] and v100 | int(0) > 0 %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] and v1 | int(0) > 0 %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Satellites
+        unique_id: gps_satellites
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_satellites_id_100') %}
+          {% set v1 = states('sensor.gps_satellites_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] and v100 | int(0) > 0 %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] and v1 | int(0) > 0 %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
+      - name: GPS Altitude
+        unique_id: gps_altitude
+        unit_of_measurement: "m"
+        state_class: measurement
+        state: >-
+          {% set v100 = states('sensor.gps_altitude_id_100') %}
+          {% set v1 = states('sensor.gps_altitude_id_1') %}
+          {% if v100 not in ['unavailable', 'unknown'] %}
+            {{ v100 }}
+          {% elif v1 not in ['unavailable', 'unknown'] %}
+            {{ v1 }}
+          {% else %}
+            {{ v100 }}
+          {% endif %}
+
       - name: Charger On Off
         state: >-
           {% set v = states('sensor.charger_on_off_raw')|int %}
