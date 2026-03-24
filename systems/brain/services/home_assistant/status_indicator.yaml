@@ -8,8 +8,8 @@ input_select:
     icon: mdi:account
     initial: Available
 
-  partner_status:
-    name: "Partner Status"
+  maple_status:
+    name: "Maple Status"
     options:
       - Available
       - Busy
@@ -28,16 +28,17 @@ template:
           {% elif status == 'Busy' %}mdi:circle-half-full
           {% else %}mdi:minus-circle{% endif %}
 
-      - name: "Partner Status Icon"
+      - name: "Maple Status Icon"
         state: >
-          {{ states('input_select.partner_status') }}
+          {{ states('input_select.maple_status') }}
         icon: >
-          {% set status = states('input_select.partner_status') %}
+          {% set status = states('input_select.maple_status') %}
           {% if status == 'Available' %}mdi:circle
           {% elif status == 'Busy' %}mdi:circle-half-full
           {% else %}mdi:minus-circle{% endif %}
 
 script:
+  # Richie
   set_richie_available:
     alias: "Richie → Available"
     icon: mdi:circle
@@ -81,6 +82,7 @@ script:
             {% if current == 'Available' %}Busy
             {% elif current == 'Busy' %}Do Not Disturb
             {% else %}Available{% endif %}
+
   # Maple
   set_maple_available:
     alias: "Maple → Available"
@@ -88,7 +90,7 @@ script:
     sequence:
       - service: input_select.select_option
         target:
-          entity_id: input_select.partner_status
+          entity_id: input_select.maple_status
         data:
           option: "Available"
 
@@ -98,7 +100,7 @@ script:
     sequence:
       - service: input_select.select_option
         target:
-          entity_id: input_select.partner_status
+          entity_id: input_select.maple_status
         data:
           option: "Busy"
 
@@ -108,7 +110,7 @@ script:
     sequence:
       - service: input_select.select_option
         target:
-          entity_id: input_select.partner_status
+          entity_id: input_select.maple_status
         data:
           option: "Do Not Disturb"
 
@@ -118,10 +120,10 @@ script:
     sequence:
       - service: input_select.select_option
         target:
-          entity_id: input_select.partner_status
+          entity_id: input_select.maple_status
         data:
           option: >
-            {% set current = states('input_select.partner_status') %}
+            {% set current = states('input_select.maple_status') %}
             {% if current == 'Available' %}Busy
             {% elif current == 'Busy' %}Do Not Disturb
             {% else %}Available{% endif %}
