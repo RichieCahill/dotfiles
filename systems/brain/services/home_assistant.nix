@@ -24,6 +24,7 @@
             gps_location = "!include ${./home_assistant/gps_location.yaml}";
             heater = "!include ${./home_assistant/heater.yaml}";
             van_weather = "!include ${./home_assistant/van_weather_template.yaml}";
+            status_indicator = "!include ${./home_assistant/status_indicator.yaml}";
           };
         };
         recorder = {
