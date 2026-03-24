@@ -9,6 +9,7 @@ import typer
 import uvicorn
 from fastapi import FastAPI
 
+from python.api.middleware import ZstdMiddleware
 from python.api.routers import contact_router, views_router
 from python.common import configure_logger
 from python.orm.common import get_postgres_engine
@@ -27,6 +28,7 @@ def create_app() -> FastAPI:
         app.state.engine.dispose()
 
     app = FastAPI(title="Contact Database API", lifespan=lifespan)
+    app.add_middleware(ZstdMiddleware)
 
     app.include_router(contact_router)
     app.include_router(views_router)
