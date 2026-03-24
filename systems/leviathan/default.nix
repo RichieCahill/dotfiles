@@ -9,6 +9,7 @@
     "${inputs.self}/common/optional/systemd-boot.nix"
     "${inputs.self}/common/optional/update.nix"
     "${inputs.self}/common/optional/zerotier.nix"
+    "${inputs.self}/common/optional/brain_substituter.nix"
     ./hardware.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];

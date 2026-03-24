@@ -12,6 +12,7 @@
     "${inputs.self}/common/optional/update.nix"
     "${inputs.self}/common/optional/yubikey.nix"
     "${inputs.self}/common/optional/zerotier.nix"
+    "${inputs.self}/common/optional/brain_substituter.nix"
     "${inputs.self}/common/optional/nvidia.nix"
     ./hardware.nix
     ./syncthing.nix
