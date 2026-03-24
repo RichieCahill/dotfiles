@@ -24,7 +24,6 @@
     claude-code
     gparted
     jetbrains.datagrip
-    antigravity-fhs
     proxychains
     opencode
   ];
