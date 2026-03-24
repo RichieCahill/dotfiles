@@ -50,6 +50,7 @@
         "network.http.max-connections" = 1800;
         "network.http.max-persistent-connections-per-server" = 10;
         "network.http.max-urgent-start-excessive-connections-per-host" = 5;
+        "network.http.accept-encoding" = "gzip, deflate, br, zstd";
         "network.http.pacing.requests.enabled" = false;
         "network.dnsCacheExpiration" = 3600;
         "network.dns.max_high_priority_threads" = 8;
