@@ -15,6 +15,7 @@ sudo zpool add storage -o ashift=12 logs mirror
 sudo zpool create scratch -o ashift=12 -O acltype=posixacl -O atime=off -O dnodesize=auto -O xattr=sa -O compression=zstd -O encryption=aes-256-gcm -O keyformat=hex -O keylocation=file:///key -m /zfs/scratch
 
 # media datasets
+sudo zfs create media/temp -o sync=disabled -o redundant_metadata=none
 sudo zfs create media/secure -o encryption=aes-256-gcm -o keyformat=hex -o keylocation=file:///root/zfs.key
 sudo zfs create media/secure/docker -o compression=zstd-9
 sudo zfs create media/secure/github-runners -o compression=zstd-9 -o sync=disabled
@@ -26,7 +27,7 @@ sudo zfs create media/secure/share -o mountpoint=/zfs/media/share -o exec=off
 
 # scratch datasets
 sudo zfs create scratch/kafka -o mountpoint=/zfs/scratch/kafka -o recordsize=1M
-sudo zfs create scratch/transmission -o mountpoint=/zfs/scratch/transmission -o recordsize=16k -o sync=disabled
+sudo zfs create scratch/transmission -o mountpoint=/zfs/scratch/transmission -o recordsize=16k -o sync=disabled -o redundant_metadata=none
 
 # storage datasets
 sudo zfs create storage/ollama -o recordsize=1M -o compression=zstd-19 -o sync=disabled
