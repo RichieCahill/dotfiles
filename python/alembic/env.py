@@ -84,11 +84,6 @@ def include_name(
     if type_ == "schema":
         # allows a database with multiple schemas to have separate alembic revisions
         return name == target_metadata.schema
-    if type_ == "table":
-        # Exclude weekly partition tables (e.g. posts_2024_01) from autogenerate.
-        # They are created via PARTITION OF in migrations. PG propagates schema changes
-        # from the parent table to all partitions, so only the parent needs ALTER statements.
-        return name and re.match(r"^posts_\d{4}_\d{2}$", name)
     return True
 
 
