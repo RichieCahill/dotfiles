@@ -16,7 +16,7 @@ from python.orm.data_science_dev.base import DataScienceDevBase
 from python.orm.data_science_dev.posts.columns import PostsColumns
 
 PARTITION_START_YEAR = 2024
-PARTITION_END_YEAR = 2025
+PARTITION_END_YEAR = 2026
 
 _current_module = sys.modules[__name__]
 
