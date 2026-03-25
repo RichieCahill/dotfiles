@@ -39,6 +39,10 @@ in
       host  postgres  math   ::1/128         trust
       host  postgres  math   192.168.90.1/24 trust
 
+      local data_science_dev  math   trust
+      host  data_science_dev  math   127.0.0.1/32    trust
+      host  data_science_dev  math   ::1/128         trust
+      host  data_science_dev  math   192.168.90.1/24 trust
     '';
 
     identMap = ''
@@ -110,6 +114,7 @@ in
       }
     ];
     ensureDatabases = [
+      "data_science_dev"
       "hass"
       "gitea"
       "math"

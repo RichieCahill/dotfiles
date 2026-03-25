@@ -90,6 +90,13 @@ DATABASES: dict[str, DatabaseConfig] = {
         base_class_name="SignalBotBase",
         models_module="python.orm.signal_bot.models",
     ),
+    "data_science_dev": DatabaseConfig(
+        env_prefix="DATA_SCIENCE_DEV",
+        version_location="python/alembic/data_science_dev/versions",
+        base_module="python.orm.data_science_dev.base",
+        base_class_name="DataScienceDevBase",
+        models_module="python.orm.data_science_dev.models",
+    ),
 }
 
 
