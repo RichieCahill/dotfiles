@@ -25,6 +25,7 @@
         fastapi-cli
         httpx
         mypy
+        orjson
         polars
         psycopg
         pydantic
