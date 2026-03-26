@@ -21,6 +21,7 @@
         alembic
         apprise
         apscheduler
+        confluent-kafka
         fastapi
         fastapi-cli
         httpx
