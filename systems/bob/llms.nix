@@ -23,6 +23,7 @@
       "magistral:24b"
       "ministral-3:14b"
       "nemotron-3-nano:30b"
+      "nemotron-3-nano:4b"
       "nemotron-cascade-2:30b"
       "qwen3-coder:30b"
       "qwen3-embedding:0.6b"
