@@ -8,9 +8,8 @@
       "deepscaler:1.5b"
       "deepseek-r1:8b"
       "gemma3:12b"
-      "gemma3:27b"
-      "gpt-oss:20b"
       "lfm2:24b"
+      "nemotron-3-nano:4b"
       "qwen3:14b"
       "qwen3.5:27b"
     ];
