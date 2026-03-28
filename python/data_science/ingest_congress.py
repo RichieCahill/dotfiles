@@ -180,10 +180,7 @@ def _split_name(display_name: str) -> tuple[str, str]:
 def ingest_bills(engine: Engine, congress_dirs: list[Path]) -> None:
     """Load bill data.json files."""
     with Session(engine) as session:
-        existing_bills = {
-            (row.congress, row.bill_type, row.number)
-            for row in session.execute(select(Bill.congress, Bill.bill_type, Bill.number)).all()
-        }
+        existing_bills = {(bill.congress, bill.bill_type, bill.number) for bill in session.scalars(select(Bill)).all()}
         logger.info("Found %d existing bills in DB", len(existing_bills))
 
         total_inserted = 0
@@ -251,8 +248,7 @@ def ingest_votes(engine: Engine, congress_dirs: list[Path]) -> None:
         bill_map = _build_bill_map(session)
         logger.info("Loaded %d bills into lookup map", len(bill_map))
         existing_votes = {
-            (row.congress, row.chamber, row.session, row.number)
-            for row in session.execute(select(Vote.congress, Vote.chamber, Vote.session, Vote.number)).all()
+            (vote.congress, vote.chamber, vote.session, vote.number) for vote in session.scalars(select(Vote)).all()
         }
         logger.info("Found %d existing votes in DB", len(existing_votes))
 
@@ -279,15 +275,12 @@ def ingest_votes(engine: Engine, congress_dirs: list[Path]) -> None:
 
 def _build_legislator_map(session: Session) -> dict[str, int]:
     """Build a mapping of bioguide_id -> legislator.id."""
-    return {row.bioguide_id: row.id for row in session.execute(select(Legislator.bioguide_id, Legislator.id)).all()}
+    return {legislator.bioguide_id: legislator.id for legislator in session.scalars(select(Legislator)).all()}
 
 
 def _build_bill_map(session: Session) -> dict[tuple[int, str, int], int]:
     """Build a mapping of (congress, bill_type, number) -> bill.id."""
-    return {
-        (row.congress, row.bill_type, row.number): row.id
-        for row in session.execute(select(Bill.congress, Bill.bill_type, Bill.number, Bill.id)).all()
-    }
+    return {(bill.congress, bill.bill_type, bill.number): bill.id for bill in session.scalars(select(Bill)).all()}
 
 
 def _parse_vote(
@@ -406,8 +399,7 @@ def ingest_bill_text(engine: Engine, congress_dirs: list[Path]) -> None:
         bill_map = _build_bill_map(session)
         logger.info("Loaded %d bills into lookup map", len(bill_map))
         existing_bill_texts = {
-            (row.bill_id, row.version_code)
-            for row in session.execute(select(BillText.bill_id, BillText.version_code)).all()
+            (bill_text.bill_id, bill_text.version_code) for bill_text in session.scalars(select(BillText)).all()
         }
         logger.info("Found %d existing bill text versions in DB", len(existing_bill_texts))
 
