@@ -63,9 +63,9 @@ class DeviceRegistry:
             return
 
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if device:
                 if device.safety_number != safety_number and device.trust_level != TrustLevel.BLOCKED:
@@ -99,9 +99,9 @@ class DeviceRegistry:
         Returns True if the device was found and verified.
         """
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if not device:
                 logger.warning(f"Cannot verify unknown device: {phone_number}")
@@ -139,9 +139,9 @@ class DeviceRegistry:
     def grant_role(self, phone_number: str, role: Role) -> bool:
         """Add a role to a device. Called by admin over SSH."""
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if not device:
                 logger.warning(f"Cannot grant role for unknown device: {phone_number}")
@@ -150,7 +150,7 @@ class DeviceRegistry:
             if any(record.name == role for record in device.roles):
                 return True
 
-            role_record = session.execute(select(RoleRecord).where(RoleRecord.name == role)).scalar_one_or_none()
+            role_record = session.scalars(select(RoleRecord).where(RoleRecord.name == role)).one_or_none()
 
             if not role_record:
                 logger.warning(f"Unknown role: {role}")
@@ -165,9 +165,9 @@ class DeviceRegistry:
     def revoke_role(self, phone_number: str, role: Role) -> bool:
         """Remove a role from a device. Called by admin over SSH."""
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if not device:
                 logger.warning(f"Cannot revoke role for unknown device: {phone_number}")
@@ -182,16 +182,16 @@ class DeviceRegistry:
     def set_roles(self, phone_number: str, roles: list[Role]) -> bool:
         """Replace all roles for a device. Called by admin over SSH."""
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if not device:
                 logger.warning(f"Cannot set roles for unknown device: {phone_number}")
                 return False
 
             role_names = [str(role) for role in roles]
-            records = list(session.execute(select(RoleRecord).where(RoleRecord.name.in_(role_names))).scalars().all())
+            records = session.scalars(select(RoleRecord).where(RoleRecord.name.in_(role_names))).all()
             device.roles = records
             session.commit()
             self._update_cache(phone_number, device)
@@ -203,7 +203,7 @@ class DeviceRegistry:
     def list_devices(self) -> list[SignalDevice]:
         """Return all known devices."""
         with Session(self.engine) as session:
-            return list(session.execute(select(SignalDevice)).scalars().all())
+            return list(session.scalars(select(SignalDevice)).all())
 
     def sync_identities(self) -> None:
         """Pull identity list from signal-cli and record any new ones."""
@@ -226,9 +226,7 @@ class DeviceRegistry:
     def _load_device(self, phone_number: str) -> SignalDevice | None:
         """Fetch a device by phone number (with joined roles)."""
         with Session(self.engine) as session:
-            return session.execute(
-                select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            return session.scalars(select(SignalDevice).where(SignalDevice.phone_number == phone_number)).one_or_none()
 
     def _update_cache(self, phone_number: str, device: SignalDevice) -> None:
         """Refresh the cache entry for a device."""
@@ -244,9 +242,9 @@ class DeviceRegistry:
     def _set_trust(self, phone_number: str, level: str, log_msg: str | None = None) -> bool:
         """Update the trust level for a device."""
         with Session(self.engine) as session:
-            device = session.execute(
+            device = session.scalars(
                 select(SignalDevice).where(SignalDevice.phone_number == phone_number)
-            ).scalar_one_or_none()
+            ).one_or_none()
 
             if not device:
                 return False
@@ -269,7 +267,7 @@ def sync_roles(engine: Engine) -> None:
     expected = {role.value for role in Role}
 
     with Session(engine) as session:
-        existing = {record.name for record in session.execute(select(RoleRecord)).scalars().all()}
+        existing = set(session.scalars(select(RoleRecord.name)).all())
 
         to_add = expected - existing
         to_remove = existing - expected
