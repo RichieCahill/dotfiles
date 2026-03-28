@@ -210,9 +210,9 @@ class TestContactCache:
             mock_session_cls.return_value.__exit__ = MagicMock(return_value=False)
             mock_device = MagicMock()
             mock_device.trust_level = TrustLevel.UNVERIFIED
-            mock_session.execute.return_value.scalar_one_or_none.return_value = mock_device
+            mock_session.scalars.return_value.one_or_none.return_value = mock_device
             registry.record_contact("+1234", "abc")
-            mock_session.execute.assert_called_once()
+            mock_session.scalars.assert_called_once()
 
 
 class TestLocationCommand:
