@@ -252,9 +252,7 @@ def ingest_votes(engine: Engine, congress_dirs: list[Path]) -> None:
         logger.info("Loaded %d bills into lookup map", len(bill_map))
         existing_votes = {
             (row.congress, row.chamber, row.session, row.number)
-            for row in session.execute(
-                select(Vote.congress, Vote.chamber, Vote.session, Vote.number)
-            ).all()
+            for row in session.execute(select(Vote.congress, Vote.chamber, Vote.session, Vote.number)).all()
         }
         logger.info("Found %d existing votes in DB", len(existing_votes))
 
@@ -281,10 +279,7 @@ def ingest_votes(engine: Engine, congress_dirs: list[Path]) -> None:
 
 def _build_legislator_map(session: Session) -> dict[str, int]:
     """Build a mapping of bioguide_id -> legislator.id."""
-    return {
-        row.bioguide_id: row.id
-        for row in session.execute(select(Legislator.bioguide_id, Legislator.id)).all()
-    }
+    return {row.bioguide_id: row.id for row in session.execute(select(Legislator.bioguide_id, Legislator.id)).all()}
 
 
 def _build_bill_map(session: Session) -> dict[tuple[int, str, int], int]:

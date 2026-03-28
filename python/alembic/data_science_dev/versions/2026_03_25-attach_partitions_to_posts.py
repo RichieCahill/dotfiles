@@ -46,12 +46,7 @@ ALREADY_ATTACHED_QUERY = text("""
 def upgrade() -> None:
     """Attach all weekly partition tables to the posts parent table."""
     connection = op.get_bind()
-    already_attached = {
-        row[0]
-        for row in connection.execute(
-            ALREADY_ATTACHED_QUERY, {"parent": f"{schema}.posts"}
-        )
-    }
+    already_attached = {row[0] for row in connection.execute(ALREADY_ATTACHED_QUERY, {"parent": f"{schema}.posts"})}
 
     for year in range(PARTITION_START_YEAR, PARTITION_END_YEAR + 1):
         for week in range(1, iso_weeks_in_year(year) + 1):
@@ -74,7 +69,4 @@ def downgrade() -> None:
     for year in range(PARTITION_START_YEAR, PARTITION_END_YEAR + 1):
         for week in range(1, iso_weeks_in_year(year) + 1):
             table_name = f"posts_{year}_{week:02d}"
-            op.execute(
-                f"ALTER TABLE {schema}.posts "
-                f"DETACH PARTITION {schema}.{table_name}"
-            )
+            op.execute(f"ALTER TABLE {schema}.posts DETACH PARTITION {schema}.{table_name}")
