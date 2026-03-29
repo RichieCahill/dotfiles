@@ -5,6 +5,18 @@ in
 {
   networking.firewall.allowedTCPPorts = [ 5432 ];
 
+  # Symlink pg_wal to a ZFS dataset on the special (metadata) vdev for fast WAL writes
+  systemd.services.postgresql.preStart = pkgs.lib.mkAfter ''
+    if [ ! -L "${vars.database}/postgres/pg_wal" ] && [ -d "${vars.database}/postgres/pg_wal" ]; then
+      echo "Moving pg_wal to ${vars.postgres_wal} and creating symlink..."
+      cp -a "${vars.database}/postgres/pg_wal/." "${vars.postgres_wal}/"
+      rm -rf "${vars.database}/postgres/pg_wal"
+      ln -s "${vars.postgres_wal}" "${vars.database}/postgres/pg_wal"
+    elif [ ! -e "${vars.database}/postgres/pg_wal" ]; then
+      ln -s "${vars.postgres_wal}" "${vars.database}/postgres/pg_wal"
+    fi
+  '';
+
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_17_jit;

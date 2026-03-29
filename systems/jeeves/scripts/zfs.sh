@@ -22,6 +22,7 @@ sudo zfs create media/secure/github-runners -o compression=zstd-9 -o sync=disabl
 sudo zfs create media/secure/home_assistant -o compression=zstd-19
 sudo zfs create media/secure/notes -o copies=2
 sudo zfs create media/secure/postgres -o recordsize=16k -o primarycache=metadata
+sudo zfs create media/secure/postgres-wal -o recordsize=32k -o primarycache=metadata -o special_small_blocks=32K -o compression=lz4 -o secondarycache=none -o logbias=latency
 sudo zfs create media/secure/services -o compression=zstd-9
 sudo zfs create media/secure/share -o mountpoint=/zfs/media/share -o exec=off
 
