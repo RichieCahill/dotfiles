@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Text
+from sqlalchemy import ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from python.orm.data_science_dev.base import DataScienceDevTableBase
@@ -40,8 +40,27 @@ class Legislator(DataScienceDevTableBase):
     current_district: Mapped[int | None]
     current_chamber: Mapped[str | None]
 
+    social_media_accounts: Mapped[list[LegislatorSocialMedia]] = relationship(
+        "LegislatorSocialMedia",
+        back_populates="legislator",
+        cascade="all, delete-orphan",
+    )
     vote_records: Mapped[list[VoteRecord]] = relationship(
         "VoteRecord",
         back_populates="legislator",
         cascade="all, delete-orphan",
     )
+
+
+class LegislatorSocialMedia(DataScienceDevTableBase):
+    """Social media account linked to a legislator."""
+
+    __tablename__ = "legislator_social_media"
+
+    legislator_id: Mapped[int] = mapped_column(ForeignKey("main.legislator.id"))
+    platform: Mapped[str]
+    account_name: Mapped[str]
+    url: Mapped[str | None]
+    source: Mapped[str]
+
+    legislator: Mapped[Legislator] = relationship(back_populates="social_media_accounts")
