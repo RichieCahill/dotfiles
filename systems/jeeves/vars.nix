@@ -6,6 +6,7 @@ in
 {
   inherit zfs_media zfs_storage zfs_scratch;
   database = "${zfs_media}/database";
+  postgres_wal = "${zfs_media}/postgres-wal";
   docker = "${zfs_media}/docker";
   docker_configs = "${zfs_media}/docker/configs";
   home_assistant = "${zfs_media}/home_assistant";
