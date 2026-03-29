@@ -4,6 +4,7 @@ hourly = 24
 daily = 0
 monthly = 0
 
+# root_pool
 ["root_pool/home"]
 15_min = 8
 hourly = 24
@@ -27,57 +28,83 @@ monthly = 0
 hourly = 24
 daily = 30
 monthly = 6
+# storage
+["storage/ollama"]
+15_min = 2
+hourly = 0
+daily = 0
+monthly = 0
 
-["storage/plex"]
+["storage/secure"]
+15_min = 0
+hourly = 0
+daily = 0
+monthly = 0
+
+["storage/secure/plex"]
 15_min = 6
 hourly = 2
 daily = 1
 monthly = 0
 
-["media/plex"]
-15_min = 6
-hourly = 2
-daily = 1
+["storage/secure/transmission"]
+15_min = 4
+hourly = 0
+daily = 0
 monthly = 0
 
-["media/notes"]
+["storage/secure/secrets"]
 15_min = 8
 hourly = 24
 daily = 30
 monthly = 12
 
-["media/docker"]
+# media
+["media/temp"]
+15_min = 2
+hourly = 0
+daily = 0
+monthly = 0
+
+["media/secure"]
+15_min = 0
+hourly = 0
+daily = 0
+monthly = 0
+
+["media/secure/plex"]
+15_min = 6
+hourly = 2
+daily = 1
+monthly = 0
+
+["media/secure/share"]
+15_min = 4
+hourly = 0
+daily = 0
+monthly = 0
+
+["media/secure/github-runners"]
+15_min = 6
+hourly = 2
+daily = 1
+monthly = 0
+
+["media/secure/notes"]
+15_min = 8
+hourly = 24
+daily = 30
+monthly = 12
+
+["media/secure/docker"]
 15_min = 3
 hourly = 12
 daily = 14
 monthly = 2
 
-["media/services"]
-15_min = 3
-hourly = 12
-daily = 14
-monthly = 2
-
-["media/home_assistant"]
-15_min = 3
-hourly = 12
-daily = 14
-monthly = 2
-
+# scratch
 ["scratch/transmission"]
-15_min = 0
-hourly = 0
-daily = 0
-monthly = 0
-
-["storage/transmission"]
-15_min = 0
-hourly = 0
-daily = 0
-monthly = 0
-
-["storage/ollama"]
-15_min = 0
+15_min = 2
 hourly = 0
 daily = 0
 monthly = 0
