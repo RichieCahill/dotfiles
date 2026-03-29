@@ -34,8 +34,9 @@ def main(config_file: Path) -> None:
                 logger.error(msg)
                 signal_alert(msg)
                 continue
-
-            get_snapshots_to_delete(dataset, get_count_lookup(config_file, dataset.name))
+            count_lookup = get_count_lookup(config_file, dataset.name)
+            logger.info(f"using {count_lookup} for {dataset.name}")
+            get_snapshots_to_delete(dataset, count_lookup)
     except Exception:
         logger.exception("snapshot_manager failed")
         signal_alert("snapshot_manager failed")
@@ -99,6 +100,7 @@ def get_snapshots_to_delete(
     """
     snapshots = dataset.get_snapshots()
 
+    logger.info(f"calculating snapshots for {dataset.name} to be deleted")
     if not snapshots:
         logger.info(f"{dataset.name} has no snapshots")
         return
