@@ -20,15 +20,15 @@
   // turns off all sounds and announcements
   "accessibility.signals.terminalCommandFailed": {
     "sound": "off",
-    "announcement": "off"
+    "announcement": "off",
   },
   "accessibility.signals.terminalQuickFix": {
     "sound": "off",
-    "announcement": "off"
+    "announcement": "off",
   },
   "accessibility.signals.terminalBell": {
     "sound": "off",
-    "announcement": "off"
+    "announcement": "off",
   },
 
   // database settings
@@ -41,8 +41,8 @@
       "driver": "PostgreSQL",
       "name": "main",
       "database": "postgres",
-      "username": "richie"
-    }
+      "username": "richie",
+    },
   ],
 
   // formatters
@@ -55,7 +55,7 @@
   "[yaml]": { "editor.defaultFormatter": "redhat.vscode-yaml" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "[dockercompose]": {
     "editor.insertSpaces": true,
@@ -64,9 +64,9 @@
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
+      "strings": true,
     },
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
 
   // spell check
@@ -78,7 +78,8 @@
     "Corvidae",
     "drivername",
     "fastapi",
-    "syncthing"
+    "sandboxing",
+    "syncthing",
   ],
 
   // nix
@@ -96,5 +97,5 @@
   // new
   "hediet.vscode-drawio.resizeImages": null,
   "hediet.vscode-drawio.appearance": "automatic",
-  "claudeCode.preferredLocation": "panel"
+  "claudeCode.preferredLocation": "panel",
 }

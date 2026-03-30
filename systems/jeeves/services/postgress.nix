@@ -5,6 +5,10 @@ in
 {
   networking.firewall.allowedTCPPorts = [ 5432 ];
 
+  # Symlink pg_wal to a ZFS dataset on the special (metadata) vdev for fast WAL writes
+  # this is required for systemd sandboxing
+  systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/zfs/media/database/postgres-wal" ];
+
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_17_jit;
