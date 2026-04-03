@@ -14,6 +14,7 @@
     ./llms.nix
     ./open_webui.nix
     ./qmk.nix
+    ./sunshine.nix
     ./syncthing.nix
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
   ];
