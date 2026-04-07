@@ -24,6 +24,7 @@
         fastapi
         fastapi-cli
         httpx
+        huggingface-hub
         mypy
         orjson
         polars
