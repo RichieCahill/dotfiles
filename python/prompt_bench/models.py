@@ -15,3 +15,4 @@ class BenchmarkConfig(BaseModel):
     temperature: float = 0.0
     timeout: int = 300
     concurrency: int = 4
+    vllm_startup_timeout: int = 900
