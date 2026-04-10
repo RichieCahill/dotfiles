@@ -1,0 +1,25 @@
+# Unsloth fine-tuning container for Qwen 3.5 4B on RTX 3090.
+#
+# Build:
+#   docker build -f python/prompt_bench/Dockerfile.finetune -t bill-finetune .
+#
+# Run:
+#   docker run --rm --device=nvidia.com/gpu=all --ipc=host \
+#     -v $(pwd)/output:/workspace/output \
+#     -v $(pwd)/output/finetune_dataset.jsonl:/workspace/dataset.jsonl:ro \
+#     -v /zfs/models/hf:/models \
+#     bill-finetune \
+#     --dataset /workspace/dataset.jsonl \
+#     --output-dir /workspace/output/qwen-bill-summarizer
+
+FROM ghcr.io/unslothai/unsloth:latest
+
+RUN pip install --no-cache-dir typer
+
+WORKDIR /workspace
+COPY python/prompt_bench/finetune.py python/prompt_bench/finetune.py
+COPY python/prompt_bench/summarization_prompts.py python/prompt_bench/summarization_prompts.py
+COPY python/prompt_bench/__init__.py python/prompt_bench/__init__.py
+COPY python/__init__.py python/__init__.py
+
+ENTRYPOINT ["python", "-m", "python.prompt_bench.finetune"]
