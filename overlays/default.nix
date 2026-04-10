@@ -42,6 +42,7 @@
         sqlalchemy
         tenacity
         textual
+        tiktoken
         tinytuya
         typer
         websockets
