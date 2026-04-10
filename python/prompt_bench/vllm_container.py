@@ -8,7 +8,7 @@ import subprocess
 logger = logging.getLogger(__name__)
 
 CONTAINER_NAME = "vllm-bench"
-VLLM_IMAGE = "vllm/vllm-openai:v0.8.5"
+VLLM_IMAGE = "vllm/vllm-openai:v0.19.0"
 
 
 def start_vllm(
@@ -49,6 +49,7 @@ def start_vllm(
         "4096",
     ]
     logger.info("Starting vLLM container with model: %s", model)
+    stop_vllm()
     result = subprocess.run(command, capture_output=True, text=True, check=False)
     if result.returncode != 0:
         msg = f"Failed to start vLLM container: {result.stderr.strip()}"
@@ -60,7 +61,12 @@ def stop_vllm() -> None:
     """Stop and remove the vLLM benchmark container."""
     logger.info("Stopping vLLM container")
     subprocess.run(["docker", "stop", CONTAINER_NAME], capture_output=True, check=False)
-    subprocess.run(["docker", "rm", CONTAINER_NAME], capture_output=True, check=False)
+    subprocess.run(["docker", "rm", "-f", CONTAINER_NAME], capture_output=True, check=False)
+    subprocess.run(
+        ["docker", "network", "disconnect", "-f", "bridge", CONTAINER_NAME],
+        capture_output=True,
+        check=False,
+    )
     logger.info("vLLM container stopped and removed")
 
 

@@ -9,7 +9,7 @@ from typing import Annotated
 
 import typer
 
-from python.prompt_bench.container import check_gpu_free
+from python.prompt_bench.vllm_container import check_gpu_free
 
 logger = logging.getLogger(__name__)
 
