@@ -9,13 +9,13 @@ from typing import Annotated
 
 import typer
 
-from python.prompt_bench.vllm_container import check_gpu_free
+from python.prompt_bench.containers.lib import check_gpu_free
 
 logger = logging.getLogger(__name__)
 
 CONTAINER_NAME = "bill-finetune"
 FINETUNE_IMAGE = "bill-finetune:latest"
-DOCKERFILE_PATH = "python/prompt_bench/Dockerfile.finetune"
+DOCKERFILE_PATH = "/home/richie/dotfiles/python/prompt_bench/Dockerfile.finetune"
 DEFAULT_HF_CACHE = Path("/zfs/models/hf")
 
 
@@ -38,13 +38,6 @@ def start_finetune(
     dataset_path: Path,
     output_dir: Path,
     hf_cache: Path = DEFAULT_HF_CACHE,
-    validation_split: float = 0.1,
-    epochs: int = 3,
-    batch_size: int = 2,
-    learning_rate: float = 2e-4,
-    lora_rank: int = 32,
-    max_seq_length: int = 4096,
-    save_gguf: bool = False,
 ) -> None:
     """Run the fine-tuning container.
 
@@ -53,12 +46,6 @@ def start_finetune(
         output_dir: Host path where the trained model will be saved.
         hf_cache: Host path to HuggingFace model cache (bind-mounted to avoid re-downloading).
         validation_split: Fraction of data held out for validation.
-        epochs: Number of training epochs.
-        batch_size: Per-device training batch size.
-        learning_rate: Learning rate for the optimizer.
-        lora_rank: LoRA adapter rank.
-        max_seq_length: Maximum sequence length for training.
-        save_gguf: Whether to also export a GGUF quantized model.
     """
     dataset_path = dataset_path.resolve()
     output_dir = output_dir.resolve()
@@ -91,30 +78,11 @@ def start_finetune(
         "/workspace/dataset.jsonl",
         "--output-dir",
         "/workspace/output/qwen-bill-summarizer",
-        "--val-split",
-        str(validation_split),
-        "--epochs",
-        str(epochs),
-        "--batch-size",
-        str(batch_size),
-        "--lr",
-        str(learning_rate),
-        "--lora-rank",
-        str(lora_rank),
-        "--max-seq-length",
-        str(max_seq_length),
     ]
-
-    if save_gguf:
-        command.append("--save-gguf")
 
     logger.info("Starting fine-tuning container")
     logger.info("  Dataset:    %s", dataset_path)
-    logger.info("  Val split:  %.0f%%", validation_split * 100)
     logger.info("  Output:     %s", output_dir)
-    logger.info("  Epochs:     %d", epochs)
-    logger.info("  Batch size: %d", batch_size)
-    logger.info("  LoRA rank:  %d", lora_rank)
 
     result = subprocess.run(command, text=True, check=False)
     if result.returncode != 0:
@@ -154,18 +122,13 @@ def build() -> None:
 
 @app.command()
 def run(
-    dataset: Annotated[Path, typer.Option(help="Fine-tuning JSONL")] = Path("output/finetune_dataset.jsonl"),
+    dataset: Annotated[Path, typer.Option(help="Fine-tuning JSONL")] = Path(
+        "/home/richie/dotfiles/data/finetune_dataset.jsonl"
+    ),
     output_dir: Annotated[Path, typer.Option(help="Where to save the trained model")] = Path(
-        "output/qwen-bill-summarizer",
+        "/home/richie/dotfiles/data/output/qwen-bill-summarizer",
     ),
     hf_cache: Annotated[Path, typer.Option(help="Host path to HuggingFace model cache")] = DEFAULT_HF_CACHE,
-    validation_split: Annotated[float, typer.Option("--val-split", help="Fraction held out for validation")] = 0.1,
-    epochs: Annotated[int, typer.Option(help="Training epochs")] = 3,
-    batch_size: Annotated[int, typer.Option(help="Per-device batch size")] = 2,
-    learning_rate: Annotated[float, typer.Option("--lr", help="Learning rate")] = 2e-4,
-    lora_rank: Annotated[int, typer.Option(help="LoRA rank")] = 32,
-    max_seq_length: Annotated[int, typer.Option(help="Max sequence length")] = 4096,
-    save_gguf: Annotated[bool, typer.Option("--save-gguf/--no-save-gguf", help="Also save GGUF")] = False,
     log_level: Annotated[str, typer.Option(help="Log level")] = "INFO",
 ) -> None:
     """Run fine-tuning inside a Docker container."""
@@ -175,15 +138,7 @@ def run(
         dataset_path=dataset,
         output_dir=output_dir,
         hf_cache=hf_cache,
-        validation_split=validation_split,
-        epochs=epochs,
-        batch_size=batch_size,
-        learning_rate=learning_rate,
-        lora_rank=lora_rank,
-        max_seq_length=max_seq_length,
-        save_gguf=save_gguf,
     )
-
 
 @app.command()
 def stop() -> None:

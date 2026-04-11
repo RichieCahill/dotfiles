@@ -12,7 +12,8 @@ from typing import Annotated
 
 import typer
 
-from python.prompt_bench.vllm_container import check_gpu_free, start_vllm, stop_vllm
+from python.prompt_bench.containers.lib import check_gpu_free
+from python.prompt_bench.containers.vllm import start_vllm, stop_vllm
 from python.prompt_bench.downloader import is_model_present
 from python.prompt_bench.models import BenchmarkConfig
 from python.prompt_bench.vllm_client import VLLMClient

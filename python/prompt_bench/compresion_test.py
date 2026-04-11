@@ -34,7 +34,6 @@ DEFAULT_COUNT = 100
 SEED = 42
 
 
-
 def load_bills(csv_path: Path, count: int) -> list[tuple[str, str]]:
     """Return up to `count` (bill_id, text_content) tuples with non-empty text."""
     csv.field_size_limit(sys.maxsize)
