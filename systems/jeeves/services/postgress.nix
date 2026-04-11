@@ -37,6 +37,9 @@ in
       # signalbot
       local signalbot  signalbot   trust
 
+      # hedgedoc
+      local hedgedoc   hedgedoc    trust
+
       # math
       local postgres  math   trust
       host  postgres  math   127.0.0.1/32    trust
@@ -116,11 +119,19 @@ in
           login = true;
         };
       }
+      {
+        name = "hedgedoc";
+        ensureDBOwnership = true;
+        ensureClauses = {
+          login = true;
+        };
+      }
     ];
     ensureDatabases = [
       "data_science_dev"
       "hass"
       "gitea"
+      "hedgedoc"
       "math"
       "n8n"
       "richie"
