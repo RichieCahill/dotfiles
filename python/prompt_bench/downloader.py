@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import tomllib
 from pathlib import Path
 from typing import Annotated
 
@@ -63,10 +62,7 @@ def main(
         message = f"Config file does not exist: {config}"
         raise typer.BadParameter(message)
 
-    with config.open("rb") as file:
-        raw = tomllib.load(file)
-
-    benchmark_config = BenchmarkConfig(**raw)
+    benchmark_config = BenchmarkConfig.from_toml(config)
     download_all(benchmark_config)
 
 

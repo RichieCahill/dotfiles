@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import logging
 import time
-import tomllib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Annotated
@@ -201,10 +200,7 @@ def main(
         message = f"Config file does not exist: {config}"
         raise typer.BadParameter(message)
 
-    with config.open("rb") as file:
-        raw = tomllib.load(file)
-
-    benchmark_config = BenchmarkConfig(**raw)
+    benchmark_config = BenchmarkConfig.from_toml(config)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     run_benchmark(benchmark_config, input_dir, output_dir)
