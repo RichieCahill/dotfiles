@@ -172,3 +172,4 @@ frontend/node_modules/
 
 # data dir for training, validation, and testing
 data/
+config.toml
