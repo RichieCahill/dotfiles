@@ -12,6 +12,7 @@ dependencies = [
     "alembic",
     "apprise",
     "apscheduler",
+    "huggingface-hub",
     "httpx",
     "python-multipart",
     "polars",
@@ -26,6 +27,11 @@ dependencies = [
 [project.scripts]
 database = "python.database_cli:app"
 van-inventory = "python.van_inventory.main:serve"
+prompt-bench = "python.prompt_bench.main:cli"
+prompt-bench-download = "python.prompt_bench.downloader:cli"
+finetune = "python.prompt_bench.finetune:cli"
+finetune-container = "python.prompt_bench.finetune_container:cli"
+build-finetune-dataset = "python.prompt_bench.build_finetune_dataset:cli"
 
 [dependency-groups]
 dev = [
@@ -80,6 +86,11 @@ lint.ignore = [
 ]
 "python/eval_warnings/**" = [
     "S607", # (perm) gh and git are expected on PATH in the runner environment
+]
+"python/prompt_bench/**" = [
+    "FBT002",  # (perm) typer requires boolean defaults for --flag/--no-flag options
+    "PLR0913", # (perm) typer CLIs naturally have many parameters
+    "S607",    # (perm) docker and nvidia-smi are expected on PATH
 ]
 "python/alembic/**" = [
     "INP001", # (perm) this creates LSP issues for alembic

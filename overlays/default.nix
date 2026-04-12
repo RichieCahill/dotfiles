@@ -24,6 +24,7 @@
         fastapi
         fastapi-cli
         httpx
+        huggingface-hub
         mypy
         orjson
         polars
@@ -41,6 +42,7 @@
         sqlalchemy
         tenacity
         textual
+        tiktoken
         tinytuya
         typer
         websockets
