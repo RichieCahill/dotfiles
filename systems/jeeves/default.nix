@@ -15,6 +15,7 @@ in
     "${inputs.self}/common/optional/zerotier.nix"
     ./docker
     ./services
+    ./web_services
     ./hardware.nix
     ./networking.nix
     ./programs.nix
