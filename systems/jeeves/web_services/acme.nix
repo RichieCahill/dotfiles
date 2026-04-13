@@ -1,39 +1,30 @@
+let
+  domains = [
+    "audiobookshelf"
+    "cache"
+    "gitea"
+    "jellyfin"
+    "share"
+  ];
+
+  makeCert = name: {
+    name = "${name}.tmmworkshop.com";
+    value = {
+      webroot = "/var/lib/acme/.challenges";
+      group = "acme";
+      reloadServices = [ "haproxy.service" ];
+    };
+  };
+
+  acmeServices = map (domain: "acme-${domain}.tmmworkshop.com.service") domains;
+in
 {
   users.users.haproxy.extraGroups = [ "acme" ];
 
   security.acme = {
     acceptTerms = true;
     defaults.email = "Richie@tmmworkshop.com";
-
-    certs."gitea.tmmworkshop.com" = {
-      webroot = "/var/lib/acme/.challenges";
-      group = "acme";
-      reloadServices = [ "haproxy.service" ];
-    };
-
-    certs."audiobookshelf.tmmworkshop.com" = {
-      webroot = "/var/lib/acme/.challenges";
-      group = "acme";
-      reloadServices = [ "haproxy.service" ];
-    };
-
-    certs."cache.tmmworkshop.com" = {
-      webroot = "/var/lib/acme/.challenges";
-      group = "acme";
-      reloadServices = [ "haproxy.service" ];
-    };
-
-    certs."jellyfin.tmmworkshop.com" = {
-      webroot = "/var/lib/acme/.challenges";
-      group = "acme";
-      reloadServices = [ "haproxy.service" ];
-    };
-
-    certs."share.tmmworkshop.com" = {
-      webroot = "/var/lib/acme/.challenges";
-      group = "acme";
-      reloadServices = [ "haproxy.service" ];
-    };
+    certs = builtins.listToAttrs (map makeCert domains);
   };
 
   # Minimal nginx to serve ACME HTTP-01 challenge files for HAProxy
@@ -60,4 +51,12 @@
   ];
 
   users.users.nginx.extraGroups = [ "acme" ];
+
+  # HAProxy needs certs to exist before it can bind :443.
+  # NixOS's acme module generates self-signed placeholders on first boot
+  # via acme-<domain>.service — just make HAProxy wait for them.
+  systemd.services.haproxy = {
+    after = acmeServices;
+    wants = acmeServices;
+  };
 }
