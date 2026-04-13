@@ -2,7 +2,7 @@ let
   vars = import ../vars.nix;
 in
 {
-  networking.firewall.allowedTCPPorts = [ 6443 ];
+  networking.firewall.allowedTCPPorts = [ 6443 2223 ];
 
   services.gitea = {
     enable = true;
@@ -24,7 +24,7 @@ in
         ROOT_URL = "https://gitea.tmmworkshop.com/";
         HTTP_PORT = 6443;
         SSH_PORT = 2223;
-        SSH_LISTEN_PORT = 2224;
+        SSH_LISTEN_PORT = 2223;
         START_SSH_SERVER = true;
         PUBLIC_URL_DETECTION = "auto";
       };
