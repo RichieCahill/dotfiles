@@ -2,7 +2,10 @@ let
   vars = import ../vars.nix;
 in
 {
-  networking.firewall.allowedTCPPorts = [ 6443 2223 ];
+  networking.firewall.allowedTCPPorts = [
+    6443
+    2223
+  ];
 
   services.gitea = {
     enable = true;
