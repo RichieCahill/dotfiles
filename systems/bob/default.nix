@@ -1,9 +1,9 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     "${inputs.self}/users/richie"
+    "${inputs.self}/users/math"
     "${inputs.self}/common/global"
-    "${inputs.self}/common/optional/desktop.nix"
     "${inputs.self}/common/optional/docker.nix"
     "${inputs.self}/common/optional/scanner.nix"
     "${inputs.self}/common/optional/steam.nix"
@@ -18,6 +18,11 @@
     ./syncthing.nix
     ./llms.nix
   ];
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_6_18;
+    zfs.package = pkgs.zfs_2_4;
+  };
 
   networking = {
     hostName = "bob";
