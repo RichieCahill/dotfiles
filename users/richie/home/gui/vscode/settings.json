@@ -78,6 +78,7 @@
     "Corvidae",
     "drivername",
     "fastapi",
+    "Qwen",
     "sandboxing",
     "syncthing",
   ],
@@ -98,4 +99,5 @@
   "hediet.vscode-drawio.resizeImages": null,
   "hediet.vscode-drawio.appearance": "automatic",
   "claudeCode.preferredLocation": "panel",
+  "docker.extension.enableComposeLanguageServer": false,
 }
