@@ -1,8 +1,9 @@
 { inputs, pkgs, ... }:
 {
   imports = [
-    "${inputs.self}/users/richie"
     "${inputs.self}/users/math"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/users/steve"
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/docker.nix"
     "${inputs.self}/common/optional/scanner.nix"

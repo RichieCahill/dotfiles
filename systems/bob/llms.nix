@@ -45,6 +45,7 @@
       "translategemma:12b"
       "translategemma:27b"
       "translategemma:4b"
+      "rinex20/translategemma3:12b"
     ];
     models = "/zfs/models";
     openFirewall = true;

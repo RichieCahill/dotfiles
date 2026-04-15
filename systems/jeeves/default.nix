@@ -4,9 +4,10 @@ let
 in
 {
   imports = [
-    "${inputs.self}/users/richie"
-    "${inputs.self}/users/math"
     "${inputs.self}/users/dov"
+    "${inputs.self}/users/math"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/users/steve"
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/docker.nix"
     "${inputs.self}/common/optional/ssh_decrypt.nix"
