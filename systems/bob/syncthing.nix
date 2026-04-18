@@ -31,5 +31,15 @@
       ];
       fsWatcherEnabled = true;
     };
+    "recordings" = {
+      path = "/home/richie/recordings";
+      devices = [
+        "jeeves"
+        "phone"
+        "rhapsody-in-green"
+      ];
+      fsWatcherEnabled = true;
+    };
+
   };
 }
