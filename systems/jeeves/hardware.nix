@@ -9,7 +9,6 @@ let
     inherit device;
     keyFileSize = 4096;
     keyFile = "/dev/disk/by-id/usb-XIAO_USB_Drive_24587CE29074-0:0";
-    fallbackToPassword = true;
   };
   makeLuksSSD =
     device:
