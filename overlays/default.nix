@@ -23,6 +23,7 @@
         apscheduler
         fastapi
         fastapi-cli
+        faster-whisper
         httpx
         mypy
         orjson
