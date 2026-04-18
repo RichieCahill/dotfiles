@@ -24,11 +24,19 @@
     hostId = "6404140d";
     firewall = {
       enable = true;
-      allowedTCPPorts = [ ];
+      allowedTCPPorts = [
+        8000
+        8080
+      ];
     };
     networkmanager.enable = true;
   };
 
+  programs.appimage = {
+    enable = true;
+    binfmt = true; # allows *.AppImage to be run directly
+  };
+  
   services = {
     openssh.ports = [ 922 ];
     flatpak.enable = true;
