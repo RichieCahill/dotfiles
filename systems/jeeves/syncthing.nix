@@ -89,7 +89,16 @@ in
           ];
           fsWatcherEnabled = true;
         };
-        #
+        "recordings" = {
+          path = "/home/richie/recordings";
+          devices = [
+            "bob"
+            "phone"
+            "rhapsody-in-green"
+          ];
+          fsWatcherEnabled = true;
+        };
+        # davids-server
         "davids-backup1" = {
           id = "8229p-8z3tm"; # cspell:disable-line
           path = "${vars.syncthing}/davids_backups/1";

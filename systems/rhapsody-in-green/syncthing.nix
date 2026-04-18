@@ -55,6 +55,15 @@
       ];
       fsWatcherEnabled = true;
     };
+    "recordings" = {
+      path = "/home/richie/recordings";
+      devices = [
+        "bob"
+        "jeeves"
+        "phone"
+      ];
+      fsWatcherEnabled = true;
+    };
     "vault" = {
       path = "/home/richie/vault";
       devices = [
