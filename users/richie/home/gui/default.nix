@@ -22,9 +22,10 @@
     chromium
     # dev tools
     claude-code
+    codex
     gparted
     jetbrains.datagrip
-    proxychains
     opencode
+    proxychains
   ];
 }
