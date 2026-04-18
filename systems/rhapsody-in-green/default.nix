@@ -36,7 +36,7 @@
     enable = true;
     binfmt = true; # allows *.AppImage to be run directly
   };
-  
+
   services = {
     openssh.ports = [ 922 ];
     flatpak.enable = true;
