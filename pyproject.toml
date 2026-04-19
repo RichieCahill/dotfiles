@@ -26,6 +26,7 @@ dependencies = [
 [project.scripts]
 database = "python.database_cli:app"
 van-inventory = "python.van_inventory.main:serve"
+whisper-transcribe = "python.tools.whisper.transcribe:main"
 
 [dependency-groups]
 dev = [
@@ -50,6 +51,7 @@ lint.ignore = [
     "COM812", # (TEMP) conflicts when used with the formatter
     "ISC001", # (TEMP) conflicts when used with the formatter
     "S603",   # (PERM) This is known to cause a false positive
+    "S607",   # (PERM) This is becoming a consistent annoyance
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -78,9 +80,7 @@ lint.ignore = [
 "python/congress_tracker/**" = [
     "TC003", # (perm) this creates issues because sqlalchemy uses these at runtime
 ]
-"python/eval_warnings/**" = [
-    "S607", # (perm) gh and git are expected on PATH in the runner environment
-]
+
 "python/alembic/**" = [
     "INP001", # (perm) this creates LSP issues for alembic
 ]

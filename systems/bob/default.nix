@@ -1,8 +1,9 @@
 { inputs, pkgs, ... }:
 {
   imports = [
-    "${inputs.self}/users/richie"
     "${inputs.self}/users/math"
+    "${inputs.self}/users/richie"
+    "${inputs.self}/users/steve"
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/docker.nix"
     "${inputs.self}/common/optional/scanner.nix"
@@ -12,7 +13,6 @@
     "${inputs.self}/common/optional/update.nix"
     "${inputs.self}/common/optional/yubikey.nix"
     "${inputs.self}/common/optional/zerotier.nix"
-    "${inputs.self}/common/optional/brain_substituter.nix"
     "${inputs.self}/common/optional/nvidia.nix"
     ./hardware.nix
     ./syncthing.nix
