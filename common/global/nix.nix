@@ -34,6 +34,7 @@ in
       warn-dirty = false;
       flake-registry = ""; # disable global flake registries
       connect-timeout = 10;
+      download-buffer-size = 536870912;
       fallback = true;
     };
 
