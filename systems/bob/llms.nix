@@ -42,6 +42,7 @@
       "qwen3:8b"
       "qwen3.5:27b"
       "qwen3.5:35b"
+      "qwen3.6:35b"
       "translategemma:12b"
       "translategemma:27b"
       "translategemma:4b"
