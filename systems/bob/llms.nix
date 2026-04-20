@@ -48,7 +48,7 @@
       "translategemma:4b"
       "rinex20/translategemma3:12b"
     ];
-    models = "/zfs/models";
+    models = "/zfs/storage/models";
     openFirewall = true;
   };
 }
