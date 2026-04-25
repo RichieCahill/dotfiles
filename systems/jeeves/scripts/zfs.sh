@@ -41,3 +41,4 @@ sudo zfs create storage/secure/plex -o recordsize=1M -o compression=zstd-19
 sudo zfs create storage/secure/secrets -o compression=zstd-19 -o copies=3
 sudo zfs create storage/secure/syncthing -o compression=zstd-19
 sudo zfs create storage/secure/transmission -o recordsize=1M -o compression=zstd-9 -o exec=off -o sync=disabled
+sudo zfs create storage/secure/important -o compression=zstd-19 -o copies=2 -o mountpoint=/zfs/storage/important
