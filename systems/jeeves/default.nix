@@ -37,5 +37,10 @@ in
     zerotierone.joinNetworks = [ "a09acf02330d37b9" ];
   };
 
+  users.groups = {
+    nornsight = { };
+    nornsight-admin = { };
+  };
+
   system.stateVersion = "24.05";
 }

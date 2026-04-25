@@ -5,7 +5,9 @@ let
     "gitea"
     "jellyfin"
     "share"
+    "verilux"
   ];
+  extraDomains = [ "www.norn-sight.com" ];
 
   makeCert = name: {
     name = "${name}.tmmworkshop.com";
@@ -16,7 +18,18 @@ let
     };
   };
 
-  acmeServices = map (domain: "acme-${domain}.tmmworkshop.com.service") domains;
+  makeExtraCert = name: {
+    inherit name;
+    value = {
+      webroot = "/var/lib/acme/.challenges";
+      group = "acme";
+      reloadServices = [ "haproxy.service" ];
+    };
+  };
+
+  acmeServices =
+    map (domain: "acme-${domain}.tmmworkshop.com.service") domains
+    ++ map (domain: "acme-${domain}.service") extraDomains;
 in
 {
   users.users.haproxy.extraGroups = [ "acme" ];
@@ -24,7 +37,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults.email = "Richie@tmmworkshop.com";
-    certs = builtins.listToAttrs (map makeCert domains);
+    certs = builtins.listToAttrs ((map makeCert domains) ++ (map makeExtraCert extraDomains));
   };
 
   # Minimal nginx to serve ACME HTTP-01 challenge files for HAProxy

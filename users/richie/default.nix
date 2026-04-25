@@ -36,6 +36,8 @@ in
         "hass"
         "libvirtd"
         "networkmanager"
+        "nornsight"
+        "nornsight-admin"
         "ollama"
         "plugdev"
         "scanner"
