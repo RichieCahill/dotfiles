@@ -169,3 +169,6 @@ test.*
 # Frontend build output
 frontend/dist/
 frontend/node_modules/
+
+# data from testing llms
+data/*
