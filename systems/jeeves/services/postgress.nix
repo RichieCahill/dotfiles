@@ -12,6 +12,7 @@ in
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_17_jit;
+    extensions = ps: with ps; [ pgvector ];
     enableTCPIP = true;
     enableJIT = true;
     dataDir = "${vars.database}/postgres";
