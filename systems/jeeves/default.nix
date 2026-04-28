@@ -10,10 +10,12 @@ in
     "${inputs.self}/users/steve"
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/docker.nix"
+    "${inputs.self}/common/optional/monitoring-agent.nix"
     "${inputs.self}/common/optional/ssh_decrypt.nix"
     "${inputs.self}/common/optional/syncthing_base.nix"
     "${inputs.self}/common/optional/update.nix"
     "${inputs.self}/common/optional/zerotier.nix"
+    ./monitoring
     ./docker
     ./services
     ./web_services
