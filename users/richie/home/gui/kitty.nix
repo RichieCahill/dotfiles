@@ -6,6 +6,7 @@
     settings = {
       allow_remote_control = "yes";
       shell = "${pkgs.zsh}/bin/zsh";
+      scrollback_lines = 50000;
       wayland_titlebar_color = "background";
       background_opacity = "0.75";
       tab_bar_edge = "top";
