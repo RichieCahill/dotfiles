@@ -21,7 +21,7 @@ in
       server = {
         http_addr = "192.168.90.40";
         http_port = 3000;
-        root_url = "http://$192.168.90.40:3000/";
+        root_url = "http://192.168.90.40:3000/";
       };
     };
     provision = {
