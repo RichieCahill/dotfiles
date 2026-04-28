@@ -94,8 +94,13 @@ let
       retention,
     }:
     {
-      after = [ "network.target" ];
+      after = [
+        "zfs-media-database-prometheus.mount"
+        "network.target"
+      ];
+      requires = [ "zfs-media-database-prometheus.mount" ];
       wantedBy = [ "multi-user.target" ];
+      unitConfig.RequiresMountsFor = [ dataDir ];
       serviceConfig = {
         ExecStart = "${lib.getExe pkgs.prometheus} ${
           lib.escapeShellArgs [
