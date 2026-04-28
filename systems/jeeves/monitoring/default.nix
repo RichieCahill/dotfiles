@@ -6,7 +6,6 @@
 let
   vars = import ../vars.nix;
 
-
   prometheusDataRoot = "${vars.database}/prometheus";
   mainPrometheusDataDir = "${prometheusDataRoot}/main";
   pidPrometheusDataDir = "${prometheusDataRoot}/pid-short";
