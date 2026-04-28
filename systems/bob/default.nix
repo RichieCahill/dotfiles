@@ -7,6 +7,7 @@
     "${inputs.self}/common/global"
     "${inputs.self}/common/optional/docker.nix"
     "${inputs.self}/common/optional/scanner.nix"
+    "${inputs.self}/common/optional/monitoring-agent.nix"
     "${inputs.self}/common/optional/steam.nix"
     "${inputs.self}/common/optional/syncthing_base.nix"
     "${inputs.self}/common/optional/systemd-boot.nix"
