@@ -2,28 +2,32 @@
   {
     "key": "shift+alt+f",
     "command": "editor.action.formatDocument",
-    "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
+    "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor",
   },
   {
     "key": "alt+a d",
-    "command": "cSpell.addWordToWorkspaceSettings"
+    "command": "cSpell.addWordToWorkspaceSettings",
   },
   {
     "key": "ctrl+shift+`",
-    "command": "workbench.action.createTerminalEditor"
+    "command": "workbench.action.createTerminalEditor",
   },
   {
     "key": "ctrl+shift+`",
     "command": "-workbench.action.terminal.new",
-    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile",
   },
   {
     "key": "ctrl+shift+g r",
-    "command": "gitlens.git.rebase"
+    "command": "gitlens.git.rebase",
   },
   {
     "key": "ctrl+shift+g c",
     "command": "-gitlens.showQuickCommitFileDetails",
-    "when": "editorTextFocus && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
-  }
+    "when": "editorTextFocus && !gitlens:disabled && config.gitlens.keymap == 'chorded'",
+  },
+  {
+    "key": "ctrl+shift+g p",
+    "command": "gitlens.pushRepositories",
+  },
 ]
